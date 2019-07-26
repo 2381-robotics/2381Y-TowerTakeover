@@ -7,8 +7,8 @@ pros::Motor leftback(LB_PORT, true);
 pros::Motor rightfront(RF_PORT, true);
 pros::Motor rightback(RB_PORT);
 pros::Motor intakemotor(INTAKE_PORT);
-pros::Motor leftlift(LL_PORT);
-pros::Motor rightlift(RL_PORT);
+//pros::Motor leftlift(LL_PORT);
+//pros::Motor rightlift(RL_PORT);
 pros::Motor anglermotor(ANGLER_PORT);
 
 int error[7];
@@ -90,17 +90,30 @@ void lift() {
 			leftlift.move(0);
 			rightlift.move(0);
 		}*/
-		if (master.get_digital(DIGITAL_UP)) {
-			//move_velocity?
-			leftlift.move(LIFT_POWER/*power[LIFTNUMBER]*/);
-			rightlift.move(-1*(LIFT_POWER/*power[LIFTNUMBER]*/));
+			//	rightlift.move(master.get_analog(ANALOG_RIGHT_Y));
+			//	leftlift.move(-1*(master.get_analog(ANALOG_RIGHT_Y)));
+				pros::delay(20);
 		}
-		else if (master.get_digital(DIGITAL_DOWN)) {
-			leftlift.move(-1*(LIFT_POWER/*power[LIFTNUMBER]*/));
-			rightlift.move(LIFT_POWER/*power[LIFTNUMBER]*/);
-		}
-		pros::delay(15);
-	}
+
+}
+ pros::Motor motor(3);
+ pros::Motor motor1(8);
+ Encoder right = pros::c::encoderInit(3, 4, false);
+ Encoder back = pros::c::encoderInit(1, 2, false);
+ Encoder left = pros::c::encoderInit(6, 5, false);
+
+void test(){
+	while (true) {
+	motor.move(master.get_analog(ANALOG_RIGHT_Y));
+	motor1.move(-1*(master.get_analog(ANALOG_RIGHT_Y)));
+	pros::delay(20);
+
+	pros::lcd::set_text(1, std::to_string(master.get_analog(ANALOG_RIGHT_Y)));
+
+	pros::lcd::set_text(2, "right:" + std::to_string(pros::c::encoderGet(right)));
+	pros::lcd::set_text(3, "back:" + std::to_string(pros::c::encoderGet(back)));
+	pros::lcd::set_text(4, "left:" + std::to_string(pros::c::encoderGet(left)));
+}
 }
 
 void angler() {
@@ -173,16 +186,6 @@ void notlift() {
 		pros::delay(15);
 	}
 }
-pros::Motor motor(3);
-pros::Motor motor1(8);
-
-void test(){
-	while (true) {
-		motor.move(master.get_analog(ANALOG_RIGHT_Y));
-		motor1.move(-1*(master.get_analog(ANALOG_RIGHT_Y)));
-		pros::delay(20);
-	}
-}
 /**
  * Runs the operator control code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -198,7 +201,7 @@ void test(){
  */
 
 void opcontrol() {
-	//xdrive();
+	xdrive();
 	//intake();
 	//lift();
 	//angler();
