@@ -8,8 +8,8 @@
 #define RB_PORT 1
 
 //lift
-#define RL_PORT 13
-#define LL_PORT 19
+//#define RL_PORT 3
+//#define LL_PORT 8
 
 //other
 #define INTAKE_PORT 7
