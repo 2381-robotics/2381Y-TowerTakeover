@@ -28,7 +28,7 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "C:/Users/JEFFRE~1/AppData/Local/Temp/tmptxr81dor/utils/motor_controller.cpp.o",
+            "bin/utils/motor_controller.cpp.o",
             "src\\utils\\motor_controller.cpp"
         ],
         "directory": "C:\\Shared Files\\Robotics\\Robotics-2381Y",
@@ -63,7 +63,7 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "C:/Users/JEFFRE~1/AppData/Local/Temp/tmptxr81dor/utils/pid.cpp.o",
+            "bin/utils/pid.cpp.o",
             "src\\utils\\pid.cpp"
         ],
         "directory": "C:\\Shared Files\\Robotics\\Robotics-2381Y",
@@ -98,7 +98,7 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "C:/Users/JEFFRE~1/AppData/Local/Temp/tmptxr81dor/autonomous.cpp.o",
+            "bin/autonomous.cpp.o",
             "src\\autonomous.cpp"
         ],
         "directory": "C:\\Shared Files\\Robotics\\Robotics-2381Y",
@@ -133,7 +133,7 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "C:/Users/JEFFRE~1/AppData/Local/Temp/tmptxr81dor/motors.cpp.o",
+            "bin/motors.cpp.o",
             "src\\motors.cpp"
         ],
         "directory": "C:\\Shared Files\\Robotics\\Robotics-2381Y",
@@ -168,7 +168,7 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "C:/Users/JEFFRE~1/AppData/Local/Temp/tmptxr81dor/initialize.cpp.o",
+            "bin/initialize.cpp.o",
             "src\\initialize.cpp"
         ],
         "directory": "C:\\Shared Files\\Robotics\\Robotics-2381Y",
@@ -203,7 +203,7 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "C:/Users/JEFFRE~1/AppData/Local/Temp/tmptxr81dor/opcontrol.cpp.o",
+            "bin/opcontrol.cpp.o",
             "src\\opcontrol.cpp"
         ],
         "directory": "C:\\Shared Files\\Robotics\\Robotics-2381Y",
