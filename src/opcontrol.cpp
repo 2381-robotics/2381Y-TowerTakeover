@@ -1,8 +1,12 @@
+#include "opcontrol.h"
+
 #include "main.h"
 #include "ports.h"
+
 #include "utils/pid.h"
-#include "opcontrol.h"
 #include "utils/motor_controller.h"
+#include "utils/robot/drive/mech_drive.h"
+
 double kp = 0.1;
 // double kp = 0.618;
 double ki = 0.0;
@@ -19,10 +23,12 @@ pros::Motor left_back_motor (LEFT_BACK_MOTOR_PORT, false);
 pros::Motor right_front_motor (RIGHT_FRONT_MOTOR_PORT, true);
 pros::Motor right_back_motor (RIGHT_BACK_MOTOR_PORT, true);
 
-Motor_Controller* left_back_motor_controller = new Motor_Controller(&driveKp, &driveKi, &driveKd, &left_back_motor);
 Motor_Controller* left_front_motor_controller = new Motor_Controller(&driveKp, &driveKi, &driveKd, &left_front_motor);
-Motor_Controller* right_back_motor_controller = new Motor_Controller(&driveKp, &driveKi, &driveKd, &right_front_motor);
+Motor_Controller* left_back_motor_controller = new Motor_Controller(&driveKp, &driveKi, &driveKd, &left_back_motor);
 Motor_Controller* right_front_motor_controller = new Motor_Controller(&driveKp, &driveKi, &driveKd, &right_back_motor);
+Motor_Controller* right_back_motor_controller = new Motor_Controller(&driveKp, &driveKi, &driveKd, &right_front_motor);
+
+Mech_Drive* mech_drive = new Mech_Drive(left_front_motor_controller, left_back_motor_controller, right_front_motor_controller, right_back_motor_controller);
 
 int liftHeight;
 int cubeHeight = 360;
@@ -322,21 +328,8 @@ double left_front_motorSetpoint, left_back_motorSetpoint, right_front_motorSetpo
 double left_front_motorMotorValue, left_back_motorMotorValue, right_front_motorMotorValue, right_back_motorMotorValue;
  void opcontrol() {
    pros::Motor motor1 (8);
-
-
-
-
    while (true) {
-     double factor = abs( master.get_analog(ANALOG_RIGHT_X)) / 127.0 ;
-     double squareF = factor*factor;
-     left_back_motorSetpoint = (master.get_analog(ANALOG_LEFT_Y) - master.get_analog(ANALOG_LEFT_X) + squareF*(master.get_analog(ANALOG_RIGHT_X)));
-     left_front_motorSetpoint = (master.get_analog(ANALOG_LEFT_Y) + master.get_analog(ANALOG_LEFT_X) + squareF*(master.get_analog(ANALOG_RIGHT_X)));
-     right_back_motorSetpoint = (master.get_analog(ANALOG_LEFT_Y) + master.get_analog(ANALOG_LEFT_X) - squareF*(master.get_analog(ANALOG_RIGHT_X)));
-     right_front_motorSetpoint = (master.get_analog(ANALOG_LEFT_Y) - master.get_analog(ANALOG_LEFT_X)  -squareF*(master.get_analog(ANALOG_RIGHT_X)));
-     left_back_motor_controller->Set_Speed(left_back_motorSetpoint);
-     left_front_motor_controller->Set_Speed(left_front_motorSetpoint);
-     right_back_motor_controller->Set_Speed(right_back_motorSetpoint);
-     right_front_motor_controller->Set_Speed(right_front_motorSetpoint);
+		 mech_drive->Drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
 
      pros::lcd::set_text(0, "left_back_motor:" + std::to_string((left_back_motor.get_position())));
 
