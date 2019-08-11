@@ -1,7 +1,8 @@
 #include "main.h"
-#include "everything.h"
-#include "pid.h"
+#include "ports.h"
+#include "utils/pid.h"
 #include "opcontrol.h"
+#include "utils/motor_controller.h"
 double kp = 0.1;
 // double kp = 0.618;
 double ki = 0.0;
@@ -12,11 +13,16 @@ Pid* lift_pid = new Pid(&kp, &ki, &kd);
 double driveKp = 1;
 double driveKi = 0;
 double driveKd = 0;
-Pid* left_back_drive_pid = new Pid(&driveKp, &driveKi, &driveKd);
-Pid* left_front_drive_pid = new Pid(&driveKp, &driveKi, &driveKd);
-Pid* right_back_drive_pid = new Pid(&driveKp, &driveKi, &driveKd);
-Pid* right_front_drive_pid = new Pid(&driveKp, &driveKi, &driveKd);
 
+pros::Motor left_front_motor (LEFT_FRONT_MOTOR_PORT, false);
+pros::Motor left_back_motor (LEFT_BACK_MOTOR_PORT, false);
+pros::Motor right_front_motor (RIGHT_FRONT_MOTOR_PORT, true);
+pros::Motor right_back_motor (RIGHT_BACK_MOTOR_PORT, true);
+
+Motor_Controller* left_back_motor_controller = new Motor_Controller(&driveKp, &driveKi, &driveKd, &left_back_motor);
+Motor_Controller* left_front_motor_controller = new Motor_Controller(&driveKp, &driveKi, &driveKd, &left_front_motor);
+Motor_Controller* right_back_motor_controller = new Motor_Controller(&driveKp, &driveKi, &driveKd, &right_front_motor);
+Motor_Controller* right_front_motor_controller = new Motor_Controller(&driveKp, &driveKi, &driveKd, &right_back_motor);
 
 int liftHeight;
 int cubeHeight = 360;
@@ -25,10 +31,7 @@ float liftSpeed = 14.4;
 
 
 pros::Controller master (CONTROLLER_MASTER);
-pros::Motor leftfront(LF_PORT);
-pros::Motor leftback(LB_PORT, true);
-pros::Motor rightfront(RF_PORT, true);
-pros::Motor rightback(RB_PORT);
+
 pros::Motor intakemotor(INTAKE_PORT);
 //pros::Motor leftlift(LL_PORT);
 //pros::Motor rightlift(RL_PORT);
@@ -44,20 +47,16 @@ int power[7];
 int kP [7];
 int kI [7];
 int kD [7];
-  pros::Motor leftBack (3, false);
-  pros::Motor leftFront (2, false);
-  pros::Motor rightBack (9, true);
-  pros::Motor rightFront (8, true);
 void mechDrive(){
 	double factor = abs( master.get_analog(ANALOG_RIGHT_X)) / 127.0 ;
     double squareF = factor*factor;
-    leftBack.move((master.get_analog(ANALOG_LEFT_Y) - master.get_analog(ANALOG_LEFT_X) + squareF*(master.get_analog(ANALOG_RIGHT_X))));
+    left_back_motor.move((master.get_analog(ANALOG_LEFT_Y) - master.get_analog(ANALOG_LEFT_X) + squareF*(master.get_analog(ANALOG_RIGHT_X))));
 
-    leftFront.move((master.get_analog(ANALOG_LEFT_Y) + master.get_analog(ANALOG_LEFT_X) + squareF*(master.get_analog(ANALOG_RIGHT_X))));
+    left_front_motor.move((master.get_analog(ANALOG_LEFT_Y) + master.get_analog(ANALOG_LEFT_X) + squareF*(master.get_analog(ANALOG_RIGHT_X))));
 
-    rightBack.move((master.get_analog(ANALOG_LEFT_Y) + master.get_analog(ANALOG_LEFT_X) - squareF*(master.get_analog(ANALOG_RIGHT_X))));
+    right_back_motor.move((master.get_analog(ANALOG_LEFT_Y) + master.get_analog(ANALOG_LEFT_X) - squareF*(master.get_analog(ANALOG_RIGHT_X))));
 
-    rightFront.move((master.get_analog(ANALOG_LEFT_Y) - master.get_analog(ANALOG_LEFT_X)  -squareF*(master.get_analog(ANALOG_RIGHT_X))));
+    right_front_motor.move((master.get_analog(ANALOG_LEFT_Y) - master.get_analog(ANALOG_LEFT_X)  -squareF*(master.get_analog(ANALOG_RIGHT_X))));
 }
 void tankdrive() {
 	while (true) {
@@ -86,10 +85,10 @@ void xdrive() {
 }
 
 void xDrivePID() {
-	// pros::lcd::set_text(3, "leftFront:" + std::to_string(leftfront.get_position()));
-	// pros::lcd::set_text(4, "rightFront:" + std::to_string(rightfront.get_position()));
-	// pros::lcd::set_text(5, "leftBack:" + std::to_string(leftback.get_position()));
-	// pros::lcd::set_text(6, "rightBack:" + std::to_string(rightback.get_position()));
+	// pros::lcd::set_text(3, "left_front_motor:" + std::to_string(leftfront.get_position()));
+	// pros::lcd::set_text(4, "right_front_motor:" + std::to_string(rightfront.get_position()));
+	// pros::lcd::set_text(5, "left_back_motor:" + std::to_string(leftback.get_position()));
+	// pros::lcd::set_text(6, "right_back_motor:" + std::to_string(rightback.get_position()));
 		// int right_x = master.get_analog(ANALOG_RIGHT_X);
 		// int left_y = master.get_analog(ANALOG_LEFT_Y);
 		// int left_x = master.get_analog(ANALOG_LEFT_X);
@@ -319,14 +318,10 @@ void notlift() {
    return result;
  }
 
-double leftFrontSetpoint, leftBackSetpoint, rightFrontSetpoint, rightBackSetpoint;
-double leftFrontMotorValue, leftBackMotorValue, rightFrontMotorValue, rightBackMotorValue;
+double left_front_motorSetpoint, left_back_motorSetpoint, right_front_motorSetpoint, right_back_motorSetpoint;
+double left_front_motorMotorValue, left_back_motorMotorValue, right_front_motorMotorValue, right_back_motorMotorValue;
  void opcontrol() {
    pros::Motor motor1 (8);
-   pros::Motor leftBack (2, false);
-   pros::Motor leftFront (3, false);
-   pros::Motor rightBack (9, true);
-   pros::Motor rightFront (8, true);
 
 
 
@@ -334,36 +329,31 @@ double leftFrontMotorValue, leftBackMotorValue, rightFrontMotorValue, rightBackM
    while (true) {
      double factor = abs( master.get_analog(ANALOG_RIGHT_X)) / 127.0 ;
      double squareF = factor*factor;
-     leftBackSetpoint = (master.get_analog(ANALOG_LEFT_Y) - master.get_analog(ANALOG_LEFT_X) + squareF*(master.get_analog(ANALOG_RIGHT_X)));
-     leftFrontSetpoint = (master.get_analog(ANALOG_LEFT_Y) + master.get_analog(ANALOG_LEFT_X) + squareF*(master.get_analog(ANALOG_RIGHT_X)));
-     rightBackSetpoint = (master.get_analog(ANALOG_LEFT_Y) + master.get_analog(ANALOG_LEFT_X) - squareF*(master.get_analog(ANALOG_RIGHT_X)));
-     rightFrontSetpoint = (master.get_analog(ANALOG_LEFT_Y) - master.get_analog(ANALOG_LEFT_X)  -squareF*(master.get_analog(ANALOG_RIGHT_X)));
-     leftBackMotorValue = drivePid(leftBack, left_back_drive_pid, leftBackSetpoint);
-		 leftFrontMotorValue = drivePid(leftFront, left_front_drive_pid, leftFrontSetpoint);
-		 rightBackMotorValue = drivePid(rightBack, right_back_drive_pid, rightBackSetpoint);
-     rightFrontMotorValue = drivePid(rightFront, right_front_drive_pid, rightFrontSetpoint);
+     left_back_motorSetpoint = (master.get_analog(ANALOG_LEFT_Y) - master.get_analog(ANALOG_LEFT_X) + squareF*(master.get_analog(ANALOG_RIGHT_X)));
+     left_front_motorSetpoint = (master.get_analog(ANALOG_LEFT_Y) + master.get_analog(ANALOG_LEFT_X) + squareF*(master.get_analog(ANALOG_RIGHT_X)));
+     right_back_motorSetpoint = (master.get_analog(ANALOG_LEFT_Y) + master.get_analog(ANALOG_LEFT_X) - squareF*(master.get_analog(ANALOG_RIGHT_X)));
+     right_front_motorSetpoint = (master.get_analog(ANALOG_LEFT_Y) - master.get_analog(ANALOG_LEFT_X)  -squareF*(master.get_analog(ANALOG_RIGHT_X)));
+     left_back_motor_controller->Set_Speed(left_back_motorSetpoint);
+     left_front_motor_controller->Set_Speed(left_front_motorSetpoint);
+     right_back_motor_controller->Set_Speed(right_back_motorSetpoint);
+     right_front_motor_controller->Set_Speed(right_front_motorSetpoint);
+
+     pros::lcd::set_text(0, "left_back_motor:" + std::to_string((left_back_motor.get_position())));
+
+     pros::lcd::set_text(2, "left_front_motor:" + std::to_string((left_front_motor.get_position())));
+
+     pros::lcd::set_text(1, "right_back_motor:" + std::to_string((right_back_motor.get_position())));
+
+     pros::lcd::set_text(3, "right_front_motor:" + std::to_string((right_front_motor.get_position())));
 
 
-     leftBack.move(leftBackMotorValue);
-     pros::lcd::set_text(0, "leftBack:" + std::to_string((leftBack.get_position())));
+     pros::lcd::set_text(4, "motor value left_back_motor:" + std::to_string(left_back_motorMotorValue));
 
-     leftFront.move(leftFrontMotorValue);
-     pros::lcd::set_text(2, "leftFront:" + std::to_string((leftFront.get_position())));
+     pros::lcd::set_text(5, "motor value left_front_motor:" + std::to_string(left_front_motorMotorValue));
 
-     rightBack.move(rightBackMotorValue);
-     pros::lcd::set_text(1, "rightBack:" + std::to_string((rightBack.get_position())));
+     pros::lcd::set_text(6, "motor value right_back_motor:" + std::to_string(right_back_motorMotorValue));
 
-     rightFront.move(rightFrontMotorValue);
-     pros::lcd::set_text(3, "rightFront:" + std::to_string((rightFront.get_position())));
-
-
-     pros::lcd::set_text(4, "motor value leftBack:" + std::to_string(leftBackMotorValue));
-
-     pros::lcd::set_text(5, "motor value leftFront:" + std::to_string(leftFrontMotorValue));
-
-     pros::lcd::set_text(6, "motor value rightBack:" + std::to_string(rightBackMotorValue));
-
-     pros::lcd::set_text(7, "motor value rightFront:" + std::to_string(rightFrontMotorValue));
+     pros::lcd::set_text(7, "motor value right_front_motor:" + std::to_string(right_front_motorMotorValue));
 
      pros::delay(20);
    }

@@ -14,7 +14,6 @@ class Pid {
    * active to prevent integral windup.
    */
   void ResetError();
-
   /**
    * Returns the output of the PID controller correcting the input.
    * @param goal The current setpoint value
