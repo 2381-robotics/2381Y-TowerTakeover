@@ -7,7 +7,7 @@
 >
 >--<cite>A Wise Person</cite>
 
-And we get it. There are probably many things you want to be doing rather than reading this. That makes sense. In fact, I myself have barely read through the document -  and I wrote this shit. However, at 2381 Robotics, we have lots and lots of documentation because it aligns with three of our guiding princaples.
+And we get it. There are probably many things you want to be doing rather than reading this. That makes sense. In fact, I myself have barely read through the document -  and I wrote this shit. However, at 2381 Robotics, we have lots and lots of documentation because it aligns with three of our guiding principles.
 
 ## **PRINCIPLES, PRINCIPALS, AND PINEAPPLES** ##
 *  ## Principle Number One - Engagement
