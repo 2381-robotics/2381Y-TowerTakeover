@@ -18,7 +18,5 @@ private:
     double _left_back_setpoint;
     double _right_front_setpoint;
     double _right_back_setpoint;
-
 };
-
 #endif
