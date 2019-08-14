@@ -1,5 +1,5 @@
-#ifndef EVERYTHING_H_
-#define EVERYTHING_H_
+#ifndef PORTS_H_
+#define PORTS_H_
 
 //drive
 #define LEFT_FRONT_MOTOR_PORT 3
