@@ -58,31 +58,31 @@ void mechDrive(){
 
     right_front_motor.move((master.get_analog(ANALOG_LEFT_Y) - master.get_analog(ANALOG_LEFT_X)  -squareF*(master.get_analog(ANALOG_RIGHT_X))));
 }
-void tankdrive() {
-	while (true) {
-		leftfront.move(master.get_analog(ANALOG_LEFT_Y));
-		leftback.move(master.get_analog(ANALOG_LEFT_Y));
-		rightfront.move(master.get_analog(ANALOG_RIGHT_Y));
-		rightback.move(master.get_analog(ANALOG_RIGHT_Y));
-		pros::delay(20);
-	}
-}
-
-void xdrive() {
-
-		int right_x = master.get_analog(ANALOG_RIGHT_X);
-		int left_y = master.get_analog(ANALOG_LEFT_Y);
-		int left_x = master.get_analog(ANALOG_LEFT_X);
-		int northwest = left_y+right_x+left_x;
-		int northeast = left_y-right_x-left_x;
-		int southwest = -1*(left_y+right_x-left_x);
-		int southeast = -1*(left_y-right_x+left_x);
-		leftfront.move(northwest);
-		rightfront.move(northeast);
-		leftback.move(southwest);
-		rightback.move(southeast);
-
-}
+// void tankdrive() {
+// 	while (true) {
+// 		leftfront.move(master.get_analog(ANALOG_LEFT_Y));
+// 		leftback.move(master.get_analog(ANALOG_LEFT_Y));
+// 		rightfront.move(master.get_analog(ANALOG_RIGHT_Y));
+// 		rightback.move(master.get_analog(ANALOG_RIGHT_Y));
+// 		pros::delay(20);
+// 	}
+// }
+//
+// void xdrive() {
+//
+// 		int right_x = master.get_analog(ANALOG_RIGHT_X);
+// 		int left_y = master.get_analog(ANALOG_LEFT_Y);
+// 		int left_x = master.get_analog(ANALOG_LEFT_X);
+// 		int northwest = left_y+right_x+left_x;
+// 		int northeast = left_y-right_x-left_x;
+// 		int southwest = -1*(left_y+right_x-left_x);
+// 		int southeast = -1*(left_y-right_x+left_x);
+// 		leftfront.move(northwest);
+// 		rightfront.move(northeast);
+// 		leftback.move(southwest);
+// 		rightback.move(southeast);
+//
+// }
 
 void xDrivePID() {
 	// pros::lcd::set_text(3, "left_front_motor:" + std::to_string(leftfront.get_position()));
