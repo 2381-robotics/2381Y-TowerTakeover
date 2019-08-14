@@ -17,9 +17,7 @@ class Motor_Controller {
    * active to prevent integral windup.
    */
   void Set_Speed(double targetValue);
-  
-  Pid * pid;
-
+  Pid* pid;
   pros::Motor* motor;
   /**
    * Returns the output of the PID controller correcting the input.

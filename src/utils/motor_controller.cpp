@@ -11,7 +11,7 @@ Motor_Controller::Motor_Controller(double* kp, double* ki, double* kd, pros::Mot
 }
 
 void Motor_Controller::Set_Speed(double targetValue){
-  double motorSpeed = (*motor).get_actual_velocity();
-  double motorValue = pid->Update(targetValue, motorSpeed);
+  double motorSpeed = this->motor->get_actual_velocity();
+  double motorValue = this->pid->Update(targetValue, motorSpeed);
   (*motor).move(motorValue);
 }
