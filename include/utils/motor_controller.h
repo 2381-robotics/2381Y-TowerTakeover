@@ -16,7 +16,7 @@ class Motor_Controller {
    * Resets the error counts. It should be called when the PID loop is not
    * active to prevent integral windup.
    */
-  void Set_Speed(double targetValue);
+  double Set_Speed(double targetValue);
   Pid* pid;
   pros::Motor* motor;
   /**
