@@ -29,8 +29,7 @@ pros::Motor left_front_motor (LEFT_FRONT_MOTOR_PORT, false);
 pros::Motor left_back_motor (LEFT_BACK_MOTOR_PORT, false);
 pros::Motor right_front_motor (RIGHT_FRONT_MOTOR_PORT, true);
 pros::Motor right_back_motor (RIGHT_BACK_MOTOR_PORT, true);
-double master_pid_values [3] = {,0.001,0}; //ku = 1.1
-
+double master_pid_values [3] = {0.001,0.001,0}; //ku = 1.1
 
 Motor_Controller* left_front_motor_controller = new Motor_Controller(&left_front_pid_values[0], &left_front_pid_values[1], &left_front_pid_values[2], &left_front_motor);
 Motor_Controller* left_back_motor_controller = new Motor_Controller(&left_back_pid_values[0], &left_back_pid_values[1], &left_back_pid_values[2], &left_back_motor);
@@ -43,7 +42,6 @@ int liftHeight;
 int cubeHeight = 360;
 int maxLift = 1600;
 float liftSpeed = 14.4;
-
 
 pros::Controller master (CONTROLLER_MASTER);
 
