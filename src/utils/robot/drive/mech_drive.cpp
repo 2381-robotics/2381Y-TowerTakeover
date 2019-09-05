@@ -10,8 +10,10 @@ Mech_Drive::Mech_Drive(Motor_Controller* left_front_motor_controller, Motor_Cont
    _master_setpoint = 1;
   test = (*master_pid_values)[0];
 }
-
-void Mech_Drive::Drive(double left_x, double left_y, double right_x, double right_y){
+double Mech_Drive::Get_Speed() {
+  return (_left_front_motor_controller->Get_Speed()+_left_back_motor_controller->Get_Speed()+ _right_back_motor_controller->Get_Speed() + _right_front_motor_controller->Get_Speed())/4;
+}
+void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double right_y){
   _left_back_setpoint = (left_y - left_x + abs(right_x)*(right_x)/127);
   _left_front_setpoint = (left_y + left_x + abs(right_x)*(right_x)/127);
   _right_back_setpoint = (left_y + left_x - abs(right_x)*(right_x)/127);
