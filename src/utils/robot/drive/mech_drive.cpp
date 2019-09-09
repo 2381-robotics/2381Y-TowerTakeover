@@ -1,6 +1,6 @@
 #include "utils/robot/drive/mech_drive.h"
 #include "api.h"
-Mech_Drive::Mech_Drive(Motor_Controller* left_front_motor_controller, Motor_Controller* left_back_motor_controller, Motor_Controller* right_front_motor_controller, Motor_Controller* right_back_motor_controller, double(*master_pid_values)[3] ){
+Mech_Drive::Mech_Drive(Motor_Controller* left_front_motor_controller, Motor_Controller* left_back_motor_controller, Motor_Controller* right_front_motor_controller, Motor_Controller* right_back_motor_controller, std::array<double,3> * master_pid_values ){
   _left_front_motor_controller = left_front_motor_controller;
   _left_back_motor_controller = left_back_motor_controller;
   _right_front_motor_controller = right_front_motor_controller;

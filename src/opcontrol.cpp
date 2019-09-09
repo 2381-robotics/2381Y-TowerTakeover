@@ -13,7 +13,7 @@
 
 
 
-using namespace Default;
+using namespace globals;
 
 
 int liftHeight;
@@ -39,17 +39,6 @@ int kP [7];
 int kI [7];
 int kD [7];
 
-void mechDrive(){
-	double factor = abs( master.get_analog(ANALOG_RIGHT_X)) / 127.0 ;
-    double squareF = factor*factor;
-    left_back_motor.move((master.get_analog(ANALOG_LEFT_Y) - master.get_analog(ANALOG_LEFT_X) + squareF*(master.get_analog(ANALOG_RIGHT_X))));
-
-    left_front_motor.move((master.get_analog(ANALOG_LEFT_Y) + master.get_analog(ANALOG_LEFT_X) + squareF*(master.get_analog(ANALOG_RIGHT_X))));
-
-    right_back_motor.move((master.get_analog(ANALOG_LEFT_Y) + master.get_analog(ANALOG_LEFT_X) - squareF*(master.get_analog(ANALOG_RIGHT_X))));
-
-    right_front_motor.move((master.get_analog(ANALOG_LEFT_Y) - master.get_analog(ANALOG_LEFT_X)  -squareF*(master.get_analog(ANALOG_RIGHT_X))));
-}
 // void tankdrive() {
 // 	while (true) {
 // 		leftfront.move(master.get_analog(ANALOG_LEFT_Y));

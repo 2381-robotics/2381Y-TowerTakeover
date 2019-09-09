@@ -10,7 +10,7 @@
 #include "utils/pid.h"
 #include "initialize.h"
 
-
+using namespace globals;
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -23,7 +23,6 @@
  * from where it left off.
  */
 
-Auto_Drive* auto_drive = new Auto_Drive(&mech_drive);
 
 void autonomous() {
   auto_drive->Set_Point_Drive(0,0,0);

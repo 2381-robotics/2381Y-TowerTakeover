@@ -15,6 +15,7 @@
 #include <list>
 #include <map>
 
+using namespace globals;
 
 void initialize() {
 
@@ -28,25 +29,24 @@ void initialize() {
   lift_pid = new Pid(&kp, &ki, &kd);
 
 
-  double left_back_pid_values [3] = {0.66, 0, 0}; //ku = 1.1
-  double right_back_pid_values [3] = {0.6, 0, 0}; //ku = 1
-  double left_front_pid_values [3] = {0.66, 0, 0};
-  double right_front_pid_values [3] = {0.66, 0, 0}; //ku = 1.1
+  left_back_pid_values = {0.66, 0, 0}; //ku = 1.1
+  right_back_pid_values = {0.6, 0, 0}; //ku = 1
+  left_front_pid_values = {0.66, 0, 0};
+  right_front_pid_values = {0.66, 0, 0}; //ku = 1.1
 
   pros::Motor left_front_motor (LEFT_FRONT_MOTOR_PORT, false);
   pros::Motor left_back_motor (LEFT_BACK_MOTOR_PORT, false);
   pros::Motor right_front_motor (RIGHT_FRONT_MOTOR_PORT, true);
   pros::Motor right_back_motor (RIGHT_BACK_MOTOR_PORT, true);
-  double master_pid_values [3] = {0,0.001,0}; //ku = 1.10
+  master_pid_values = {0,0.001,0}; //ku = 1.10
 
-  Motor_Controller* left_front_motor_controller = new Motor_Controller(&left_front_pid_values[0], &left_front_pid_values[1], &left_front_pid_values[2], &left_front_motor);
-  Motor_Controller* left_back_motor_controller = new Motor_Controller(&left_back_pid_values[0], &left_back_pid_values[1], &left_back_pid_values[2], &left_back_motor);
-  Motor_Controller* right_front_motor_controller = new Motor_Controller(&right_front_pid_values[0], &right_front_pid_values[1], &right_front_pid_values[2], &right_front_motor);
-  Motor_Controller* right_back_motor_controller = new Motor_Controller(&right_back_pid_values[0], &right_back_pid_values[1], &right_back_pid_values[2], &right_back_motor);
+  left_front_motor_controller = new Motor_Controller(&left_front_pid_values[0], &left_front_pid_values[1], &left_front_pid_values[2], &left_front_motor);
+  left_back_motor_controller = new Motor_Controller(&left_back_pid_values[0], &left_back_pid_values[1], &left_back_pid_values[2], &left_back_motor);
+  right_front_motor_controller = new Motor_Controller(&right_front_pid_values[0], &right_front_pid_values[1], &right_front_pid_values[2], &right_front_motor);
+  right_back_motor_controller = new Motor_Controller(&right_back_pid_values[0], &right_back_pid_values[1], &right_back_pid_values[2], &right_back_motor);
 
-  Mech_Drive* mech_drive = new Mech_Drive(left_front_motor_controller, left_back_motor_controller, right_front_motor_controller, right_back_motor_controller, &master_pid_values);
-  Auto_Drive* auto_drive = new Auto_Drive(mech_drive);
-
+  mech_drive = new Mech_Drive(left_front_motor_controller, left_back_motor_controller, right_front_motor_controller, right_back_motor_controller, &master_pid_values);
+  auto_drive = new Auto_Drive(mech_drive);
 
 }
 

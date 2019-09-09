@@ -15,7 +15,6 @@
 
 Auto_Drive::Auto_Drive(Drive* drive){
   this->drive = drive;
-  _speed= speed;
 }
 
 std::tuple<double, double> Auto_Drive::Convert(double speed, double direction){
@@ -23,6 +22,7 @@ std::tuple<double, double> Auto_Drive::Convert(double speed, double direction){
   double x = sin(direction* (180/M_PI)) *speed;
   double y = cos(direction* (180/M_PI)) *speed;
   drive_coordinates = std::make_tuple(x, y);
+  return drive_coordinates;
 }
 
 void Auto_Drive::Set_Point_Drive(double *speed, double *direction, double *distance){
@@ -30,7 +30,6 @@ void Auto_Drive::Set_Point_Drive(double *speed, double *direction, double *dista
   _direction = direction;
     std::tuple<double, double> drive_convert = this->Convert(*_speed, *_direction);
   this->drive->Set_Drive(0, std::get<0>(drive_convert), std::get<1>(drive_convert), 0);
-
 
 }
 
