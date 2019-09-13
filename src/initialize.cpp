@@ -25,7 +25,7 @@ pros::Motor right_back_motor (RIGHT_BACK_MOTOR_PORT, true);
 std::array<double,3>  master_pid_values = {0,0.001,0}; //ku = 1.10
 
 void initialize() {
-
+  
   pros::lcd::initialize();
 
 }

@@ -8,7 +8,6 @@ void Robot::set_drive(double left_x, double left_y, double right_x, double right
 }
 void Robot::create(){}
 Robot::Robot(){}
-Robot* robot = RobotFactory::instance()->create_robot("Mech_Drive","","");
 
 void Robot::assign_drive(Drive* drive_instance) {
   this->drive = drive_instance;
@@ -19,3 +18,5 @@ void Robot::assign_lift(Structure* drive_instance) {
 void Robot::assign_intake(Structure* drive_instance) {
   this->intake = drive_instance;
 }
+
+Robot* robot = RobotFactory::instance()->create_robot("Mech_Drive","","");

@@ -9,5 +9,5 @@ Registrar<T>::Registrar(std::string robot_type) {
 	RobotFactory::instance()->register_factory_function(robot_type, [](void) -> Structure* { return new T(); });
 }
 
-static Registrar<Mech_Drive> registrar_drive_mech("MechanumDrive");
+static Registrar<Mech_Drive> registrar_drive_mech("Mech_Drive");
 static Registrar<Robot> registrar_robot("ROBOT_MAIN");
