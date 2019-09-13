@@ -18,10 +18,11 @@ class Robot : public Structure{
 	enum class DrivingStyle;
 
 	virtual ~Robot();
-	
+
 	void begin_tasks();
 	void set_drive(double left_x, double left_y, double right_x, double right_y);
 	void stop();
+	void create() override;
 
 	void assign_drive(Drive* drive_instance);
 	void assign_lift(Structure* lift_instance);

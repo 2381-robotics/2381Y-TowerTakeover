@@ -5,7 +5,7 @@
 class Structure {
 	public:
 	Structure(){};
-	virtual void create() =0;
+	virtual void create() = 0;
 };
 
 #endif
