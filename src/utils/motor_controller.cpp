@@ -1,4 +1,4 @@
-#include "utils/motor_controller.h"
+#include "utils/motor_controller.hpp"
 #include "api.h"
 #include "utils/pid.h"
 /**
@@ -14,6 +14,7 @@ Motor_Controller::Motor_Controller(double* kp, double* ki, double* kd, pros::Mot
 double Motor_Controller::Get_Speed () {
   return this->motor->get_actual_velocity();
 }
+
 double Motor_Controller::Set_Speed(double targetValue){
   double motorSpeed = this->motor->get_actual_velocity();
   double motorValue = this->pid->Update(targetValue, motorSpeed);

@@ -1,7 +1,7 @@
 #ifndef OPCONTROL_H_
 #define OPCONTROL_H_
-double awning_setpoint;
-double awning_output;
-double lift_setpoint;
-double lift_output;
+extern double awning_setpoint;
+extern double awning_output;
+extern double lift_setpoint;
+extern double lift_output;
 #endif

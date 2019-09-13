@@ -1,5 +1,5 @@
-#include "utils/motor_controller.h"
-#include "utils/robot/drive/mech_drive.h"
+#include "utils/motor_controller.hpp"
+#include "utils/robot/drive/mech_drive.hpp"
 
 #include "api.h"
 #include "auto_drive.h"
@@ -11,7 +11,6 @@
 /**
  * Constructor taking in kp, ki, and kd
  */
-
 
 Auto_Drive::Auto_Drive(Drive* drive){
   this->drive = drive;
@@ -25,7 +24,7 @@ std::tuple<double, double> Auto_Drive::Convert(double speed, double direction){
   return drive_coordinates;
 }
 
-void Auto_Drive::Set_Point_Drive(double *speed, double *direction, double *distance){
+volatile void Auto_Drive::Set_Point_Drive(double *speed, double *direction, double *distance){
   _speed = speed;
   _direction = direction;
     std::tuple<double, double> drive_convert = this->Convert(*_speed, *_direction);

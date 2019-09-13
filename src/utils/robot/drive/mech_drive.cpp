@@ -1,14 +1,20 @@
-#include "utils/robot/drive/mech_drive.h"
+#include "utils/robot/drive/mech_drive.hpp"
+#include "../../motor_controller.hpp"
 #include "api.h"
-Mech_Drive::Mech_Drive(Motor_Controller* left_front_motor_controller, Motor_Controller* left_back_motor_controller, Motor_Controller* right_front_motor_controller, Motor_Controller* right_back_motor_controller, std::array<double,3> * master_pid_values ){
-  _left_front_motor_controller = left_front_motor_controller;
-  _left_back_motor_controller = left_back_motor_controller;
-  _right_front_motor_controller = right_front_motor_controller;
-  _right_back_motor_controller = right_back_motor_controller;
-  _master_pid = new Pid( &(*master_pid_values)[0], &(*master_pid_values)[1], &(*master_pid_values)[2]);
+#include "globals.hpp"
+#include <array>
+Mech_Drive::Mech_Drive() : test{left_front_pid_values[0]}{
+pros::Motor something (LEFT_BACK_MOTOR_PORT);
+  _left_front_motor_controller = new Motor_Controller(&left_front_pid_values[0], &left_front_pid_values[1], &left_front_pid_values[2], &left_front_motor);
+  _left_back_motor_controller = new Motor_Controller(&left_back_pid_values[0], &left_back_pid_values[1], &left_back_pid_values[2], &left_back_motor);
+  _right_front_motor_controller = new Motor_Controller(&right_front_pid_values[0], &right_front_pid_values[1], &right_front_pid_values[2], &right_front_motor);
+  _right_back_motor_controller = new Motor_Controller(&left_front_pid_values[0], &left_front_pid_values[1], &left_front_pid_values[2], &left_front_motor);
+
+  _master_pid = new Pid( &(master_pid_values)[0], &(master_pid_values)[1], &(master_pid_values)[2]);
    _master_error_average = 0;
    _master_setpoint = 1;
-  test = (*master_pid_values)[0];
+  test = (master_pid_values)[0];
+
 }
 double Mech_Drive::Get_Speed() {
   return (_left_front_motor_controller->Get_Speed()+_left_back_motor_controller->Get_Speed()+ _right_back_motor_controller->Get_Speed() + _right_front_motor_controller->Get_Speed())/4;

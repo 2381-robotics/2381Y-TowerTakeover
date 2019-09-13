@@ -2,51 +2,31 @@
 #include "ports.h"
 #include "opcontrol.h"
 
-#include "main.h"
-#include "ports.h"
-
 #include "utils/pid.h"
-#include "utils/motor_controller.h"
-#include "utils/robot/drive/mech_drive.h"
+#include "utils/motor_controller.hpp"
+#include "utils/robot/drive/mech_drive.hpp"
 #include "initialize.h"
 #include "auto_drive.h"
 
-
 #include <list>
 #include <map>
+#include "globals.hpp"
 
-using namespace globals;
+std::array<double,3> left_back_pid_values;
+std::array<double,3> right_back_pid_values;
+std::array<double,3> left_front_pid_values;
+std::array<double,3> right_front_pid_values;
+
+pros::Motor left_front_motor (LEFT_FRONT_MOTOR_PORT, false);
+pros::Motor left_back_motor (LEFT_BACK_MOTOR_PORT, false);
+pros::Motor right_front_motor (RIGHT_FRONT_MOTOR_PORT, true);
+pros::Motor right_back_motor (RIGHT_BACK_MOTOR_PORT, true);
+
+std::array<double,3>  master_pid_values = {0,0.001,0}; //ku = 1.10
 
 void initialize() {
 
   pros::lcd::initialize();
-  double kp = 1;
-
-  // double kp = 0.618;
-  double ki = 0.0;
-  double kd = 0;
-  // double kd = 0;
-  lift_pid = new Pid(&kp, &ki, &kd);
-
-
-  left_back_pid_values = {0.66, 0, 0}; //ku = 1.1
-  right_back_pid_values = {0.6, 0, 0}; //ku = 1
-  left_front_pid_values = {0.66, 0, 0};
-  right_front_pid_values = {0.66, 0, 0}; //ku = 1.1
-
-  pros::Motor left_front_motor (LEFT_FRONT_MOTOR_PORT, false);
-  pros::Motor left_back_motor (LEFT_BACK_MOTOR_PORT, false);
-  pros::Motor right_front_motor (RIGHT_FRONT_MOTOR_PORT, true);
-  pros::Motor right_back_motor (RIGHT_BACK_MOTOR_PORT, true);
-  master_pid_values = {0,0.001,0}; //ku = 1.10
-
-  left_front_motor_controller = new Motor_Controller(&left_front_pid_values[0], &left_front_pid_values[1], &left_front_pid_values[2], &left_front_motor);
-  left_back_motor_controller = new Motor_Controller(&left_back_pid_values[0], &left_back_pid_values[1], &left_back_pid_values[2], &left_back_motor);
-  right_front_motor_controller = new Motor_Controller(&right_front_pid_values[0], &right_front_pid_values[1], &right_front_pid_values[2], &right_front_motor);
-  right_back_motor_controller = new Motor_Controller(&right_back_pid_values[0], &right_back_pid_values[1], &right_back_pid_values[2], &right_back_motor);
-
-  mech_drive = new Mech_Drive(left_front_motor_controller, left_back_motor_controller, right_front_motor_controller, right_back_motor_controller, &master_pid_values);
-  auto_drive = new Auto_Drive(mech_drive);
 
 }
 

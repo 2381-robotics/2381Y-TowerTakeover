@@ -1,6 +1,6 @@
 #ifndef AUTO_DRIVE_H
 #define AUTO_DRIVE_H
-#include "utils/robot/drive/drive.h"
+#include "utils/robot/drive/drive.hpp"
 
 #include <array>
 #include <tuple>
@@ -11,7 +11,7 @@ public:
 
   std::tuple<double, double> Convert(double speed = 0, double direction = 0);
   Drive* drive;
-  void Set_Point_Drive(double *speed = 0, double *direction = 0, double *distance = 0);
+  void volatile  Set_Point_Drive(double *speed = 0, double *direction = 0, double *distance = 0);
 private:
   double* _speed;
   double* _direction;
