@@ -12,22 +12,23 @@
 #include <map>
 #include "globals.hpp"
 
-std::array<double,3> left_back_pid_values;
-std::array<double,3> right_back_pid_values;
-std::array<double,3> left_front_pid_values;
-std::array<double,3> right_front_pid_values;
+std::array<double,3> left_back_pid_values = {0.66, 0, 0};
+std::array<double,3> right_back_pid_values = {0.66, 0, 0};
+std::array<double,3> left_front_pid_values = {0.66, 0, 0};
+std::array<double,3> right_front_pid_values = {0.66, 0, 0};
 
 pros::Motor left_front_motor (LEFT_FRONT_MOTOR_PORT, false);
 pros::Motor left_back_motor (LEFT_BACK_MOTOR_PORT, false);
 pros::Motor right_front_motor (RIGHT_FRONT_MOTOR_PORT, true);
 pros::Motor right_back_motor (RIGHT_BACK_MOTOR_PORT, true);
 
+pros::Controller master (CONTROLLER_MASTER);
+
 std::array<double,3>  master_pid_values = {0,0.001,0}; //ku = 1.10
 
 void initialize() {
-  
+  robot->create();
   pros::lcd::initialize();
-
 }
 
 /**

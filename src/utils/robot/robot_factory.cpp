@@ -13,7 +13,6 @@ Robot* RobotFactory::create_robot(std::string drive_type, std::string lift_type,
 		auto drive_instance = factory_function_registry.find(drive_type);
 		if (drive_instance != factory_function_registry.end()) {
 			// mapped value (std::function<Robot*(void)>).
-
 			instance->assign_drive(dynamic_cast<Drive*>(drive_instance->second()));
 		}
 		auto lift_instance = factory_function_registry.find(lift_type);

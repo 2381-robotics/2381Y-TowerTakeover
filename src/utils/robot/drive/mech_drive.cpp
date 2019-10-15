@@ -4,23 +4,12 @@
 #include "globals.hpp"
 #include <array>
 
-Mech_Drive::Mech_Drive() : test{left_front_pid_values[0]}{
-pros::Motor something (LEFT_BACK_MOTOR_PORT);
-  _left_front_motor_controller = new Motor_Controller(&left_front_pid_values[0], &left_front_pid_values[1], &left_front_pid_values[2], &left_front_motor);
-  _left_back_motor_controller = new Motor_Controller(&left_back_pid_values[0], &left_back_pid_values[1], &left_back_pid_values[2], &left_back_motor);
-  _right_front_motor_controller = new Motor_Controller(&right_front_pid_values[0], &right_front_pid_values[1], &right_front_pid_values[2], &right_front_motor);
-  _right_back_motor_controller = new Motor_Controller(&left_front_pid_values[0], &left_front_pid_values[1], &left_front_pid_values[2], &left_front_motor);
 
-  _master_pid = new Pid( &(master_pid_values)[0], &(master_pid_values)[1], &(master_pid_values)[2]);
-   _master_error_average = 0;
-   _master_setpoint = 1;
-  test = (master_pid_values)[0];
-
-}
 double Mech_Drive::Get_Speed() {
   return (_left_front_motor_controller->Get_Speed()+_left_back_motor_controller->Get_Speed()+ _right_back_motor_controller->Get_Speed() + _right_front_motor_controller->Get_Speed())/4;
 }
 void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double right_y){
+
   _left_back_setpoint = (left_y - left_x + std::abs(right_x)*(right_x)/127);
   _left_front_setpoint = (left_y + left_x + std::abs(right_x)*(right_x)/127);
   _right_back_setpoint = (left_y + left_x - std::abs(right_x)*(right_x)/127);
@@ -31,7 +20,6 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
 
   double tuning_coefficient = _master_pid->Update(0, _master_error_average);
   pros::lcd::set_text(2, "tuning coeff:" + std::to_string(tuning_coefficient));
-
 
   // pros::lcd::set_text(0+4, "left_back_motor:" + std::to_string((_left_back_setpoint)));
   //
@@ -65,4 +53,12 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
 
 }
 
-void Mech_Drive::create() {}
+void Mech_Drive::create() {
+    _left_front_motor_controller = new Motor_Controller(&left_front_pid_values[0], &left_front_pid_values[1], &left_front_pid_values[2], &left_front_motor);
+    _left_back_motor_controller = new Motor_Controller(&left_back_pid_values[0], &left_back_pid_values[1], &left_back_pid_values[2], &left_back_motor);
+    _right_front_motor_controller = new Motor_Controller(&right_front_pid_values[0], &right_front_pid_values[1], &right_front_pid_values[2], &right_front_motor);
+    _right_back_motor_controller = new Motor_Controller(&left_front_pid_values[0], &left_front_pid_values[1], &left_front_pid_values[2], &left_front_motor);
+    _master_pid = new Pid(&(master_pid_values)[0], &(master_pid_values)[1], &(master_pid_values)[2]);
+    _master_error_average = 0;
+    _master_setpoint = 1;
+}

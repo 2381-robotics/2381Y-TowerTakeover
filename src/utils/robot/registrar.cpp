@@ -10,4 +10,5 @@ Registrar<T>::Registrar(std::string robot_type) {
 }
 
 static Registrar<Mech_Drive> registrar_drive_mech("Mech_Drive");
+
 static Registrar<Robot> registrar_robot("ROBOT_MAIN");

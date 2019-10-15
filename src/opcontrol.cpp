@@ -12,27 +12,69 @@
 #include "globals.hpp"
 
 
-
 int liftHeight;
-int cubeHeight = 360;
-int maxLift = 1600;
-float liftSpeed = 14.4;
-
-pros::Controller master (CONTROLLER_MASTER);
+int cubeHeight = 280;
+int maxLift = 1800;
+float liftSpeed = 10;
 
 
+double lift_output;
 double left_front_motorSetpoint, left_back_motorSetpoint, right_front_motorSetpoint, right_back_motorSetpoint;
 double left_front_motorMotorValue, left_back_motorMotorValue, right_front_motorMotorValue, right_back_motorMotorValue;
 
+pros::Motor testMotorLeft (1, true);
+pros::Motor testMotorRight (7, false);
 
-pros::Motor testMotorLeft (16, true);
-pros::Motor testMotorRight (17, false);
+pros::Motor leftLift (5, true);
+pros::Motor rightLift(10, false);
+double liftPidValues[3] = {0.618, 0, 1.454};
+double masterLiftPidValues[3] = {1, 0.001, 0};
+
+Pid* lift_pid = new Pid(&liftPidValues[0], &liftPidValues[1], &liftPidValues[2]);
+Pid* master_lift_pid = new Pid(&masterLiftPidValues[0], &masterLiftPidValues[1], &masterLiftPidValues[2]);
+
+double liftAverage, liftCoeffient;
+double liftDifference;
+void pidLift() {
+ if (master.get_digital_new_press(DIGITAL_X)) {
+     liftHeight = (liftHeight + cubeHeight > maxLift) ? maxLift : (liftHeight+cubeHeight);
+  }
+ if (master.get_digital_new_press(DIGITAL_B)) {
+   liftHeight = (liftHeight - cubeHeight < 0) ? 0 : (liftHeight-cubeHeight);
+ }
+}
+void autoLift() {
+   if (master.get_digital(DIGITAL_UP)) {
+     liftHeight = (liftHeight + liftSpeed > maxLift) ? maxLift : (liftHeight+liftSpeed);
+   }
+   if (master.get_digital(DIGITAL_DOWN)) {
+     liftHeight = (liftHeight - liftSpeed < 0) ? 0 : (liftHeight-liftSpeed);
+   }
+}
+void lift() {
+ // pros::lcd::set_text(3, std::to_string(master.get_analog(ANALOG_RIGHT_Y)));
+ pros::lcd::set_text(5, "left:" + std::to_string((leftLift.get_position())));
+ pros::lcd::set_text(6, "right:" + std::to_string(rightLift.get_position()));
+ liftAverage = (leftLift.get_position() + rightLift.get_position()) / 2;
+ liftDifference = (leftLift.get_position() - rightLift.get_position());
+ pros::lcd::set_text(2, "average:" + (std::to_string(liftAverage)));
+ lift_output = lift_pid->Update(liftHeight, liftAverage);
+ liftCoeffient = master_lift_pid->Update(0, liftDifference);
+ pros::lcd::set_text(3, "lift coefficient: "+ std::to_string(liftCoeffient));
+ pros::lcd::set_text(4, "liftoutput:" + (std::to_string(lift_output)));
+ // liftHeight+=master.get_analog(ANALOG_RIGHT_Y);
+ pidLift();
+ autoLift();
+ rightLift.move(lift_output - liftCoeffient);
+ leftLift.move(lift_output+liftCoeffient);
+}
 
  void opcontrol() {
    while (true) {
 		 testMotorLeft.move(master.get_analog(ANALOG_LEFT_X)/3 + master.get_analog(ANALOG_LEFT_Y));
 		 testMotorRight.move(master.get_analog(ANALOG_LEFT_X)/3 + master.get_analog(ANALOG_LEFT_Y));
      robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
+     lift();
 // 			 if(master.get_digital(DIGITAL_X)){
 // 	//			 left_front_motor_controller->Set_Speed(150);
 // 	//		 mech_drive->Drive(0,30,0, 0);
@@ -56,6 +98,7 @@ pros::Motor testMotorRight (17, false);
      pros::delay(20);
    }
  }
+
 
 //
 // vision::signature SIG_1 (1, 0, 0, 0, 0, 0, 0, 3.000, 0);

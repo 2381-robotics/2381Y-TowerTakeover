@@ -22,5 +22,5 @@
  */
 Auto_Drive* auto_drive;
 void autonomous() {
-  auto_drive->Set_Point_Drive(0,0,0);
+  // auto_drive->Set_Point_Drive(0,0,0);
 }
