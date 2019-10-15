@@ -1,5 +1,14 @@
 #include "main.h"
+#include "utils/motor_controller.hpp"
+#include "utils/robot/drive/mech_drive.hpp"
+#include "utils/robot/drive/drive.hpp"
 
+
+#include "api.h"
+#include "auto_drive.h"
+#include <math.h>
+#include "utils/pid.h"
+#include "globals.hpp"
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -11,4 +20,7 @@
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+Auto_Drive* auto_drive;
+void autonomous() {
+  // auto_drive->Set_Point_Drive(0,0,0);
+}

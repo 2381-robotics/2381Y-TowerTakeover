@@ -5,6 +5,7 @@
 #include <map>
 
 
+
 class Motor_Set{
 public:
   Motor_Set(std::list<char>* parameters);

@@ -1,4 +1,5 @@
 #include "utils/pid.h"
+#include "api.h"
 
 /**
  * Constructor taking in kp, ki, and kd
@@ -8,6 +9,8 @@ Pid::Pid(double* kp, double* ki, double* kd) {
   ki_ = ki;
   kd_ = kd;
   ResetError();
+
+
 }
 
 /**

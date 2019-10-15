@@ -4,353 +4,101 @@
 #include "ports.h"
 
 #include "utils/pid.h"
-#include "utils/motor_controller.h"
-#include "utils/robot/drive/mech_drive.h"
+#include "utils/motor_controller.hpp"
+#include "utils/robot/drive/mech_drive.hpp"
 
-double kp = 0.1;
-// double kp = 0.618;
-double ki = 0.0;
-double kd = 0;
-// double kd = 0;
-Pid* lift_pid = new Pid(&kp, &ki, &kd);
+#include <list>
+#include <map>
+#include "globals.hpp"
 
-double driveKp = 1;
-double driveKi = 0;
-double driveKd = 0;
-
-pros::Motor left_front_motor (LEFT_FRONT_MOTOR_PORT, false);
-pros::Motor left_back_motor (LEFT_BACK_MOTOR_PORT, false);
-pros::Motor right_front_motor (RIGHT_FRONT_MOTOR_PORT, true);
-pros::Motor right_back_motor (RIGHT_BACK_MOTOR_PORT, true);
-
-Motor_Controller* left_front_motor_controller = new Motor_Controller(&driveKp, &driveKi, &driveKd, &left_front_motor);
-Motor_Controller* left_back_motor_controller = new Motor_Controller(&driveKp, &driveKi, &driveKd, &left_back_motor);
-Motor_Controller* right_front_motor_controller = new Motor_Controller(&driveKp, &driveKi, &driveKd, &right_back_motor);
-Motor_Controller* right_back_motor_controller = new Motor_Controller(&driveKp, &driveKi, &driveKd, &right_front_motor);
-
-Mech_Drive* mech_drive = new Mech_Drive(left_front_motor_controller, left_back_motor_controller, right_front_motor_controller, right_back_motor_controller);
 
 int liftHeight;
-int cubeHeight = 360;
-int maxLift = 1600;
-float liftSpeed = 14.4;
+int cubeHeight = 280;
+int maxLift = 1800;
+float liftSpeed = 10;
 
 
-pros::Controller master (CONTROLLER_MASTER);
-
-pros::Motor intakemotor(INTAKE_PORT);
-//pros::Motor leftlift(LL_PORT);
-//pros::Motor rightlift(RL_PORT);
-pros::Motor anglermotor(ANGLER_PORT);
-
-int error[7];
-int sensor[7];
-int setpoint[7];
-int integral[7] = {0,0,0,0,0,0,0};
-int derivative[7];
-int prevError[7] = {0,0,0,0,0,0,0};
-int power[7];
-int kP [7];
-int kI [7];
-int kD [7];
-void mechDrive(){
-	double factor = abs( master.get_analog(ANALOG_RIGHT_X)) / 127.0 ;
-    double squareF = factor*factor;
-    left_back_motor.move((master.get_analog(ANALOG_LEFT_Y) - master.get_analog(ANALOG_LEFT_X) + squareF*(master.get_analog(ANALOG_RIGHT_X))));
-
-    left_front_motor.move((master.get_analog(ANALOG_LEFT_Y) + master.get_analog(ANALOG_LEFT_X) + squareF*(master.get_analog(ANALOG_RIGHT_X))));
-
-    right_back_motor.move((master.get_analog(ANALOG_LEFT_Y) + master.get_analog(ANALOG_LEFT_X) - squareF*(master.get_analog(ANALOG_RIGHT_X))));
-
-    right_front_motor.move((master.get_analog(ANALOG_LEFT_Y) - master.get_analog(ANALOG_LEFT_X)  -squareF*(master.get_analog(ANALOG_RIGHT_X))));
-}
-// void tankdrive() {
-// 	while (true) {
-// 		leftfront.move(master.get_analog(ANALOG_LEFT_Y));
-// 		leftback.move(master.get_analog(ANALOG_LEFT_Y));
-// 		rightfront.move(master.get_analog(ANALOG_RIGHT_Y));
-// 		rightback.move(master.get_analog(ANALOG_RIGHT_Y));
-// 		pros::delay(20);
-// 	}
-// }
-//
-// void xdrive() {
-//
-// 		int right_x = master.get_analog(ANALOG_RIGHT_X);
-// 		int left_y = master.get_analog(ANALOG_LEFT_Y);
-// 		int left_x = master.get_analog(ANALOG_LEFT_X);
-// 		int northwest = left_y+right_x+left_x;
-// 		int northeast = left_y-right_x-left_x;
-// 		int southwest = -1*(left_y+right_x-left_x);
-// 		int southeast = -1*(left_y-right_x+left_x);
-// 		leftfront.move(northwest);
-// 		rightfront.move(northeast);
-// 		leftback.move(southwest);
-// 		rightback.move(southeast);
-//
-// }
-
-void xDrivePID() {
-	// pros::lcd::set_text(3, "left_front_motor:" + std::to_string(leftfront.get_position()));
-	// pros::lcd::set_text(4, "right_front_motor:" + std::to_string(rightfront.get_position()));
-	// pros::lcd::set_text(5, "left_back_motor:" + std::to_string(leftback.get_position()));
-	// pros::lcd::set_text(6, "right_back_motor:" + std::to_string(rightback.get_position()));
-		// int right_x = master.get_analog(ANALOG_RIGHT_X);
-		// int left_y = master.get_analog(ANALOG_LEFT_Y);
-		// int left_x = master.get_analog(ANALOG_LEFT_X);
-		// int northwest = left_y+right_x+left_x;
-		// int northeast = left_y-right_x-left_x;
-		// int southwest = -1*(left_y+right_x-left_x);
-		// int southeast = -1*(left_y-right_x+left_x);
-		// leftfront.move(northwest);
-		// rightfront.move(northeast);
-		// leftback.move(southwest);
-		// rightback.move(southeast);
-
-}
-
-
- pros::Motor motor(0); // right
- pros::Motor motor1(0, true); // left
- Encoder right = pros::c::encoderInit(3, 4, true);
- Encoder back = pros::c::encoderInit(1, 2, true);
- Encoder left = pros::c::encoderInit(6, 5, false);
-
- void pidLift() {
- 	if (master.get_digital_new_press(DIGITAL_X)) {
-       liftHeight = (liftHeight + cubeHeight > maxLift) ? maxLift : (liftHeight+cubeHeight);
-     }
- 	if (master.get_digital_new_press(DIGITAL_B)) {
- 		liftHeight = (liftHeight - cubeHeight < 0) ? 0 : (liftHeight-cubeHeight);
- 	}
- }
-
- void autoLift() {
- 	if(master.get_digital(DIGITAL_UP)){
- 		liftHeight = (liftHeight + liftSpeed > maxLift) ? maxLift : (liftHeight+liftSpeed);
- 	}
- 	if(master.get_digital(DIGITAL_DOWN)){
- 		liftHeight = (liftHeight - liftSpeed < 0) ? 0 : (liftHeight-liftSpeed);
- 	}
- }
-double liftAverage;
-void lift() {
-	pros::lcd::set_text(3, std::to_string(master.get_analog(ANALOG_RIGHT_Y)));
-		pros::lcd::set_text(5, "left:" + std::to_string((motor1.get_position())));
-		pros::lcd::set_text(6, "right:" + std::to_string(motor.get_position()));
-		liftAverage =(motor1.get_position() + motor.get_position())/2;
-		pros::lcd::set_text(2, "average:" + (std::to_string(liftAverage)));
-		lift_output = lift_pid->Update(liftHeight, liftAverage);
-		pros::lcd::set_text(4, "liftoutput:" + (std::to_string(lift_output)));
-		pros::lcd::set_text(7, "liftheight:" + (std::to_string(liftHeight)));
-		// liftHeight+=master.get_analog(ANALOG_RIGHT_Y);
-		pidLift();
-		autoLift();
-		motor.move_velocity(lift_output);
-		motor1.move_velocity(lift_output);
-
-}
-
-void liftPIDTest() {
-	liftAverage =(motor1.get_position() + motor.get_position())/2;
-	// pros::lcd::set_text(2, "average:" + (std::to_string(liftAverage)));
-	lift_output = lift_pid->Update(600, liftAverage);
-	// pros::lcd::set_text(4, "liftoutput:" + (std::to_string(lift_output)));
-	motor.move_velocity(lift_output);
-	motor1.move_velocity(-lift_output);
-
-}
-// void lift() {
-// 	while (true) { /*
-		/**
-		* tune these --> terrence's problem
-		* what could help:
-		* increase kP until steady, continous oscillations
-		* kU = this kP
-		* keep kP and see how long each oscillation takes
-		* (I think in ms? although idk for sure)
-		* pU = this number
-		* approximate constant values for a regular PID method
-		* (this is by Ziegler-Nichols method):
-		* kP = 0.6*kU
-		* kI = 1.2*kU/pU
-		* kD = 0.075*kU*pU
-		* bad idea to write these into code since they're just estimates
-		* better to just straight up put in the numbers
-		*
-		kP[0] = 0;
-		kI[0] = 0;
-		kD[0] = 0;
-	  std::uint32_t now = pros::millis();
-		sensor[1] = anglermotor.get_raw_position(&now);
-		//sensor is sensor value
-		error[LIFTNUMBER] = setpoint[LIFTNUMBER] - sensor[LIFTNUMBER];
-		//setpoint is where you want to be,
-		//based on our auton (problem for later)
-		integral[LIFTNUMBER] += error[LIFTNUMBER];
-		if (error[LIFTNUMBER] == 0 || error[LIFTNUMBER] >= setpoint[LIFTNUMBER] || error[LIFTNUMBER] > 9000) {
-			//9000 is just meme
-			//we need test to figure out
-			integral[LIFTNUMBER] = 0;
-		}
-		derivative[LIFTNUMBER] = error - prevError;
-		prevError[LIFTNUMBER] = error[LIFTNUMBER];
-		power[LIFTNUMBER] = error[LIFTNUMBER]*kP[LIFTNUMBER] + integral[LIFTNUMBER]*kI[LIFTNUMBER] + derivative[LIFTNUMBER]*kD[LIFTNUMBER];
-		*/
-		/*if (master.get_digital(DIGITAL_UP) && master.get_digital(DIGITAL_DOWN)) {
-			leftlift.move(0);
-			rightlift.move(0);
-		}*/
-			//	rightlift.move(master.get_analog(ANALOG_RIGHT_Y));
-			//	leftlift.move(-1*(master.get_analog(ANALOG_RIGHT_Y)));
-// 				pros::delay(20);
-// 		}
-//
-// }
-int intakeSpeed;
-pros::Motor intakeLeft(1);
-pros::Motor intakeRight(7, true);
-void intake(){
-	intakeSpeed = 80*(master.get_digital(DIGITAL_L1)-master.get_digital(DIGITAL_R1))+master.get_analog(ANALOG_RIGHT_Y);
-	intakeLeft.move(intakeSpeed);
-	intakeRight.move(intakeSpeed);
-
-}
-//  pros::Motor motor(3);
-//  pros::Motor motor2(8);
-//  Encoder right = pros::c::encoderInit(3, 4, true);
-//  Encoder back = pros::c::encoderInit(1, 2, true);
-//  Encoder left = pros::c::encoderInit(6, 5, false);
-//
-// void test(){
-// 	motor.move(master.get_analog(ANALOG_RIGHT_Y));
-// 	motor1.move(-1*(master.get_analog(ANALOG_RIGHT_Y)));
-// 	pros::lcd::set_text(1, std::to_string(master.get_analog(ANALOG_RIGHT_Y)));
-// 		// pros::lcd::set_text(5, "left:" + std::to_string(-1*(motor1.get_position())));
-// 		// pros::lcd::set_text(6, "right:" + std::to_string(motor.get_position()));
-// 		double liftAverage =(-1*motor1.get_position() + motor.get_position())/2;
-// 		pros::lcd::set_text(2, "average:" + (std::to_string(liftAverage)));
-// 		awning_output = awning_pid->Update(liftHeight, liftAverage);
-// 		motor.move_velocity(awning_output);
-// 		motor1.move_velocity(-awning_output);
-// }
-
-
-void angler() {
-	while (true) {
-		if (master.get_digital(DIGITAL_X) && master.get_digital(DIGITAL_Y)) {
-			anglermotor.move(0);
-		}
-		else if (master.get_digital(DIGITAL_X)) {
-			anglermotor.move(-1*(ANGLER_POWER));
-		}
-		else if (master.get_digital(DIGITAL_Y)) {
-			anglermotor.move(ANGLER_POWER);
-		}
-		pros::delay(20);
-	}
-}
-//
-// void intake() {
-// 	while (true) {
-// 		if (master.get_digital(DIGITAL_A) && master.get_digital(DIGITAL_B)) {
-// 			intakemotor.move(0);
-// 		}
-// 		else if (master.get_digital(DIGITAL_A)) {
-// 			intakemotor.move(-0.5*(INTAKE_POWER));
-// 		}
-// 		else if (master.get_digital(DIGITAL_B)) {
-// 			intakemotor.move(0.5*(INTAKE_POWER));
-// 		}
-// 		pros::delay(20);
-// 	}
-// }
-
-void notlift() {
-	Ultrasonic ultrasonic = pros::c::ultrasonicInit(PORT_IN, PORT_OUT);
-	int error, sensor, setpoint, integral, derivative, prevError = 0, power;
-	int kP, kI, kD;
-	//set these ^ three
-	/**
-	* tune these --> terrence's problem
-	* what could help:
-	* increase kP until steady, continous oscillations
-	* kU = this kP
-	* keep kP and see how long each oscillation takes
-	* (I think in ms? although idk for sure)
-	* pU = this number
-	* approximate constant values for a regular PID method
-	* (this is by Ziegler-Nichols method):
-	* kP = 0.6*kU
-	* kI = 1.2*kU/pU
-	* kD = 0.075*kU*pU
-	* bad idea to write these into code since they're just estimates
-	* better to just straight up put in the numbers
-	*/
-	while (true) {
-		//sensor is sensor value
-		//setpoint is where you want to be,
-		//based on our auton (problem for later)
-		sensor = pros::c::ultrasonicGet(ultrasonic);
-		error = setpoint - sensor;
-		integral = integral + error;
-		if (error == 0 || error >= setpoint || error > 9000) {
-			//9000 is just meme
-			//we need test to figure out
-			integral = 0;
-		}
-		derivative = error - prevError;
-		prevError = error;
-		power = error*kP + integral*kI + derivative*kD;
-		intakemotor.move(power);
-		pros::delay(15);
-	}
-}
-/**
- * Runs the operator control code. This function will be started in its own task
- * with the default priority and stack size whenever the robot is enabled via
- * the Field Management System or the VEX Competition Switch in the operator
- * control mode.
- *
- * If no competition control is connected, this function will run immediately
- * following initialize().
- *
- * If the robot is disabled or communications is lost, the
- * operator control task will be stopped. Re-enabling the robot will restart the
- * task, not resume it from where it left off.
- */
- double drivePid(pros::Motor motor, Pid* pid, double target) {
-   double result = pid->Update(target, motor.get_actual_velocity());
-   return result;
- }
-
+double lift_output;
 double left_front_motorSetpoint, left_back_motorSetpoint, right_front_motorSetpoint, right_back_motorSetpoint;
 double left_front_motorMotorValue, left_back_motorMotorValue, right_front_motorMotorValue, right_back_motorMotorValue;
+
+pros::Motor testMotorLeft (1, true);
+pros::Motor testMotorRight (7, false);
+
+pros::Motor leftLift (5, true);
+pros::Motor rightLift(10, false);
+double liftPidValues[3] = {0.618, 0, 1.454};
+double masterLiftPidValues[3] = {1, 0.001, 0};
+
+Pid* lift_pid = new Pid(&liftPidValues[0], &liftPidValues[1], &liftPidValues[2]);
+Pid* master_lift_pid = new Pid(&masterLiftPidValues[0], &masterLiftPidValues[1], &masterLiftPidValues[2]);
+
+double liftAverage, liftCoeffient;
+double liftDifference;
+void pidLift() {
+ if (master.get_digital_new_press(DIGITAL_X)) {
+     liftHeight = (liftHeight + cubeHeight > maxLift) ? maxLift : (liftHeight+cubeHeight);
+  }
+ if (master.get_digital_new_press(DIGITAL_B)) {
+   liftHeight = (liftHeight - cubeHeight < 0) ? 0 : (liftHeight-cubeHeight);
+ }
+}
+void autoLift() {
+   if (master.get_digital(DIGITAL_UP)) {
+     liftHeight = (liftHeight + liftSpeed > maxLift) ? maxLift : (liftHeight+liftSpeed);
+   }
+   if (master.get_digital(DIGITAL_DOWN)) {
+     liftHeight = (liftHeight - liftSpeed < 0) ? 0 : (liftHeight-liftSpeed);
+   }
+}
+void lift() {
+ // pros::lcd::set_text(3, std::to_string(master.get_analog(ANALOG_RIGHT_Y)));
+ pros::lcd::set_text(5, "left:" + std::to_string((leftLift.get_position())));
+ pros::lcd::set_text(6, "right:" + std::to_string(rightLift.get_position()));
+ liftAverage = (leftLift.get_position() + rightLift.get_position()) / 2;
+ liftDifference = (leftLift.get_position() - rightLift.get_position());
+ pros::lcd::set_text(2, "average:" + (std::to_string(liftAverage)));
+ lift_output = lift_pid->Update(liftHeight, liftAverage);
+ liftCoeffient = master_lift_pid->Update(0, liftDifference);
+ pros::lcd::set_text(3, "lift coefficient: "+ std::to_string(liftCoeffient));
+ pros::lcd::set_text(4, "liftoutput:" + (std::to_string(lift_output)));
+ // liftHeight+=master.get_analog(ANALOG_RIGHT_Y);
+ pidLift();
+ autoLift();
+ rightLift.move(lift_output - liftCoeffient);
+ leftLift.move(lift_output+liftCoeffient);
+}
+
  void opcontrol() {
-   pros::Motor motor1 (8);
    while (true) {
-		 mech_drive->Drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
+		 testMotorLeft.move(master.get_analog(ANALOG_LEFT_X)/3 + master.get_analog(ANALOG_LEFT_Y));
+		 testMotorRight.move(master.get_analog(ANALOG_LEFT_X)/3 + master.get_analog(ANALOG_LEFT_Y));
+     robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
+     lift();
+// 			 if(master.get_digital(DIGITAL_X)){
+// 	//			 left_front_motor_controller->Set_Speed(150);
+// 	//		 mech_drive->Drive(0,30,0, 0);
+// } else if(master.get_digital(DIGITAL_Y)){
+// 	// left_front_motor_controller->Set_Speed(50);
+// //	mech_drive->Drive (0,-100,0, 0);
+//
+// }
+//  else {
+// 	 // left_front_motor_controller->Set_Speed(0);
+// //	mech_drive->Drive(0,0,0, master.get_analog(ANALOG_RIGHT_Y));
+// }
 
-     pros::lcd::set_text(0, "left_back_motor:" + std::to_string((left_back_motor.get_position())));
-
-     pros::lcd::set_text(2, "left_front_motor:" + std::to_string((left_front_motor.get_position())));
-
-     pros::lcd::set_text(1, "right_back_motor:" + std::to_string((right_back_motor.get_position())));
-
-     pros::lcd::set_text(3, "right_front_motor:" + std::to_string((right_front_motor.get_position())));
-
-
-     pros::lcd::set_text(4, "motor value left_back_motor:" + std::to_string(left_back_motorMotorValue));
-
-     pros::lcd::set_text(5, "motor value left_front_motor:" + std::to_string(left_front_motorMotorValue));
-
-     pros::lcd::set_text(6, "motor value right_back_motor:" + std::to_string(right_back_motorMotorValue));
-
-     pros::lcd::set_text(7, "motor value right_front_motor:" + std::to_string(right_front_motorMotorValue));
-
+     // pros::lcd::set_text(0, "left_back_motor:" + std::to_string((left_back_motor.get_position())));
+		 //
+     // pros::lcd::set_text(2, "left_front_motor:" + std::to_string((left_front_motor.get_position())));
+		 //
+     // pros::lcd::set_text(1, "right_back_motor:" + std::to_string((right_back_motor.get_position())));
+		 //
+     // pros::lcd::set_text(3, "right_front_motor:" + std::to_string((right_front_motor.get_position())));
      pros::delay(20);
    }
  }
+
 
 //
 // vision::signature SIG_1 (1, 0, 0, 0, 0, 0, 0, 3.000, 0);

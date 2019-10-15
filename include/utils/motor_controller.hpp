@@ -6,6 +6,8 @@
 
 class Motor_Controller {
  public:
+
+
   /**
    * Constructor
    * Accepts the kp, ki, and kd to determine the correction value
@@ -16,11 +18,10 @@ class Motor_Controller {
    * Resets the error counts. It should be called when the PID loop is not
    * active to prevent integral windup.
    */
-  void Set_Speed(double targetValue);
-
-  Pid * pid;
-
-  pros::Motor* motor;
+   double Set_Speed(double targetValue);
+   Pid* pid;
+   pros::Motor* motor;
+   double Get_Speed();
   /**
    * Returns the output of the PID controller correcting the input.
    * @param goal The current setpoint value

@@ -14,6 +14,8 @@ class Pid {
    * active to prevent integral windup.
    */
   void ResetError();
+  double last_error_;
+  double error_sum_;
   /**
    * Returns the output of the PID controller correcting the input.
    * @param goal The current setpoint value
@@ -28,11 +30,11 @@ class Pid {
   double* kd_;
 
   // Summation of errors used in the integral term
-  double error_sum_;
+
 
   // The last error value to find the difference with the current error value
   // for the derivative term.
-  double last_error_;
+
 };
 
 #endif
