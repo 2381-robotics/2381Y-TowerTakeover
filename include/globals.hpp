@@ -29,6 +29,8 @@ extern pros::Motor left_back_motor;
 extern pros::Motor right_front_motor;
 extern pros::Motor right_back_motor;
 
+extern pros::Controller master;
+
 extern std::array<double,3> master_pid_values; //ku = 1.10
 
 #endif

@@ -18,7 +18,7 @@ class Pid {
   double error_sum_;
   /**
    * Returns the output of the PID controller correcting the input.
-   * @param goal The current setpoint value
+   * @param setpoint The current setpoint value
    * @param current_value The current value that will be compared with the setpoint
    */
   double Update(double setpoint, double current_value);
