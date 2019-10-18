@@ -6,6 +6,7 @@
 #include "api.h"
 #include "ports.h"
 #include "okapi/api.hpp"
+using namespace std;
 
 extern Robot* robot;
 
