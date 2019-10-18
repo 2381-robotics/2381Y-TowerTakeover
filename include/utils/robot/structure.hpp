@@ -6,6 +6,7 @@ class Structure {
 	public:
 	Structure(){};
 	virtual void create() = 0;
+protected:
 };
 
 #endif
