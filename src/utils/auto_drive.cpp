@@ -3,6 +3,7 @@
 
 #include "api.h"
 #include "auto_drive.h"
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 #include "utils/pid.h"

@@ -52,7 +52,8 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
   pros::lcd::set_text(4, "master error average:" + std::to_string((_master_error_average)));
 
 }
-
+//Empty default constructor for blank factory arguments.
+Mech_Drive::Mech_Drive(){}
 void Mech_Drive::create() {
     _left_front_motor_controller = new Motor_Controller(&left_front_pid_values[0], &left_front_pid_values[1], &left_front_pid_values[2], &left_front_motor);
     _left_back_motor_controller = new Motor_Controller(&left_back_pid_values[0], &left_back_pid_values[1], &left_back_pid_values[2], &left_back_motor);

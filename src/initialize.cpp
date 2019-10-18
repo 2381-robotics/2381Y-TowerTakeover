@@ -17,14 +17,20 @@ std::array<double,3> right_back_pid_values = {0.66, 0, 0};
 std::array<double,3> left_front_pid_values = {0.66, 0, 0};
 std::array<double,3> right_front_pid_values = {0.66, 0, 0};
 
+std::array<double,3>  master_pid_values = {0,0.001,0}; //ku = 1.10
+
+std::array<double,3>  lift_pid_values = {0.618, 0, 1.454};
+std::array<double, 3> master_lift_pid_values = {1, 0.001, 0};
+
 pros::Motor left_front_motor (LEFT_FRONT_MOTOR_PORT, false);
 pros::Motor left_back_motor (LEFT_BACK_MOTOR_PORT, false);
 pros::Motor right_front_motor (RIGHT_FRONT_MOTOR_PORT, true);
 pros::Motor right_back_motor (RIGHT_BACK_MOTOR_PORT, true);
 
-pros::Controller master (CONTROLLER_MASTER);
+pros::Motor left_lift_motor(LEFT_LIFT_MOTOR_PORT, LEFT_LIFT_MOTOR_ORIENTATION);
+pros::Motor right_lift_motor(RIGHT_LIFT_MOTOR_PORT, RIGHT_LIFT_MOTOR_ORIENTATION);
 
-std::array<double,3>  master_pid_values = {0,0.001,0}; //ku = 1.10
+pros::Controller master (CONTROLLER_MASTER);
 
 void initialize() {
   robot->create();

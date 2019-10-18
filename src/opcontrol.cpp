@@ -17,6 +17,8 @@ int cubeHeight = 280;
 int maxLift = 1800;
 float liftSpeed = 10;
 
+//Add lift to factory construcutor (robot->addLift("Y_Lift"))
+//  Add controller inputs to lift values
 
 double lift_output;
 double left_front_motorSetpoint, left_back_motorSetpoint, right_front_motorSetpoint, right_back_motorSetpoint;
@@ -27,13 +29,11 @@ pros::Motor testMotorRight (7, false);
 
 pros::Motor leftLift (5, true);
 pros::Motor rightLift(10, false);
-double liftPidValues[3] = {0.618, 0, 1.454};
-double masterLiftPidValues[3] = {1, 0.001, 0};
 
-Pid* lift_pid = new Pid(&liftPidValues[0], &liftPidValues[1], &liftPidValues[2]);
-Pid* master_lift_pid = new Pid(&masterLiftPidValues[0], &masterLiftPidValues[1], &masterLiftPidValues[2]);
+Pid* lift_pid = new Pid(&lift_pid_values[0], &lift_pid_values[1], &lift_pid_values[2]);
+Pid *master_lift_pid = new Pid(&master_lift_pid_values[0], &master_lift_pid_values[1], &master_lift_pid_values[2]);
 
-double liftAverage, liftCoeffient;
+double liftAverage, liftCoefficient;
 double liftDifference;
 void pidLift() {
  if (master.get_digital_new_press(DIGITAL_X)) {
@@ -52,21 +52,22 @@ void autoLift() {
    }
 }
 void lift() {
- // pros::lcd::set_text(3, std::to_string(master.get_analog(ANALOG_RIGHT_Y)));
- pros::lcd::set_text(5, "left:" + std::to_string((leftLift.get_position())));
- pros::lcd::set_text(6, "right:" + std::to_string(rightLift.get_position()));
- liftAverage = (leftLift.get_position() + rightLift.get_position()) / 2;
- liftDifference = (leftLift.get_position() - rightLift.get_position());
- pros::lcd::set_text(2, "average:" + (std::to_string(liftAverage)));
- lift_output = lift_pid->Update(liftHeight, liftAverage);
- liftCoeffient = master_lift_pid->Update(0, liftDifference);
- pros::lcd::set_text(3, "lift coefficient: "+ std::to_string(liftCoeffient));
- pros::lcd::set_text(4, "liftoutput:" + (std::to_string(lift_output)));
- // liftHeight+=master.get_analog(ANALOG_RIGHT_Y);
- pidLift();
- autoLift();
- rightLift.move(lift_output - liftCoeffient);
- leftLift.move(lift_output+liftCoeffient);
+  pidLift();
+  autoLift();
+  // pros::lcd::set_text(3, std::to_string(master.get_analog(ANALOG_RIGHT_Y)));
+  pros::lcd::set_text(5, "left:" + std::to_string((leftLift.get_position())));
+  pros::lcd::set_text(6, "right:" + std::to_string(rightLift.get_position()));
+  liftAverage = (leftLift.get_position() + rightLift.get_position()) / 2;
+  liftDifference = (leftLift.get_position() - rightLift.get_position());
+  pros::lcd::set_text(2, "average:" + (std::to_string(liftAverage)));
+  lift_output = lift_pid->Update(liftHeight, liftAverage);
+  liftCoefficient = master_lift_pid->Update(0, liftDifference);
+  pros::lcd::set_text(3, "lift coefficient: " + std::to_string(liftCoefficient));
+  pros::lcd::set_text(4, "liftoutput:" + (std::to_string(lift_output)));
+  // liftHeight+=master.get_analog(ANALOG_RIGHT_Y);
+
+  rightLift.move(lift_output - liftCoefficient);
+  leftLift.move(lift_output + liftCoefficient);
 }
 
  void opcontrol() {
