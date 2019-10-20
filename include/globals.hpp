@@ -6,7 +6,8 @@
 #include "api.h"
 #include "ports.h"
 #include "okapi/api.hpp"
-//  Global Variable Declarations
+using namespace std;
+
 extern Robot* robot;
 extern pros::Controller master;
 
