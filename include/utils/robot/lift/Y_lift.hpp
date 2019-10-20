@@ -9,10 +9,14 @@
 class Y_Lift : public Lift{
 public:
     Y_Lift();
-    void Set_Height(double target_height) override;
+    void Set_Target(double target_height) override;
+    void Move_Lift() override;
     double Get_Height() override;
-    double GetTarget() override;
+    double Get_Target() override;
     void create() override;
+
+    void Increment_Height(int increment) override;
+    void Smooth_Lift(int increment) override;
 private:
     pros::Motor* _left_lift_motor;
     pros::Motor* _right_lift_motor;
@@ -21,8 +25,8 @@ private:
     Pid* _master_lift_pid;
     Pid* _lift_pid;
 
-    double _lift_coefficient;
-    double _lift_power;
+    double _lift_coefficient, _cube_height, _lift_power, _lift_speed;
+    double _max_height, _min_height;
 };
 
 

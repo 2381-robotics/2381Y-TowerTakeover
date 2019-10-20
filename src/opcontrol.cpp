@@ -11,91 +11,18 @@
 #include <map>
 #include "globals.hpp"
 
-
-int liftHeight;
-int cubeHeight = 280;
-int maxLift = 1800;
-float liftSpeed = 10;
-
-//Add lift to factory construcutor (robot->addLift("Y_Lift"))
-//  Add controller inputs to lift values
-
-double lift_output;
-double left_front_motorSetpoint, left_back_motorSetpoint, right_front_motorSetpoint, right_back_motorSetpoint;
-double left_front_motorMotorValue, left_back_motorMotorValue, right_front_motorMotorValue, right_back_motorMotorValue;
-
 pros::Motor testMotorLeft (1, true);
 pros::Motor testMotorRight (7, false);
-
-pros::Motor leftLift (5, true);
-pros::Motor rightLift(10, false);
-
-Pid* lift_pid = new Pid(&lift_pid_values[0], &lift_pid_values[1], &lift_pid_values[2]);
-Pid *master_lift_pid = new Pid(&master_lift_pid_values[0], &master_lift_pid_values[1], &master_lift_pid_values[2]);
-
-double liftAverage, liftCoefficient;
-double liftDifference;
-void pidLift() {
- if (master.get_digital_new_press(DIGITAL_X)) {
-     liftHeight = (liftHeight + cubeHeight > maxLift) ? maxLift : (liftHeight+cubeHeight);
-  }
- if (master.get_digital_new_press(DIGITAL_B)) {
-   liftHeight = (liftHeight - cubeHeight < 0) ? 0 : (liftHeight-cubeHeight);
- }
-}
-void autoLift() {
-   if (master.get_digital(DIGITAL_UP)) {
-     liftHeight = (liftHeight + liftSpeed > maxLift) ? maxLift : (liftHeight+liftSpeed);
-   }
-   if (master.get_digital(DIGITAL_DOWN)) {
-     liftHeight = (liftHeight - liftSpeed < 0) ? 0 : (liftHeight-liftSpeed);
-   }
-}
-void lift() {
-  pidLift();
-  autoLift();
-  // pros::lcd::set_text(3, std::to_string(master.get_analog(ANALOG_RIGHT_Y)));
-  pros::lcd::set_text(5, "left:" + std::to_string((leftLift.get_position())));
-  pros::lcd::set_text(6, "right:" + std::to_string(rightLift.get_position()));
-  liftAverage = (leftLift.get_position() + rightLift.get_position()) / 2;
-  liftDifference = (leftLift.get_position() - rightLift.get_position());
-  pros::lcd::set_text(2, "average:" + (std::to_string(liftAverage)));
-  lift_output = lift_pid->Update(liftHeight, liftAverage);
-  liftCoefficient = master_lift_pid->Update(0, liftDifference);
-  pros::lcd::set_text(3, "lift coefficient: " + std::to_string(liftCoefficient));
-  pros::lcd::set_text(4, "liftoutput:" + (std::to_string(lift_output)));
-  // liftHeight+=master.get_analog(ANALOG_RIGHT_Y);
-
-  rightLift.move(lift_output - liftCoefficient);
-  leftLift.move(lift_output + liftCoefficient);
-}
 
  void opcontrol() {
    while (true) {
 		 testMotorLeft.move(master.get_analog(ANALOG_LEFT_X)/3 + master.get_analog(ANALOG_LEFT_Y));
 		 testMotorRight.move(master.get_analog(ANALOG_LEFT_X)/3 + master.get_analog(ANALOG_LEFT_Y));
      robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
-     lift();
-// 			 if(master.get_digital(DIGITAL_X)){
-// 	//			 left_front_motor_controller->Set_Speed(150);
-// 	//		 mech_drive->Drive(0,30,0, 0);
-// } else if(master.get_digital(DIGITAL_Y)){
-// 	// left_front_motor_controller->Set_Speed(50);
-// //	mech_drive->Drive (0,-100,0, 0);
-//
-// }
-//  else {
-// 	 // left_front_motor_controller->Set_Speed(0);
-// //	mech_drive->Drive(0,0,0, master.get_analog(ANALOG_RIGHT_Y));
-// }
+     robot->lift->Increment_Height(master.get_digital_new_press(DIGITAL_X) - master.get_digital_new_press(DIGITAL_B));
+     robot->lift->Smooth_Lift(master.get_digital(DIGITAL_UP) - master.get_digital(DIGITAL_DOWN));
+     robot->lift->Move_Lift();
 
-     // pros::lcd::set_text(0, "left_back_motor:" + std::to_string((left_back_motor.get_position())));
-		 //
-     // pros::lcd::set_text(2, "left_front_motor:" + std::to_string((left_front_motor.get_position())));
-		 //
-     // pros::lcd::set_text(1, "right_back_motor:" + std::to_string((right_back_motor.get_position())));
-		 //
-     // pros::lcd::set_text(3, "right_front_motor:" + std::to_string((right_front_motor.get_position())));
      pros::delay(20);
    }
  }

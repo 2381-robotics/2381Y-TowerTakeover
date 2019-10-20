@@ -18,12 +18,12 @@ Robot* RobotFactory::create_robot(std::string drive_type, std::string lift_type,
 		auto lift_instance = factory_function_registry.find(lift_type);
 		if (lift_instance != factory_function_registry.end()) {
 			// mapped value (std::function<Robot*(void)>).
-			instance->assign_lift(lift_instance->second());
+			instance->assign_lift(dynamic_cast<Lift*>(lift_instance->second()));
 		}
 		auto intake_instance = factory_function_registry.find(intake_type);
 		if (intake_instance != factory_function_registry.end()) {
 			// mapped value (std::function<Robot*(void)>).
-			instance->assign_lift(intake_instance->second());
+			instance->assign_intake(dynamic_cast<Structure*>(intake_instance->second()));
 		}
 		return instance;
 	} else {
