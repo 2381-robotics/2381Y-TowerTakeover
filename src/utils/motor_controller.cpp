@@ -14,7 +14,7 @@ Motor_Controller::Motor_Controller(double* kp, double* ki, double* kd, pros::Mot
 double Motor_Controller::Get_Speed () {
   return this->motor->get_actual_velocity();
 }
-
+//method that collects the data needed to update the PID with the new data
 double Motor_Controller::Set_Speed(double targetValue){
   double motorSpeed = this->motor->get_actual_velocity();
   double motorValue = this->pid->Update(targetValue, motorSpeed);

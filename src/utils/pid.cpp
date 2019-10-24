@@ -25,7 +25,7 @@ void Pid::ResetError() {
  * Every update period, this is called to calculate a new PID output
  */
 
-double Pid::Update(double setpoint, double current_value) {
+double Pid ::Update(double setpoint, double current_value) {
   double error = setpoint - current_value;
   double p = *kp_ * error;
   error_sum_ += error;
