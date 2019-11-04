@@ -9,6 +9,11 @@
 #include <math.h>
 #include "utils/pid.h"
 #include "globals.hpp"
+#include "auton_control.hpp"
+#include "utils/structure/auto_sequence.hpp"
+#include <vector>
+#include<functional>
+using namespace std;
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -20,7 +25,21 @@
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-Auto_Drive* auto_drive;
+// Auto_Drive* auto_drive;
+// auton_control->load_auton(left_back_sequence)
 void autonomous() {
-  // auto_drive->Set_Point_Drive(0,0,0);
-}
+  while(true) {
+    auton_control->run();
+    
+    pros::delay(20);
+  }
+};
+
+AutoSequence *auton1 = AutoSequence::FromTasks(
+  vector<AutoTask>{
+    AutoTask::AsyncTask( 
+      //Drive to cube.
+        [](void) -> void {robot->set_drive(100, 0 , 0 , 0);}, [](void) -> bool { return true; }),
+    AutoTask::AsyncTask(
+        [](void) -> void {}, [](void) -> bool { return true; }),
+});

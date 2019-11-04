@@ -6,9 +6,11 @@
 #include "api.h"
 #include "ports.h"
 #include "okapi/api.hpp"
+#include "auton_control.hpp"
 using namespace std;
 
 extern Robot* robot;
+extern AutonControl* auton_control;
 extern pros::Controller master;
 
 // Drive
@@ -20,5 +22,6 @@ extern pros::Motor left_front_motor, left_back_motor, right_front_motor, right_b
 extern std::array<double,3> lift_pid_values, master_lift_pid_values;
 extern pros::Motor left_lift_motor, right_lift_motor;
 extern double cube_height, lift_max_height, lift_min_height, lift_speed;
+
 
 #endif

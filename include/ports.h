@@ -9,12 +9,11 @@
 
 //lift
 #define LEFT_LIFT_MOTOR_PORT 5
-#define RIGHT_LIFT_MOTOR_PORT 10
+#define RIGHT_LIFT_MOTOR_PORT 7
 #define LEFT_LIFT_MOTOR_ORIENTATION true
 #define RIGHT_LIFT_MOTOR_ORIENTATION false
 //other
-#define INTAKE_PORT 7
-#define ANGLER_PORT 4
+
 
 //vision sensor
 #define VISION_PORT 5

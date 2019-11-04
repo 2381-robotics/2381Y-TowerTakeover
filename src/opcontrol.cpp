@@ -10,19 +10,20 @@
 #include <list>
 #include <map>
 #include "globals.hpp"
-
-pros::Motor testMotorLeft (1, true);
-pros::Motor testMotorRight (7, false);
+using namespace pros;
+Motor testMotorLeft (1, true);
+Motor testMotorRight (10, false);
 
  void opcontrol() {
    while (true) {
-		 testMotorLeft.move(master.get_analog(ANALOG_LEFT_X)/3 + master.get_analog(ANALOG_LEFT_Y));
-		 testMotorRight.move(master.get_analog(ANALOG_LEFT_X)/3 + master.get_analog(ANALOG_LEFT_Y));
-     robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
+    
+     testMotorLeft.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2)) * -60);
+     testMotorRight.move((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2))* -60);
+      robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
      robot->lift->Increment_Height(master.get_digital_new_press(DIGITAL_X) - master.get_digital_new_press(DIGITAL_B));
      robot->lift->Smooth_Lift(master.get_digital(DIGITAL_UP) - master.get_digital(DIGITAL_DOWN));
-     robot->lift->Move_Lift();
-
+    //  pros::lcd::set_text(3, "right_front_motor:" + std::to_string(robot->lift->Get_Target()));
+      robot->lift->Move_Lift();
      pros::delay(20);
    }
  }

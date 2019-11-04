@@ -11,10 +11,12 @@
 #include <list>
 #include <map>
 #include "globals.hpp"
+#include "auton_control.hpp"
 //Initialize Variables
 
 //  Global Variables
 pros::Controller master(CONTROLLER_MASTER);
+AutonControl* auton_control = AutonControl::instance();
 
 // Drive Variables:
 std::array<double,3> left_back_pid_values = {0.66, 0, 0};
