@@ -6,7 +6,7 @@
 #define ROBOT_H_
 #include "utils/robot/drive/drive.hpp"
 #include "utils/robot/structure.hpp"
-
+#include "utils/robot/lift/lift.hpp"
 /**
  * \class Robot
  * \brief A singleton thread safe robot class
@@ -25,12 +25,12 @@ class Robot : public Structure{
 	void create() override;
 
 	void assign_drive(Drive* drive_instance);
-	void assign_lift(Structure* lift_instance);
+	void assign_lift(Lift* lift_instance);
 	void assign_intake(Structure* intake_instance);
 
-protected:
+
 	Drive* drive = nullptr;
-	Structure* lift = nullptr;
+	Lift* lift = nullptr;
 	Structure* intake = nullptr;
 };
 

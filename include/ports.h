@@ -8,9 +8,10 @@
 #define RIGHT_BACK_MOTOR_PORT 9
 
 //lift
-//#define RL_PORT 3
-//#define LL_PORT 8
-
+#define LEFT_LIFT_MOTOR_PORT 5
+#define RIGHT_LIFT_MOTOR_PORT 10
+#define LEFT_LIFT_MOTOR_ORIENTATION true
+#define RIGHT_LIFT_MOTOR_ORIENTATION false
 //other
 #define INTAKE_PORT 7
 #define ANGLER_PORT 4

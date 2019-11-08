@@ -1,6 +1,5 @@
-#ifndef MECH_DRIVE_H
-#define MECH_DRIVE_H
-
+#ifndef MECH_DRIVE_HPP
+#define MECH_DRIVE_HPP
 
 #include "utils/robot/drive/drive.hpp"
 #include "utils/motor_controller.hpp"

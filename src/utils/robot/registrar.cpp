@@ -3,6 +3,7 @@
 #include "robot_factory.hpp"
 #include "drive/mech_drive.hpp"
 #include "structure.hpp"
+#include "lift/Y_lift.hpp"
 template <class T>
 Registrar<T>::Registrar(std::string robot_type) {
 	// register the class factory function
@@ -10,5 +11,5 @@ Registrar<T>::Registrar(std::string robot_type) {
 }
 
 static Registrar<Mech_Drive> registrar_drive_mech("Mech_Drive");
-
+static Registrar<Y_Lift> registrar_lift_Y("Y_Lift");
 static Registrar<Robot> registrar_robot("ROBOT_MAIN");

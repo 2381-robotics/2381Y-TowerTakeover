@@ -15,11 +15,11 @@ Robot::Robot(){}
 void Robot::assign_drive(Drive* drive_instance) {
   this->drive = drive_instance;
 }
-void Robot::assign_lift(Structure* drive_instance) {
-  this->lift = drive_instance;
+void Robot::assign_lift(Lift* lift_instance) {
+  this->lift = lift_instance;
 }
-void Robot::assign_intake(Structure* drive_instance) {
-  this->intake = drive_instance;
+void Robot::assign_intake(Structure* intake_instance) {
+  this->intake = intake_instance;
 }
 
-Robot* robot = RobotFactory::instance()->create_robot("Mech_Drive","","");
+Robot* robot = RobotFactory::instance()->create_robot("Mech_Drive","Y_Lift","");

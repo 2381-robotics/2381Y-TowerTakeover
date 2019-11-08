@@ -6,31 +6,19 @@
 #include "api.h"
 #include "ports.h"
 #include "okapi/api.hpp"
-
-#define MTR_PORT_LFRONT 1
-#define MTR_PORT_RFRONT 2
-#define MTR_PORT_LBACK 3
-#define MTR_PORT_RBACK 4
-#define MTR_PORT_UTIL1 5
-#define MTR_PORT_UTIL2 6
-#define MTR_PORT_UTIL3 7
-#define MTR_PORT_UTIL4 8
-
+using namespace std;
 
 extern Robot* robot;
-
-extern std::array<double,3> left_back_pid_values;
-extern std::array<double,3> right_back_pid_values;
-extern std::array<double,3> left_front_pid_values;
-extern std::array<double,3> right_front_pid_values;
-
-extern pros::Motor left_front_motor;
-extern pros::Motor left_back_motor;
-extern pros::Motor right_front_motor;
-extern pros::Motor right_back_motor;
-
 extern pros::Controller master;
 
-extern std::array<double,3> master_pid_values; //ku = 1.10
+// Drive
+extern std::array<double,3> left_back_pid_values, right_back_pid_values, left_front_pid_values, right_front_pid_values;
+extern std::array<double, 3> master_drive_pid_values; //ku = 1.10
+extern pros::Motor left_front_motor, left_back_motor, right_front_motor, right_back_motor;
+
+// Lift
+extern std::array<double,3> lift_pid_values, master_lift_pid_values;
+extern pros::Motor left_lift_motor, right_lift_motor;
+extern double cube_height, lift_max_height, lift_min_height, lift_speed;
 
 #endif
