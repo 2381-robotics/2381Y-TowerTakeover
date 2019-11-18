@@ -43,6 +43,8 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
   _right_front_motor_value = _right_front_motor_controller->Set_Speed(_right_front_setpoint * tuning_coefficient);
   _motor_value_average = (_left_back_motor_value + _left_front_motor_value +  _right_back_motor_value +  _right_front_motor_value)/4;
   pros::lcd::set_text(3, "motor value average:" + std::to_string((_motor_value_average)));
+
+  
   if(_master_setpoint >= 0){
     _master_error_average = _motor_value_average - _master_setpoint;
   } else{

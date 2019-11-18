@@ -2,6 +2,7 @@
 
 #include "main.h"
 #include "ports.h"
+#include "utils/robot/intake.hpp"
 
 #include "utils/pid.h"
 #include "utils/motor_controller.hpp"
@@ -11,26 +12,30 @@
 #include <map>
 #include "globals.hpp"
 using namespace pros;
-Motor testMotorLeft (2, true);
-Motor testMotorRight (3, false);
-std::array<double, 3> pidValues = {0, 0.5, 0};
-Motor_Controller* leftMotorController = new Motor_Controller(&pidValues[0], &pidValues[1], &pidValues[2], &testMotorLeft);
-Motor_Controller *rightMotorController = new Motor_Controller(&pidValues[0], &pidValues[1], &pidValues[2], &testMotorRight);
+Motor intakeMotorLeft (2, true);
+Motor intakeMotorRight (3, false);
+std::array<double, 3> pidValues = {0, 0.1, 0};
+
+Motor_Controller* leftMotorController = new Motor_Controller(&pidValues[0], &pidValues[1], &pidValues[2], &intakeMotorLeft);
+Motor_Controller *rightMotorController = new Motor_Controller(&pidValues[0], &pidValues[1], &pidValues[2], &intakeMotorRight);
 
 void opcontrol()
 {
   while (true)
   {
-    
-    //  testMotorLeft.move(50);
-     leftMotorController->Set_Speed((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
-     rightMotorController->Set_Speed((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
+
+    pros::lcd::set_text(2, "intake value:" + to_string(intakeMotorLeft.get_actual_velocity()));
+    pros::lcd::set_text(3, "intake value:" + to_string(intakeMotorRight.get_actual_velocity()));
+    intake->Set_Drive((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
+
+    // leftMotorController->Set_Speed((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
+    // rightMotorController->Set_Speed((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
     //  robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
     //  robot->lift->Increment_Height(master.get_digital_new_press(DIGITAL_X) - master.get_digital_new_press(DIGITAL_B));
     //  robot->lift->Smooth_Lift(master.get_digital(DIGITAL_UP) - master.get_digital(DIGITAL_DOWN));
     // //  pros::lcd::set_text(3, "right_front_motor:" + std::to_string(robot->lift->Get_Target()));
     //   robot->lift->Move_Lift();
-     pros::delay(20);
+    pros::delay(20);
    }
  }
   
