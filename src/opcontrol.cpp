@@ -11,23 +11,29 @@
 #include <map>
 #include "globals.hpp"
 using namespace pros;
-Motor testMotorLeft (1, true);
-Motor testMotorRight (10, false);
+Motor testMotorLeft (2, true);
+Motor testMotorRight (3, false);
+std::array<double, 3> pidValues = {0, 0.5, 0};
+Motor_Controller* leftMotorController = new Motor_Controller(&pidValues[0], &pidValues[1], &pidValues[2], &testMotorLeft);
+Motor_Controller *rightMotorController = new Motor_Controller(&pidValues[0], &pidValues[1], &pidValues[2], &testMotorRight);
 
- void opcontrol() {
-   while (true) {
-
-     testMotorLeft.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
-     testMotorRight.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
-     robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
-     robot->lift->Increment_Height(master.get_digital_new_press(DIGITAL_X) - master.get_digital_new_press(DIGITAL_B));
-     robot->lift->Smooth_Lift(master.get_digital(DIGITAL_UP) - master.get_digital(DIGITAL_DOWN));
-    //  pros::lcd::set_text(3, "right_front_motor:" + std::to_string(robot->lift->Get_Target()));
-      robot->lift->Move_Lift();
+void opcontrol()
+{
+  while (true)
+  {
+    
+    //  testMotorLeft.move(50);
+     leftMotorController->Set_Speed((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
+     rightMotorController->Set_Speed((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
+    //  robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
+    //  robot->lift->Increment_Height(master.get_digital_new_press(DIGITAL_X) - master.get_digital_new_press(DIGITAL_B));
+    //  robot->lift->Smooth_Lift(master.get_digital(DIGITAL_UP) - master.get_digital(DIGITAL_DOWN));
+    // //  pros::lcd::set_text(3, "right_front_motor:" + std::to_string(robot->lift->Get_Target()));
+    //   robot->lift->Move_Lift();
      pros::delay(20);
    }
  }
-
+  
 
 //
 // vision::signature SIG_1 (1, 0, 0, 0, 0, 0, 0, 3.000, 0);
