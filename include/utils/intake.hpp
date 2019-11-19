@@ -1,16 +1,17 @@
-#ifndef MECH_DRIVE_HPP
-#define MECH_DRIVE_HPP
+#ifndef INTAKE_HPP
+#define INTAKE_HPP
 
 #include "utils/robot/drive/drive.hpp"
 #include "utils/motor_controller.hpp"
 #include <array>
 
-class intake
+class Intake
 {
 public:
-    intake();
-    void Set_Drive(double upL, double downL);
+    Intake();
+    void Set_Intake(double upL, double downL);
     double Get_Speed();
+    void create();
 
 
 private:
@@ -21,10 +22,12 @@ private:
     double _intake_setpoint;
     double _outtake_setpoint;
 
-    double _left_intake_motor_value;
-    double _right_intake_motor_value;
+    double _left_intake_value;
+    double _right_intake_value;
     double _intake_value_average;
     double _master_intake_setpoint;
     double _master_intake_error_average;
+
+
 };
 #endif

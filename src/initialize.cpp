@@ -24,7 +24,7 @@ std::array<double,3> right_back_pid_values = {0.66, 0, 0};
 std::array<double,3> left_front_pid_values = {0.66, 0, 0};
 std::array<double,3> right_front_pid_values = {0.66, 0, 0};
 
-std::array<double, 3> master_drive_pid_values = {0, 0.001, 0}; 
+std::array<double, 3> master_drive_pid_values = {0, 0.001, 0};
 
 pros::Motor left_front_motor(LEFT_FRONT_MOTOR_PORT, false);
 pros::Motor left_back_motor(LEFT_BACK_MOTOR_PORT, false);
@@ -43,6 +43,17 @@ double cube_height = 280;
 double lift_min_height = 0;
 double lift_max_height = 1800;
 double lift_speed = 10;
+
+
+pros::Motor intakeMotorLeft (2, true);
+pros::Motor intakeMotorRight (3, false);
+
+std::array<double, 3> pid_intake_left_values = {0.5,0.5,0.5};
+std::array<double, 3> pid_intake_right_values = {0.5, 0.5, 0.5};
+std::array<double, 3> master_intake_pid_values = {1,0.001,0};
+
+
+
 
 void initialize()
 {
