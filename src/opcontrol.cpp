@@ -6,6 +6,8 @@
 #include "utils/pid.h"
 #include "utils/motor_controller.hpp"
 #include "utils/robot/drive/mech_drive.hpp"
+#include "utils/angler.hpp"
+
 
 #include <list>
 #include <map>
@@ -14,9 +16,11 @@ using namespace pros;
 Motor testMotorLeft (1, true);
 Motor testMotorRight (10, false);
 
+Angler *angler = new Angler();
  void opcontrol() {
+   angler->create();
    while (true) {
-
+     angler->Set_Angler(100);
      testMotorLeft.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
      testMotorRight.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
      robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));

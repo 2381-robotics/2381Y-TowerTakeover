@@ -18,6 +18,11 @@ extern std::array<double,3> left_back_pid_values, right_back_pid_values, left_fr
 extern std::array<double, 3> master_drive_pid_values; //ku = 1.10
 extern pros::Motor left_front_motor, left_back_motor, right_front_motor, right_back_motor;
 
+//Angler
+// extern angler;
+extern std::array<double,3> angler_pid_values;
+extern pros::Motor _angler_motor;
+
 // Lift
 extern std::array<double,3> lift_pid_values, master_lift_pid_values;
 extern pros::Motor left_lift_motor, right_lift_motor;

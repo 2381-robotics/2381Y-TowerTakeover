@@ -30,6 +30,7 @@ private:
     double _right_front_motor_value;
     double _motor_value_average;
     double _master_setpoint;
+    double _previous_setpoint;
     double _master_error_average;
 
 
