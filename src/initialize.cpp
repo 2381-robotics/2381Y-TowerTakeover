@@ -48,9 +48,9 @@ double lift_speed = 10;
 pros::Motor intakeMotorLeft (2, true);
 pros::Motor intakeMotorRight (3, false);
 
-std::array<double, 3> pid_intake_left_values = {0.5,0.5,0.5};
-std::array<double, 3> pid_intake_right_values = {0.5, 0.5, 0.5};
-std::array<double, 3> master_intake_pid_values = {1,0.001,0};
+std::array<double, 3> pid_intake_left_values = {0.1,0,0};
+std::array<double, 3> pid_intake_right_values = {0.1, 0, 0};
+std::array<double, 3> master_intake_pid_values = {0.1,0.001,0};
 
 
 

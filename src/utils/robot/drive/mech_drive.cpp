@@ -44,7 +44,7 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
   _motor_value_average = (_left_back_motor_value + _left_front_motor_value +  _right_back_motor_value +  _right_front_motor_value)/4;
   pros::lcd::set_text(3, "motor value average:" + std::to_string((_motor_value_average)));
 
-  
+
   if(_master_setpoint >= 0){
     _master_error_average = _motor_value_average - _master_setpoint;
   } else{
@@ -54,6 +54,31 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
   pros::lcd::set_text(4, "master error average:" + std::to_string((_master_error_average)));
 
 }
+
+
+std::tuple<double, double> Mech_Drive::Convert(double speed, double direction){
+  std::tuple<double, double> drive_coordinates;
+  double x = sin(direction* (180/M_PI)) *speed;
+  double y = cos(direction* (180/M_PI)) *speed;
+  drive_coordinates = std::make_tuple(x, y);
+  return drive_coordinates;
+}
+
+void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance){
+  // _speed = speed;
+  // _direction = direction;
+  // _distance = distance;
+    std::tuple<double, double> drive_convert = this->Convert(speed, direction);
+
+  double value = this->drive->Get_Speed();
+  if( &value < _distance){
+      this->drive->Set_Drive(0, std::get<0>(drive_convert), std::get<1>(drive_convert), 0);
+  }
+  else{
+      this->drive->Set_Drive(0, 0, 0, 0);
+  }
+}
+
 //Empty default constructor for blank factory arguments.
 Mech_Drive::Mech_Drive(){}
 void Mech_Drive::create() {

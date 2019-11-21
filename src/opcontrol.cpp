@@ -20,11 +20,12 @@ using namespace pros;
 Intake * intake = new Intake();
 void opcontrol()
 {
+  intake->create();
   while (true)
   {
     // pros::lcd::set_text(2, "intake value:" + to_string(intakeMotorLeft.get_actual_velocity()));
     // pros::lcd::set_text(3, "intake value:" + to_string(intakeMotorRight.get_actual_velocity()));
-    intake->Set_Intake( master.get_digital(DIGITAL_L1), master.get_digital(DIGITAL_L2));
+    intake->Set_Intake((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2)) * 100);
 
     // leftMotorController->Set_Speed((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
     // rightMotorController->Set_Speed((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);

@@ -9,10 +9,9 @@ class Intake
 {
 public:
     Intake();
-    void Set_Intake(double upL, double downL);
+    void Set_Intake(double intakeSpeed);
     double Get_Speed();
     void create();
-
 
 private:
     Motor_Controller *rightIntakeController;
