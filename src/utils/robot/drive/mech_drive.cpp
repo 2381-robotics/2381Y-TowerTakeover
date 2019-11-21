@@ -8,7 +8,15 @@
 double Mech_Drive::Get_Speed() {
   return (_left_front_motor_controller->Get_Speed()+_left_back_motor_controller->Get_Speed()+ _right_back_motor_controller->Get_Speed() + _right_front_motor_controller->Get_Speed())/4;
 }
+
+
+
+double Mech_Drive::Get_Encoder_Value() {
+  return (_left_front_motor_controller->Get_Encoder_Value()+_left_back_motor_controller->Get_Encoder_Value()+ _right_back_motor_controller->Get_Encoder_Value()+ _right_front_motor_controller->Get_Encoder_Value())/4;
+}
+
 void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double right_y){
+
 
   _left_back_setpoint = (left_y - left_x + std::abs(right_x)*(right_x)/127);
   _left_front_setpoint = (left_y + left_x + std::abs(right_x)*(right_x)/127);
@@ -70,7 +78,7 @@ void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance
   // _distance = distance;
     std::tuple<double, double> drive_convert = this->Convert(speed, direction);
 
-  double value = this->drive->Get_Speed();
+  double value = this->drive->Get_Encoder_Value();
   if( &value < _distance){
       this->drive->Set_Drive(0, std::get<0>(drive_convert), std::get<1>(drive_convert), 0);
   }

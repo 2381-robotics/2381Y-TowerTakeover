@@ -12,6 +12,7 @@ public:
   void Set_Point_Drive(double speed, double direction, double distance) override;
 
   double Get_Speed() override;
+  double Get_Encoder_Value() override;
   void create() override;
 
   double test;
