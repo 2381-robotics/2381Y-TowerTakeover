@@ -30,16 +30,20 @@ using namespace std;
 void autonomous() {
   while(true) {
     auton_control->run();
-    
+
     pros::delay(20);
   }
 };
 
+//operations are stopped once a sync task is reached and is only continued once the sync task has been completed
+//multiple operations can be run in one sync task that will be run at the same time
+//async task runs all operations at the same time
 AutoSequence *auton1 = AutoSequence::FromTasks(
   vector<AutoTask>{
-    AutoTask::AsyncTask( 
+    AutoTask::AsyncTask(
       //Drive to cube.
-        [](void) -> void {robot->set_drive(100, 0 , 0 , 0);}, [](void) -> bool { return true; }),
+        [](void) -> void {robot->set_point_drive(100, 0 , 0);}, [](void) -> bool { return true; }),
+
     AutoTask::AsyncTask(
         [](void) -> void {}, [](void) -> bool { return true; }),
 });
