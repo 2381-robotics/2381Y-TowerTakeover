@@ -27,7 +27,6 @@ class Motor_Controller {
    * @param goal The current setpoint value
    * @param current_value The current value that will be compared with the setpoint
    */
-  double Update(double setpoint, double current_value);
 
 };
 
