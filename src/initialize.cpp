@@ -11,10 +11,12 @@
 #include <list>
 #include <map>
 #include "globals.hpp"
+#include "auton_control.hpp"
 //Initialize Variables
 
 //  Global Variables
 pros::Controller master(CONTROLLER_MASTER);
+AutonControl* auton_control = AutonControl::instance();
 
 // Drive Variables:
 std::array<double,3> left_back_pid_values = {0.66, 0, 0};
@@ -41,6 +43,14 @@ double cube_height = 280;
 double lift_min_height = 0;
 double lift_max_height = 1800;
 double lift_speed = 10;
+
+// Angler Variables:
+
+pros::Motor angler_motor(ANGLER_MOTOR_PORT, true);
+std::array<double,3> angler_pid_values = {1, 0, 0};
+double angler_speed = 20;
+double angler_min_height = 0;
+double angler_max_height = 2250;
 
 void initialize()
 {

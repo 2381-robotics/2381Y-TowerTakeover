@@ -18,13 +18,15 @@ void Y_Lift::create() {
     _min_height = lift_min_height;
     _max_height = lift_max_height;
     _lift_speed = lift_speed;
+    _target_height = 0;
 }
 
 void Y_Lift::Set_Target(double target_height) {
     if(target_height > _max_height) {
-        target_height = _max_height;
+        _target_height = _max_height;
+        
     } else if (target_height < _min_height) {
-        target_height = _min_height;
+        _target_height = _min_height;
     } else {
         _target_height = target_height;
     }
@@ -36,14 +38,19 @@ void Y_Lift::Move_Lift() {
     // Lift Coefficient is for keeping lift even / not tilted, not sure if it works.
     // Right now it's a constant and is additive, not sure if it should be multiplicative maybe?
     _lift_coefficient = _master_lift_pid->Update(0, _lift_difference);
-    _right_lift_motor->move(_lift_power - _lift_coefficient);
-    _left_lift_motor->move(_lift_power + _lift_coefficient);
+    pros::lcd::set_text(2, "asdf" +  to_string(_lift_power));
+    pros::lcd::set_text(3, "asdf" +  to_string(_right_lift_motor->get_position()));
+    pros::lcd::set_text(4, "asdf" +  to_string(_left_lift_motor->get_position()));
+    
+
+    _right_lift_motor->move(_lift_power);
+    _left_lift_motor->move(_lift_power);
 }
 void Y_Lift::Increment_Height(int increment) {
-    Set_Target(_target_height + increment * _cube_height);
+    Set_Target(_target_height + increment*_cube_height);
 }
 void Y_Lift::Smooth_Lift(int increment) {
-    Set_Target(_target_height + increment * _lift_speed);
+    Set_Target(_target_height + increment*_lift_speed);
 }
 double Y_Lift::Get_Height() {
     return this->_lift_height;
