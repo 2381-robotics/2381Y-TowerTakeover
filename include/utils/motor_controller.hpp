@@ -22,7 +22,7 @@ class Motor_Controller {
    Pid* pid;
    pros::Motor* motor;
    double Get_Speed();
-   double Get_Encoder_Value();
+   double Get_Distance();
 
   /**
    * Returns the output of the PID controller correcting the input.

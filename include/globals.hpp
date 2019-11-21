@@ -20,9 +20,6 @@ extern std::array<double,3> left_back_pid_values, right_back_pid_values, left_fr
 extern std::array<double, 3> master_drive_pid_values; //ku = 1.10
 
 extern pros::Motor left_front_motor, left_back_motor, right_front_motor, right_back_motor;
-extern pros::Motor intakeMotorLeft, intakeMotorRight;
-extern std::array<double, 3> pid_intake_left_values, pid_intake_right_values;
-extern std::array<double, 3> master_intake_pid_values;
 
 //Angler
 // extern angler;
@@ -35,5 +32,9 @@ extern std::array<double,3> lift_pid_values, master_lift_pid_values;
 extern pros::Motor left_lift_motor, right_lift_motor;
 extern double cube_height, lift_max_height, lift_min_height, lift_speed;
 
+//intake
+extern std::array<double, 3> pid_intake_left_values, pid_intake_right_values;
+extern std::array<double, 3> master_intake_pid_values;
+extern pros::Motor intakeMotorLeft, intakeMotorRight;
 
 #endif

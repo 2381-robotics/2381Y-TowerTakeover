@@ -15,7 +15,7 @@ double Motor_Controller::Get_Speed () {
   return this->motor->get_actual_velocity();
 }
 
-double Motor_Controller::Get_Encoder_Value (){
+double Motor_Controller::Get_Distance (){
   return this->motor->get_target_position();
 }
 

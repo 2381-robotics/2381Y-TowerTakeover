@@ -12,20 +12,15 @@ public:
   void Set_Point_Drive(double speed, double direction, double distance) override;
 
   double Get_Speed() override;
-  double Get_Encoder_Value() override;
+  double Get_Distance() override;
   void create() override;
 
   double test;
 
   std::tuple<double, double> Convert(double speed = 0, double direction = 0);
-  Drive* drive;
-  // void volatile Set_Point_Drive(double *speed = 0, double *direction = 0, double *distance = 0);
 
   private:
-    double* _speed;
-    double* _direction;
-    double* _distance;
-    double value;
+  
     Motor_Controller* _left_front_motor_controller;
     Motor_Controller* _left_back_motor_controller;
     Motor_Controller* _right_front_motor_controller;

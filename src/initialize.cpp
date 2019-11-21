@@ -6,7 +6,6 @@
 #include "utils/motor_controller.hpp"
 #include "utils/robot/drive/mech_drive.hpp"
 #include "initialize.h"
-#include "auto_drive.h"
 
 #include <list>
 #include <map>
