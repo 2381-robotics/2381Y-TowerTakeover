@@ -8,23 +8,26 @@
 class Angler {
 public:
   Angler();
-  void Set_Angler(double angler);
+  void Set_Target(double target_height);
+  void Move_Angler();
+  void Smooth_Angler(int increment);
+  void Toggle_Extension(int increment);
+  double Get_Height();
+  double Get_Target();
   double Get_Speed();
   void create();
 
   double test;
 private:
     Motor_Controller* _angler_motor_controller;
-
+    pros::Motor* _angler_motor;
+    Pid* _angler_pid;
     Pid* _master_pid;
     double _angler_setpoint;
 
-    double _angler_motor_value;
-    double _motor_value_average;
-    double _master_setpoint;
-    double _previous_setpoint;
-    double _master_error_average;
-
+    double _angler_motor_value, _angler_height, _angler_power;
+    double _min_height, _max_height, _angler_speed, _target_height;
+    
 
 };
 #endif

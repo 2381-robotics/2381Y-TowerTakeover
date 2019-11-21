@@ -46,8 +46,12 @@ double lift_speed = 10;
 
 // Angler Variables:
 
-pros:: Motor _angler_motor(5,true);
-std::array<double,3> angler_pid_values = {0, 1, 0};
+pros::Motor angler_motor(ANGLER_MOTOR_PORT, true);
+std::array<double,3> angler_pid_values = {1, 0, 0};
+double angler_speed = 20;
+double angler_min_height = 0;
+double angler_max_height = 2250;
+
 void initialize()
 {
   robot->create();

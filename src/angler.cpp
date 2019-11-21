@@ -10,37 +10,73 @@ using namespace std;
 // double Mech_Drive::Get_Speed() {
 //   return (_left_front_motor_controller->Get_Speed()+_left_back_motor_controller->Get_Speed()+ _right_back_motor_controller->Get_Speed() + _right_front_motor_controller->Get_Speed())/4;
 // }
-void Angler::Set_Angler(double angler){
-  _previous_setpoint = _master_setpoint;
-  _angler_setpoint = (100);
-  pros::lcd::set_text(5, "old master setpoint:" + std::to_string((_previous_setpoint)));
-  _master_setpoint = _angler_setpoint;
-  pros::lcd::set_text(6, "new master setpoint:" + std::to_string((_master_setpoint)));
-  
-  double tuning_coefficient = _master_pid->Update(0, _master_error_average);
-  pros::lcd::set_text(2, "tuning coeff:" + std::to_string(tuning_coefficient));
 
- 
-  
-  _angler_motor_value = _angler_motor_controller->Set_Speed(_angler_setpoint * tuning_coefficient);
-  _motor_value_average = _angler_motor_value;
+void Angler::create()
+{
+  // Assign motors.
+  _angler_motor = &angler_motor;
+  // Initialize Pids.
+  _angler_pid = new Pid(&angler_pid_values[0], &angler_pid_values[1], &angler_pid_values[2]);
+  // Assign Variables
+  _min_height = angler_min_height;
+  _max_height = angler_max_height;
+  _angler_speed = angler_speed;
+  _target_height = 0;
+}
 
-  pros::lcd::set_text(3, "motor value average:" + std::to_string((_motor_value_average)));
-  if(_master_setpoint >= 0){
-    _master_error_average = _motor_value_average - _master_setpoint;
-  } else{
-    _master_error_average = _master_setpoint - _motor_value_average;
+void Angler::Set_Target(double target_height)
+{
+  if (target_height >= _max_height)
+  {
+    _target_height = _max_height;
   }
-
-  pros::lcd::set_text(4, "master error average:" + std::to_string((_master_error_average)));
-
+  else if (target_height <= _min_height)
+  {
+    _target_height = _min_height;
+  }
+  else
+  {
+    _target_height = target_height;
+  }
 }
-//Empty default constructor for blank factory arguments.
-Angler::Angler(){}
-void Angler::create() {
-
-    _angler_motor_controller = new Motor_Controller(&angler_pid_values[0], &angler_pid_values[1], &angler_pid_values[2], &_angler_motor);
-    _master_pid = new Pid(&(master_drive_pid_values)[0], &(master_drive_pid_values)[1], &(master_drive_pid_values)[2]);
-    _master_error_average = 0;
-    _master_setpoint = 1;
+void Angler::Move_Angler()
+{
+  _angler_height = (_angler_motor->get_position()) ;
+  _angler_power = _angler_pid->Update(_target_height, _angler_height);
+  // angler Coefficient is for keeping angler even / not tilted, not sure if it works.
+  // Right now it's a constant and is additive, not sure if it should be multiplicative maybe
+  _angler_motor->move(_angler_power);
+  pros::lcd::set_text(1, "Target height" + to_string(_target_height));
+  // pros::lcd::set_text(2, "angler power" + to_string(_angler_power));
+  pros::lcd::set_text(3, "angler position" + to_string(_angler_motor->get_position()));
 }
+Angler::Angler(){
+  create();
+}
+void Angler::Toggle_Extension(int increment)
+{
+  // If its not at max, set to max - if it is at max set to min - 
+  if(increment > 0) {
+    if (_angler_height <= _max_height - 100)
+    {
+      Set_Target(_max_height);
+    }
+    else
+    {
+      Set_Target(_min_height);
+    };
+  }
+}
+void Angler::Smooth_Angler(int increment)
+{
+  Set_Target(_target_height + increment * _angler_speed);
+}
+double Angler::Get_Height()
+{
+  return this->_angler_height;
+}
+double Angler::Get_Target()
+{
+  return this->_target_height;
+}
+

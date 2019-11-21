@@ -18,22 +18,20 @@ Motor testMotorRight (10, false);
 
 Angler *angler = new Angler();
  void opcontrol() {
-   angler->create();
+   
    while (true) {
-     angler->Set_Angler(100);
-     testMotorLeft.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
-     testMotorRight.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
-     robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
-     robot->lift->Increment_Height(master.get_digital_new_press(DIGITAL_X) - master.get_digital_new_press(DIGITAL_B));
-     robot->lift->Smooth_Lift(master.get_digital(DIGITAL_UP) - master.get_digital(DIGITAL_DOWN));
-    //  pros::lcd::set_text(3, "right_front_motor:" + std::to_string(robot->lift->Get_Target()));
-      robot->lift->Move_Lift();
+     //  testMotorLeft.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
+     //  testMotorRight.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
+     //  robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
+      angler->Toggle_Extension(master.get_digital_new_press(DIGITAL_X));
+      angler->Smooth_Angler(master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2));
+     angler->Move_Angler();
+     pros::lcd::set_text(1, "Target height" + to_string(angler->Get_Height()));
+
      pros::delay(20);
    }
  }
 
-
-//
 // vision::signature SIG_1 (1, 0, 0, 0, 0, 0, 0, 3.000, 0);
 // vision::signature SIG_2 (2, 0, 0, 0, 0, 0, 0, 3.000, 0);
 // vision::signature TOPBLUE (3, 0, 0, 0, 0, 0, 0, 2.900, 0);

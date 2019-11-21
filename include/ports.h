@@ -7,6 +7,10 @@
 #define RIGHT_FRONT_MOTOR_PORT 8
 #define RIGHT_BACK_MOTOR_PORT 9
 
+//Angler 
+#define ANGLER_MOTOR_PORT 5
+#define ANGLER_MOTOR_ORIENTATION true
+
 //lift
 #define LEFT_LIFT_MOTOR_PORT 5
 #define RIGHT_LIFT_MOTOR_PORT 7

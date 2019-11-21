@@ -21,7 +21,8 @@ extern pros::Motor left_front_motor, left_back_motor, right_front_motor, right_b
 //Angler
 // extern angler;
 extern std::array<double,3> angler_pid_values;
-extern pros::Motor _angler_motor;
+extern pros::Motor angler_motor;
+extern double angler_min_height, angler_max_height, angler_speed;
 
 // Lift
 extern std::array<double,3> lift_pid_values, master_lift_pid_values;

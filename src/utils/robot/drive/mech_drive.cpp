@@ -21,7 +21,7 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
   pros::lcd::set_text(6, "new master setpoint:" + std::to_string((_master_setpoint)));
   
   double tuning_coefficient = _master_pid->Update(0, _master_error_average);
-  pros::lcd::set_text(2, "tuning coeff:" + std::to_string(tuning_coefficient));
+  // pros::lcd::set_text(2, "tuning coeff:" + std::to_string(tuning_coefficient));
 
   // pros::lcd::set_text(0+4, "left_back_motor:" + std::to_string((_left_back_setpoint)));
   //
@@ -44,14 +44,14 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
   _right_back_motor_value = _right_back_motor_controller->Set_Speed(_right_back_setpoint * tuning_coefficient);
   _right_front_motor_value = _right_front_motor_controller->Set_Speed(_right_front_setpoint * tuning_coefficient);
   _motor_value_average = (_left_back_motor_value + _left_front_motor_value +  _right_back_motor_value +  _right_front_motor_value)/4;
-  pros::lcd::set_text(3, "motor value average:" + std::to_string((_motor_value_average)));
+  // pros::lcd::set_text(3, "motor value average:" + std::to_string((_motor_value_average)));
   if(_master_setpoint >= 0){
     _master_error_average = _motor_value_average - _master_setpoint;
   } else{
     _master_error_average = _master_setpoint - _motor_value_average;
   }
 
-  pros::lcd::set_text(4, "master error average:" + std::to_string((_master_error_average)));
+  // pros::lcd::set_text(4, "master error average:" + std::to_string((_master_error_average)));
 
 }
 //Empty default constructor for blank factory arguments.
