@@ -51,10 +51,11 @@ std::array<double,3> angler_pid_values = {1, 0, 0};
 double angler_speed = 20;
 double angler_min_height = 0;
 double angler_max_height = 2250;
-
+Angler*  angler = new Angler();
 void initialize()
 {
   robot->create();
+  angler->create();
   pros::lcd::initialize();
 }
 

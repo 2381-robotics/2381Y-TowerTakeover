@@ -7,6 +7,7 @@
 #include "ports.h"
 #include "okapi/api.hpp"
 #include "auton_control.hpp"
+#include "utils/angler.hpp"
 
 using namespace std;
 
@@ -24,7 +25,7 @@ extern pros::Motor left_front_motor, left_back_motor, right_front_motor, right_b
 extern std::array<double,3> angler_pid_values;
 extern pros::Motor angler_motor;
 extern double angler_min_height, angler_max_height, angler_speed;
-
+extern Angler* angler;
 // Lift
 extern std::array<double,3> lift_pid_values, master_lift_pid_values;
 extern pros::Motor left_lift_motor, right_lift_motor;

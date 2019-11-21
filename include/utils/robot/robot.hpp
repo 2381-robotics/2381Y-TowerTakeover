@@ -28,7 +28,6 @@ class Robot : public Structure{
 	void assign_lift(Lift* lift_instance);
 	void assign_intake(Structure* intake_instance);
 
-
 	Drive* drive = nullptr;
 	Lift* lift = nullptr;
 	Structure* intake = nullptr;
