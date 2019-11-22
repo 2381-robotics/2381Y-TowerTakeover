@@ -8,6 +8,7 @@
 #include "okapi/api.hpp"
 #include "auton_control.hpp"
 #include "utils/angler.hpp"
+#include "utils/arm.hpp"
 
 using namespace std;
 
@@ -26,10 +27,16 @@ extern std::array<double,3> angler_pid_values;
 extern pros::Motor angler_motor;
 extern double angler_min_height, angler_max_height, angler_speed;
 extern Angler* angler;
+//Arm
+extern std::array<double,3> arm_pid_values;
+extern pros::Motor arm_motor;
+extern double arm_min_height, arm_max_height, arm_speed;
+extern Arm* arm;
 // Lift
 extern std::array<double,3> lift_pid_values, master_lift_pid_values;
 extern pros::Motor left_lift_motor, right_lift_motor;
 extern double cube_height, lift_max_height, lift_min_height, lift_speed;
+
 
 
 #endif
