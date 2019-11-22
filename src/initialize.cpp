@@ -6,7 +6,6 @@
 #include "utils/motor_controller.hpp"
 #include "utils/robot/drive/mech_drive.hpp"
 #include "initialize.h"
-#include "auto_drive.h"
 
 #include <list>
 #include <map>
@@ -24,7 +23,7 @@ std::array<double,3> right_back_pid_values = {0.66, 0, 0};
 std::array<double,3> left_front_pid_values = {0.66, 0, 0};
 std::array<double,3> right_front_pid_values = {0.66, 0, 0};
 
-std::array<double, 3> master_drive_pid_values = {0, 0.001, 0}; 
+std::array<double, 3> master_drive_pid_values = {0, 0.001, 0};
 
 pros::Motor left_front_motor(LEFT_FRONT_MOTOR_PORT, false);
 pros::Motor left_back_motor(LEFT_BACK_MOTOR_PORT, false);
@@ -52,6 +51,17 @@ double angler_speed = 20;
 double angler_min_height = 0;
 double angler_max_height = 2300;
 Angler*  angler = new Angler();
+
+pros::Motor intakeMotorLeft (2, true);
+pros::Motor intakeMotorRight (3, false);
+
+std::array<double, 3> pid_intake_left_values = {0.1,0,0};
+std::array<double, 3> pid_intake_right_values = {0.1, 0, 0};
+std::array<double, 3> master_intake_pid_values = {0.1,0.001,0};
+
+
+
+
 void initialize()
 {
   robot->create();
