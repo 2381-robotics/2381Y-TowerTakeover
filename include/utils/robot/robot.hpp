@@ -21,6 +21,8 @@ class Robot : public Structure{
 
 	void begin_tasks();
 	void set_drive(double left_x, double left_y, double right_x, double right_y);
+	void set_point_drive(double speed, double direction, double distance);
+
 	void stop();
 	void create() override;
 

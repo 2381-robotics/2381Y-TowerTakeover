@@ -2,6 +2,7 @@
 
 #include "main.h"
 #include "ports.h"
+#include "utils/intake.hpp"
 
 #include "utils/pid.h"
 #include "utils/motor_controller.hpp"
@@ -18,9 +19,13 @@ using namespace pros;
 Motor testMotorLeft (1, true);
 Motor testMotorRight (10, false);
 
+  Intake * intake = new Intake();
+
  void opcontrol() {
-   
+     intake->create();
+
    while (true) {
+     intake->Set_Intake((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2)) * 100);
      //  testMotorLeft.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
      //  testMotorRight.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
      //  robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
