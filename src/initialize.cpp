@@ -47,10 +47,10 @@ double lift_speed = 10;
 // Angler Variables:
 
 pros::Motor angler_motor(ANGLER_MOTOR_PORT, true);
-std::array<double,3> angler_pid_values = {1, 0, 0};
+std::array<double,3> angler_pid_values = {0.8, 0, 0.1};
 double angler_speed = 20;
 double angler_min_height = 0;
-double angler_max_height = 2250;
+double angler_max_height = 2300;
 Angler*  angler = new Angler();
 void initialize()
 {
