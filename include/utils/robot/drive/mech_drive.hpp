@@ -9,11 +9,18 @@ class Mech_Drive : public Drive {
 public:
   Mech_Drive();
   void Set_Drive(double left_x, double left_y, double right_x, double right_y) override;
+  void Set_Point_Drive(double speed, double direction, double distance) override;
+
   double Get_Speed() override;
+  double Get_Distance() override;
   void create() override;
 
   double test;
-private:
+
+  std::tuple<double, double> Convert(double speed = 0, double direction = 0);
+
+  private:
+  
     Motor_Controller* _left_front_motor_controller;
     Motor_Controller* _left_back_motor_controller;
     Motor_Controller* _right_front_motor_controller;

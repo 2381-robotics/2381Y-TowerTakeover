@@ -8,6 +8,13 @@
 double Mech_Drive::Get_Speed() {
   return (_left_front_motor_controller->Get_Speed()+_left_back_motor_controller->Get_Speed()+ _right_back_motor_controller->Get_Speed() + _right_front_motor_controller->Get_Speed())/4;
 }
+
+
+
+double Mech_Drive::Get_Distance() {
+  return (_left_front_motor_controller->Get_Distance()+_left_back_motor_controller->Get_Distance()+ _right_back_motor_controller->Get_Distance()+ _right_front_motor_controller->Get_Distance())/4;
+}
+
 void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double right_y){
 
   _left_back_setpoint = (left_y - left_x + std::abs(right_x)*(right_x)/127);
@@ -54,6 +61,31 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
   pros::lcd::set_text(4, "master error average:" + std::to_string((_master_error_average)));
 
 }
+
+
+std::tuple<double, double> Mech_Drive::Convert(double speed, double direction){
+  std::tuple<double, double> drive_coordinates;
+  double x = sin(direction* (180/M_PI)) *speed;
+  double y = cos(direction* (180/M_PI)) *speed;
+  drive_coordinates = std::make_tuple(x, y);
+  return drive_coordinates;
+}
+
+void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance){
+  // _speed = speed;
+  // _direction = direction;
+  // _distance = distance;
+    std::tuple<double, double> drive_convert = Convert(speed, direction);
+
+  double actualDistance = this->Get_Distance();
+  if( actualDistance < distance){
+      Set_Drive(0, std::get<0>(drive_convert), std::get<1>(drive_convert), 0);
+  }
+  else{
+      Set_Drive(0, 0, 0, 0);
+  }
+}
+
 //Empty default constructor for blank factory arguments.
 Mech_Drive::Mech_Drive(){}
 void Mech_Drive::create() {
