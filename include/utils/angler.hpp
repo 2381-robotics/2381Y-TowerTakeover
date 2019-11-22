@@ -18,6 +18,8 @@ public:
   void create();
 
   double test;
+      double _angler_motor_value, _angler_height, _angler_power;
+
 private:
     Motor_Controller* _angler_motor_controller;
     pros::Motor* _angler_motor;
@@ -25,7 +27,6 @@ private:
     Pid* _master_pid;
     double _angler_setpoint;
 
-    double _angler_motor_value, _angler_height, _angler_power;
     double _min_height, _max_height, _angler_speed, _target_height;
     
 

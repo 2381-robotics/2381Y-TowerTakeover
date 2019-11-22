@@ -4,8 +4,6 @@
 #include "globals.hpp"
 #include <array>
 
-using namespace std;
-
 
 double Mech_Drive::Get_Speed() {
   return (_left_front_motor_controller->Get_Speed()+_left_back_motor_controller->Get_Speed()+ _right_back_motor_controller->Get_Speed() + _right_front_motor_controller->Get_Speed())/4;
@@ -18,15 +16,15 @@ double Mech_Drive::Get_Distance() {
 }
 
 void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double right_y){
-  _previous_setpoint = _master_setpoint;
+
   _left_back_setpoint = (left_y - left_x + std::abs(right_x)*(right_x)/127);
   _left_front_setpoint = (left_y + left_x + std::abs(right_x)*(right_x)/127);
   _right_back_setpoint = (left_y + left_x - std::abs(right_x)*(right_x)/127);
   _right_front_setpoint = (left_y - left_x  - std::abs(right_x)*(right_x)/127);
-  pros::lcd::set_text(5, "old master setpoint:" + std::to_string((_previous_setpoint)));
+  // pros::lcd::set_text(0, "old master setpoint:" + std::to_string((_master_setpoint)));
   _master_setpoint = (_left_back_setpoint + _left_front_setpoint + _right_back_setpoint + _right_front_setpoint)/4;
-  pros::lcd::set_text(6, "new master setpoint:" + std::to_string((_master_setpoint)));
-  
+  // pros::lcd::set_text(1, "new master setpoint:" + std::to_string((_master_setpoint)));
+
   double tuning_coefficient = _master_pid->Update(0, _master_error_average);
   // pros::lcd::set_text(2, "tuning coeff:" + std::to_string(tuning_coefficient));
 
@@ -51,14 +49,16 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
   _right_back_motor_value = _right_back_motor_controller->Set_Speed(_right_back_setpoint * tuning_coefficient);
   _right_front_motor_value = _right_front_motor_controller->Set_Speed(_right_front_setpoint * tuning_coefficient);
   _motor_value_average = (_left_back_motor_value + _left_front_motor_value +  _right_back_motor_value +  _right_front_motor_value)/4;
-  // pros::lcd::set_text(3, "motor value average:" + std::to_string((_motor_value_average)));
+  pros::lcd::set_text(3, "motor value average:" + std::to_string((_motor_value_average)));
+
+  
   if(_master_setpoint >= 0){
     _master_error_average = _motor_value_average - _master_setpoint;
   } else{
     _master_error_average = _master_setpoint - _motor_value_average;
   }
 
-  // pros::lcd::set_text(4, "master error average:" + std::to_string((_master_error_average)));
+  pros::lcd::set_text(4, "master error average:" + std::to_string((_master_error_average)));
 
 }
 

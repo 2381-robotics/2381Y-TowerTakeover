@@ -32,6 +32,8 @@ Motor testMotorRight (10, false);
      angler->Toggle_Extension(master.get_digital_new_press(DIGITAL_Y));
      angler->Smooth_Angler(master.get_digital(DIGITAL_A) - master.get_digital(DIGITAL_X));
      angler->Move_Angler();
+      arm->Increment_Arm((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
+    arm->Move_Arm();
      pros::lcd::set_text(1, "Target height" + to_string(angler->Get_Height()));
 
      pros::delay(20);

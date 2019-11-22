@@ -46,9 +46,9 @@ void Angler::Move_Angler()
   // angler Coefficient is for keeping angler even / not tilted, not sure if it works.
   // Right now it's a constant and is additive, not sure if it should be multiplicative maybe
   _angler_motor->move(_angler_power);
-  pros::lcd::set_text(1, "Target height" + to_string(_target_height));
+  // pros::lcd::set_text(1, "Target height" + to_string(_target_height));
   // pros::lcd::set_text(2, "angler power" + to_string(_angler_power));
-  pros::lcd::set_text(3, "angler position" + to_string(_angler_motor->get_position()));
+  // pros::lcd::set_text(3, "angler position" + to_string(_angler_motor->get_position()));
 }
 Angler::Angler(){
   create();

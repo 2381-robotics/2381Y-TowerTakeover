@@ -52,6 +52,15 @@ double angler_min_height = 0;
 double angler_max_height = 2300;
 Angler*  angler = new Angler();
 
+// arm variables
+pros::Motor arm_motor(4, false);
+std::array<double,3> arm_pid_values = {1, 0, 0};
+double arm_speed = 30;
+double arm_min_height = 0;
+double arm_max_height = 10000;
+bool isMoving = false;
+Arm* arm = new Arm();
+
 pros::Motor intakeMotorLeft (2, true);
 pros::Motor intakeMotorRight (3, false);
 
