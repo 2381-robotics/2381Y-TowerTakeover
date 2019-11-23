@@ -25,10 +25,19 @@ Motor testMotorRight (10, false);
      intake->create();
 
    while (true) {
+<<<<<<< HEAD
      intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_UP)*64));
       robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
      angler->Toggle_Extension(master.get_digital_new_press(DIGITAL_Y));
      angler->Smooth_Angler(master.get_digital(DIGITAL_A) - master.get_digital(DIGITAL_X));
+=======
+     intake->Set_Intake((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2)) * 100);
+     //  testMotorLeft.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
+      // testMotorRight.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
+     //  robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
+     angler->Smooth_Angler(master.get_digital(DIGITAL_X) - master.get_digital(DIGITAL_A));
+     
+>>>>>>> 9c67970d77062df2ddd4bacfc1edd93bd216193c
      angler->Move_Angler();
     arm->Increment_Arm((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
     arm->Move_Arm();
