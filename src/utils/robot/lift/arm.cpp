@@ -49,7 +49,7 @@ void Arm::Move_Arm()
 
 
 //allows for clearance  
-if(!_manual_arm) {
+if(_manual_arm) {
     if (_is_moving && _moving_up) {
         angler->Smooth_Angler(1);
     }
