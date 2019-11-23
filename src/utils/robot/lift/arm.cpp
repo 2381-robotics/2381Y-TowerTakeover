@@ -25,7 +25,8 @@ void Arm::create()
   _arm_speed = arm_speed;
   _target_height = 0;
   _is_moving = false;
-  
+  _moving_up = false;
+  _manual_arm = true;
 }
 
 void Arm::Set_Target(double target_height)
@@ -48,10 +49,14 @@ void Arm::Move_Arm()
 
 
 //allows for clearance  
-    if (angler->_angler_height < 1400 && _is_moving) {
-        angler->Set_Target(1400);
+if(!_manual_arm) {
+    if (_is_moving && _moving_up) {
+        angler->Smooth_Angler(1);
     }
-
+if (!_is_moving && !_moving_up) {
+        angler->Smooth_Angler(-1);
+    }
+}
   _arm_motor->move(_arm_power);
   pros::lcd::set_text(1, "arm power" + to_string(_arm_power));
     pros::lcd::set_text(3, "_current_arm_height" + to_string(_current_arm_height));
@@ -68,11 +73,17 @@ void Arm::Increment_Arm(int increment)
   Set_Target(_target_height + increment * _arm_speed);
    
     // for clearances
-    if (increment != 0) {
+    if (increment == 1) {
         _is_moving = true;
+        _moving_up = true;
+    }
+    else if (increment == -1){
+        _is_moving = true;
+        _moving_up = false;
     }
     else {
         _is_moving = false;
+        _moving_up = false;
     }
 }
 double Arm::Get_Height()

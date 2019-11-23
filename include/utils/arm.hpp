@@ -26,7 +26,7 @@ private:
 
     double _arm_motor_value, _current_arm_height, _arm_power;
     double _min_height, _max_height, _arm_speed, _target_height;
-    bool _is_moving, _moving_up;
+    bool _is_moving, _moving_up, _manual_arm;
     
 
 };

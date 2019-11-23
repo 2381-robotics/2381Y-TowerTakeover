@@ -46,7 +46,8 @@ double lift_speed = 10;
 // Angler Variables:
 
 pros::Motor angler_motor(ANGLER_MOTOR_PORT, true);
-std::array<double,3> angler_pid_values = {1, 0, 0};
+std::array<double,3> angler_pid_values = {1, 0.1, 0};
+
 double angler_speed = 16;
 double angler_min_height = 0;
 double angler_max_height = 2250;
@@ -60,6 +61,7 @@ double arm_min_height = 0;
 double arm_max_height = 10000;
 bool _is_moving = false;
 bool _moving_up= false;
+bool _manual_arm = false;
 Arm* arm = new Arm();
 
 pros::Motor intakeMotorLeft (2, true);

@@ -29,7 +29,7 @@ Motor testMotorRight (10, false);
      //  testMotorLeft.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
       // testMotorRight.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
      //  robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
-     angler->Toggle_Extension(master.get_digital_new_press(DIGITAL_X));
+     angler->Smooth_Angler(master.get_digital(DIGITAL_X) - master.get_digital(DIGITAL_A));
      
      angler->Move_Angler();
       arm->Increment_Arm((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
