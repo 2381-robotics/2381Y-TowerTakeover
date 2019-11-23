@@ -49,7 +49,7 @@ pros::Motor angler_motor(ANGLER_MOTOR_PORT, true);
 std::array<double,3> angler_pid_values = {0.5, 0, 0.1};
 double angler_speed = 20;
 double angler_min_height = 0;
-double angler_max_height = 2300;
+double angler_max_height = 2500;
 Angler*  angler = new Angler();
 
 // arm variables

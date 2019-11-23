@@ -25,13 +25,25 @@ using namespace std;
  * from where it left off.
  */
 // Auto_Drive* auto_drive;
+int times =0 ;
 AutoSequence *auton1 = AutoSequence::FromTasks(
     vector<AutoTask>{
-        AutoTask::AsyncTask(
+        AutoTask::SyncTask(
             //Drive to cube.
 
-            [](void) -> void { robot->set_point_drive(100, 0, 500);
-            pros::lcd::set_text(5, "YEEE"); }, [](void) -> bool { return !robot->drive->get_running(); }, [](void) -> void { robot->drive->Reset_Point(); }),
+            [](void) -> void { robot->set_point_drive(100, 160, 500);
+            pros::lcd::set_text(5, "YEET1"); }, [](void) -> bool {  if(!robot->drive->get_running()){if(times==0){times++;} else{times = 0; return true;}; return false;}; }, [](void) -> void { robot->drive->Reset_Point(); }),
+        AutoTask::SyncTask(
+
+            //Drive to cube.
+
+            [](void) -> void { robot->set_point_drive(100, 70, 500);
+            pros::lcd::set_text(5, "2"); }, [](void) -> bool { return !robot->drive->get_running(); }, [](void) -> void { robot->drive->Reset_Point(); }),
+        AutoTask::SyncTask(
+            //Drive to cube.
+
+            [](void) -> void { robot->set_point_drive(100, 180, 500);
+            pros::lcd::set_text(5, "YEYEET3EE"); }, [](void) -> bool { return !robot->drive->get_running(); }, [](void) -> void { robot->drive->Reset_Point(); }),
 
         AutoTask::SyncTask(
             [](void) -> void {}, [](void) -> bool { return false; }, [](void) -> void {}),

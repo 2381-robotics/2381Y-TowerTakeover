@@ -18,6 +18,7 @@ bool Mech_Drive::get_running() {
 }
 void Mech_Drive::Reset_Point()
 {
+  pros::lcd::set_text(6, "resetpoint");
   Set_Init_Point();
   _is_running = true;
 }
@@ -25,6 +26,7 @@ double Mech_Drive::Get_Distance() {
   return (std::abs(_left_front_motor_controller->Get_Distance() - initial_position[0]) + std::abs(_left_back_motor_controller->Get_Distance() - initial_position[1]) + std::abs(_right_front_motor_controller->Get_Distance() - initial_position[2]) + std::abs(_right_back_motor_controller->Get_Distance() - initial_position[3])) / 4;
 }
 
+int yo = 0;
 void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double right_y){
 
   _left_back_setpoint = (left_y - left_x + std::abs(right_x)*(right_x)/127);
@@ -54,12 +56,12 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
   // pros::lcd::set_text(1, "right_back_motor:" + std::to_string(_right_back_motor_controller->Set_Speed(_right_back_setpoint)));
   //
   // pros::lcd::set_text(3, "right_front_motor:" + std::to_string(  _right_front_motor_controller->Set_Speed(_right_front_setpoint)));
-  _left_back_motor_value = _left_back_motor_controller->Set_Speed(_left_back_setpoint * tuning_coefficient);
+  _left_back_motor_value = _left_back_motor_controller->Set_Speed(_left_back_setpoint *tuning_coefficient);
   _left_front_motor_value = _left_front_motor_controller->Set_Speed(_left_front_setpoint * tuning_coefficient);
   _right_back_motor_value = _right_back_motor_controller->Set_Speed(_right_back_setpoint * tuning_coefficient);
   _right_front_motor_value = _right_front_motor_controller->Set_Speed(_right_front_setpoint * tuning_coefficient);
   _motor_value_average = (_left_back_motor_value + _left_front_motor_value +  _right_back_motor_value +  _right_front_motor_value)/4;
-  pros::lcd::set_text(3, "motor value average:" + std::to_string((_motor_value_average)));
+  // pros::lcd::set_text(3, "motor value average:" + std::to_string((_motor_value_average)));
 
   
   if(_master_setpoint >= 0){
@@ -68,16 +70,16 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
     _master_error_average = _master_setpoint - _motor_value_average;
   }
 
-  pros::lcd::set_text(4, "master error average:" + std::to_string((_master_error_average)));
+  // pros::lcd::set_text(4, "master error average:" + std::to_string((_master_error_average)));
 
 }
 
 
-std::tuple<double, double> Mech_Drive::Convert(double speed, double direction){
-  std::tuple<double, double> drive_coordinates;
-  double x = sin(direction* (180/M_PI)) *speed;
-  double y = cos(direction* (180/M_PI)) *speed;
-  drive_coordinates = std::make_tuple(x, y);
+std::array<double, 2> Mech_Drive::Convert(double speed, double direction){
+  double x = cos(direction* (180/3.14159)) *speed;
+  double y = sin(direction * (180 / 3.14159)) * speed;
+  std::array<double, 2> drive_coordinates = {x, y};
+  // drive_coordinates = x, y);
   return drive_coordinates;
 }
 
@@ -85,17 +87,22 @@ void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance
   // _speed = speed;
   // _direction = direction;
   // _distance = distance;
-    std::tuple<double, double> drive_convert = Convert(speed, direction);
+    std::array<double, 2> drive_convert = Convert(speed, direction);
 
+  pros::lcd::set_text(0, to_string((drive_convert)[1]));
   double actualDistance = this->Get_Distance();
   if( actualDistance < distance){
-      Set_Drive(0, std::get<0>(drive_convert), std::get<1>(drive_convert), 0);
+      Set_Drive(drive_convert[1], (drive_convert)[0], 0, 0);
+      _is_running = true;
   }
   else{
       Set_Drive(0, 0, 0, 0);
-  }
+  pros::lcd::set_text(7, "done" + to_string(actualDistance) + "actual" + to_string(distance) );
+     _is_running = false;
 }
+pros::lcd::set_text(4, to_string(get_running()));
 
+}
 //Empty default constructor for blank factory arguments.
 Mech_Drive::Mech_Drive(){}
 void Mech_Drive::create() {

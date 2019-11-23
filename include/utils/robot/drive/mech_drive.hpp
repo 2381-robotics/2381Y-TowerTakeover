@@ -21,7 +21,7 @@ public:
   double test;
   bool get_running() override;
 
-  std::tuple<double, double> Convert(double speed = 0, double direction = 0);
+  std::array<double, 2> Convert(double speed = 0, double direction = 0);
   double _point_drive_distance;
   bool _is_running = false;
 
