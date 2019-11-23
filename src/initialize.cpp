@@ -50,7 +50,7 @@ std::array<double,3> angler_pid_values = {1, 0.1, 0};
 
 double angler_speed = 16;
 double angler_min_height = 0;
-double angler_max_height = 2500;
+double angler_max_height = 2400;
 Angler*  angler = new Angler();
 
 // arm variables
@@ -71,14 +71,16 @@ std::array<double, 3> pid_intake_left_values = {0.1,0,0};
 std::array<double, 3> pid_intake_right_values = {0.1, 0, 0};
 std::array<double, 3> master_intake_pid_values = {0,0.001,0};
 
+Intake* intake =  new Intake();
 
 
 
 void initialize()
 {
-  robot->create();
-  angler->create();
   pros::lcd::initialize();
+  robot->create();
+  intake->create();
+  angler->create();
 }
 
 /**

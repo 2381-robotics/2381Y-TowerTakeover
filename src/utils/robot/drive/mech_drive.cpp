@@ -83,15 +83,40 @@ std::array<double, 2> Mech_Drive::Convert(double speed, double direction){
   return drive_coordinates;
 }
 
-void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance){
+void Mech_Drive::Set_Turn(double speed, double direction, double distance)
+{
   // _speed = speed;
   // _direction = direction;
   // _distance = distance;
-    std::array<double, 2> drive_convert = Convert(speed, direction);
+  std::array<double, 2> drive_convert = Convert(speed, direction);
 
   pros::lcd::set_text(0, to_string((drive_convert)[1]));
   double actualDistance = this->Get_Distance();
-  if( actualDistance < distance){
+  pros::lcd::set_text(5, to_string(distance) + " sadf " + to_string(actualDistance));
+  if (actualDistance < distance)
+  {
+    Set_Drive(0, 0, speed, 0);
+    _is_running = true;
+  }
+  else
+  {
+    Set_Drive(0, 0, 0, 0);
+    pros::lcd::set_text(7, "done" + to_string(actualDistance) + "actual" + to_string(distance));
+    _is_running = false;
+  }
+}
+  void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance)
+  {
+    // _speed = speed;
+    // _direction = direction;
+    // _distance = distance;
+    std::array<double, 2> drive_convert = Convert(speed, direction);
+
+    pros::lcd::set_text(0, to_string((drive_convert)[1]));
+    double actualDistance = this->Get_Distance();
+    pros::lcd::set_text(7, "done" + to_string(actualDistance) + "actual" + to_string(distance));
+    if (actualDistance < distance)
+    {
       Set_Drive(drive_convert[1], (drive_convert)[0], 0, 0);
       _is_running = true;
   }

@@ -12,6 +12,8 @@ public:
   virtual void Reset_Point();
   virtual void Set_Init_Point();
   virtual bool get_running();
+  virtual void Set_Turn(double Speed, double direction, double distance);
+
   // private:
 
 };

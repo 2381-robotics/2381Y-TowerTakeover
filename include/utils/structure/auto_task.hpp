@@ -14,6 +14,7 @@ class AutoTask {
     static AutoTask SyncTask(std::function<void(void)> task, std::function<bool(void)> done, std::function<void(void)> init);
     bool isSync;
     bool initialized = false;
+    int _count = 0;
 private:
     AutoTask(std::function<void(void)> task, std::function<bool(void)> done, std::function<void(void)> init);
 };

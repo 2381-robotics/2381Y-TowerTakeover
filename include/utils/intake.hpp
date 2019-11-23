@@ -11,6 +11,7 @@ public:
     Intake();
     void Set_Intake(double intakeSpeed);
     double Get_Speed();
+    void Auton_Intake(double speed, double time);
     void create();
 
 private:

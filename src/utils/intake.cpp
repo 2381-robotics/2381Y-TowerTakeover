@@ -10,6 +10,8 @@ double Intake::Get_Speed() {
   return (leftIntakeController->Get_Speed()+rightIntakeController->Get_Speed())/2;
 }
 
+
+
 void Intake::Set_Intake(double intakeSpeed)
 {
     _intake_setpoint = (intakeSpeed);
@@ -30,7 +32,7 @@ void Intake::Set_Intake(double intakeSpeed)
      pros::lcd::set_text(1, "new master setpoint:" + std::to_string((_master_intake_setpoint)));
 
 
-    // pros::lcd::set_text(3, "motor value average:" + std::to_string((_intake_value_average)));
+    pros::lcd::set_text(3, "motor value average:" + std::to_string((_intake_value_average)));
 
     if (_master_intake_setpoint >= 0)
     {
@@ -45,6 +47,13 @@ void Intake::Set_Intake(double intakeSpeed)
 }
 //Empty default constructor for blank factory arguments.
 Intake::Intake(){};
+
+void Intake :: Auton_Intake(double speed, double time){
+    Set_Intake(speed);
+    pros::delay(time);
+    // Set_Intake(0);
+}
+
 void Intake::create()
 {
     leftIntakeController = new Motor_Controller(&pid_intake_left_values[0], &pid_intake_left_values[1], &pid_intake_left_values[2], &intakeMotorLeft);

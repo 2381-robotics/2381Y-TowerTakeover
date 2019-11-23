@@ -68,8 +68,12 @@ void Angler::Toggle_Extension(int increment)
   }
 }
 void Angler::Smooth_Angler(int increment)
-{
+{ if (increment > 0) {
   Set_Target(_target_height + increment * _angler_speed);
+}
+else {
+  Set_Target(_target_height + increment * (_angler_speed + 7));
+}
 }
 double Angler::Get_Height()
 {

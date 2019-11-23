@@ -9,7 +9,7 @@
 #include "auton_control.hpp"
 #include "utils/angler.hpp"
 #include "utils/arm.hpp"
-
+#include "utils/intake.hpp"
 using namespace std;
 
 extern Robot* robot;
@@ -42,6 +42,7 @@ extern double cube_height, lift_max_height, lift_min_height, lift_speed;
 extern std::array<double, 3> pid_intake_left_values, pid_intake_right_values;
 extern std::array<double, 3> master_intake_pid_values;
 extern pros::Motor intakeMotorLeft, intakeMotorRight;
+extern Intake* intake;
 
 
 #endif

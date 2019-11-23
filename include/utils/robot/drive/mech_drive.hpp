@@ -20,7 +20,7 @@ public:
   void Reset_Point() override;
   double test;
   bool get_running() override;
-
+  void Set_Turn(double Speed, double direction, double distance) override;
   std::array<double, 2> Convert(double speed = 0, double direction = 0);
   double _point_drive_distance;
   bool _is_running = false;

@@ -19,28 +19,25 @@ using namespace pros;
 Motor testMotorLeft (1, true);
 Motor testMotorRight (10, false);
 
-  Intake * intake = new Intake();
+//   Intake * intake = new Intake();
 
  void opcontrol() {
-     intake->create();
+     // intake->create();
 
    while (true) {
-<<<<<<< HEAD
-     intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_UP)*64));
+     intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2)*127));
       robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
-     angler->Toggle_Extension(master.get_digital_new_press(DIGITAL_Y));
-     angler->Smooth_Angler(master.get_digital(DIGITAL_A) - master.get_digital(DIGITAL_X));
-=======
-     intake->Set_Intake((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_L2)) * 100);
-     //  testMotorLeft.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
-      // testMotorRight.move((master.get_digital(DIGITAL_L1) - master.get_digital(DIGITAL_R1)) * -60 + (master.get_digital(DIGITAL_L2) - master.get_digital(DIGITAL_R2)) * -30);
-     //  robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
+     // angler->Toggle_Extension(master.get_digital_new_press(DIGITAL_Y));
+
      angler->Smooth_Angler(master.get_digital(DIGITAL_X) - master.get_digital(DIGITAL_A));
-     
->>>>>>> 9c67970d77062df2ddd4bacfc1edd93bd216193c
      angler->Move_Angler();
     arm->Increment_Arm((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
     arm->Move_Arm();
+    if(master.get_digital(DIGITAL_UP)){
+         arm_motor.move(-40);
+    }
+//     arm->Set_Target(arm->Get_Target() - 40*master.get_digital(DIGITAL_UP));
+
     //  pros::lcd::set_text(1, "Target height" + to_string(angler->Get_Height()));
 
      pros::delay(20);
