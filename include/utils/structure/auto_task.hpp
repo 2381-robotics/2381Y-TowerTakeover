@@ -8,11 +8,14 @@ class AutoTask {
     public: 
     std::function<bool(void)> done;
     std::function<void(void)> run;
-    static AutoTask AsyncTask(std::function<void(void)> task, std::function<bool(void)> done);
-    static AutoTask SyncTask(std::function<void(void)> task, std::function<bool(void)> done);
+    std::function<void(void)> init;
+    std::function<void(void)> kill;
+    static AutoTask AsyncTask(std::function<void(void)> task, std::function<bool(void)> done, std::function<void(void)> init);
+    static AutoTask SyncTask(std::function<void(void)> task, std::function<bool(void)> done, std::function<void(void)> init);
     bool isSync;
+    bool initialized;
 private:
-    AutoTask(std::function<void(void)> task, std::function<bool(void)> done);
+    AutoTask(std::function<void(void)> task, std::function<bool(void)> done, std::function<void(void)> init);
 };
 
 #endif

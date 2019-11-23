@@ -9,6 +9,10 @@ public:
   virtual void Set_Point_Drive(double speed, double direction, double distance) = 0;
   virtual double Get_Speed() = 0;
   virtual double Get_Distance() = 0;
+  virtual void Reset_Point();
+  virtual void Set_Init_Point();
+  virtual bool get_running();
+  // private:
 
 };
 

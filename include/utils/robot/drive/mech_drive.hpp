@@ -15,30 +15,35 @@ public:
   double Get_Distance() override;
   void create() override;
 
+  void Set_Init_Point() override;
+  std::array<double, 4> initial_position;
+  void Reset_Point() override;
   double test;
+  bool get_running() override;
 
   std::tuple<double, double> Convert(double speed = 0, double direction = 0);
+  double _point_drive_distance;
+  bool _is_running = false;
 
-  private:
-  
-    Motor_Controller* _left_front_motor_controller;
-    Motor_Controller* _left_back_motor_controller;
-    Motor_Controller* _right_front_motor_controller;
-    Motor_Controller* _right_back_motor_controller;
-    Pid* _master_pid;
-    double _left_front_setpoint;
-    double _left_back_setpoint;
-    double _right_front_setpoint;
-    double _right_back_setpoint;
+private:
+  Motor_Controller *_left_front_motor_controller;
+  Motor_Controller *_left_back_motor_controller;
+  Motor_Controller *_right_front_motor_controller;
+  Motor_Controller *_right_back_motor_controller;
+  Pid *_master_pid;
+  double _left_front_setpoint;
+  double _left_back_setpoint;
+  double _right_front_setpoint;
+  double _right_back_setpoint;
 
-    double _left_back_motor_value;
-    double _left_front_motor_value;
-    double _right_back_motor_value;
-    double _right_front_motor_value;
-    double _motor_value_average;
-    double _master_setpoint;
-    double _previous_setpoint;
-    double _master_error_average;
+  double _left_back_motor_value;
+  double _left_front_motor_value;
+  double _right_back_motor_value;
+  double _right_front_motor_value;
+  double _motor_value_average;
+  double _master_setpoint;
+  double _previous_setpoint;
+  double _master_error_average;
 
 
 };

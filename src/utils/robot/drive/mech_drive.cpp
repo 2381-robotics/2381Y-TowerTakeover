@@ -9,10 +9,20 @@ double Mech_Drive::Get_Speed() {
   return (_left_front_motor_controller->Get_Speed()+_left_back_motor_controller->Get_Speed()+ _right_back_motor_controller->Get_Speed() + _right_front_motor_controller->Get_Speed())/4;
 }
 
-
-
+void Mech_Drive::Set_Init_Point() {
+  std::array < double, 4> tempArr = {_left_front_motor_controller->Get_Distance(), _left_back_motor_controller->Get_Distance(), _right_front_motor_controller->Get_Distance(), _right_back_motor_controller->Get_Distance()};
+  initial_position = tempArr;
+}
+bool Mech_Drive::get_running() {
+    return _is_running;
+}
+void Mech_Drive::Reset_Point()
+{
+  Set_Init_Point();
+  _is_running = true;
+}
 double Mech_Drive::Get_Distance() {
-  return (_left_front_motor_controller->Get_Distance()+_left_back_motor_controller->Get_Distance()+ _right_back_motor_controller->Get_Distance()+ _right_front_motor_controller->Get_Distance())/4;
+  return (std::abs(_left_front_motor_controller->Get_Distance() - initial_position[0]) + std::abs(_left_back_motor_controller->Get_Distance() - initial_position[1]) + std::abs(_right_front_motor_controller->Get_Distance() - initial_position[2]) + std::abs(_right_back_motor_controller->Get_Distance() - initial_position[3])) / 4;
 }
 
 void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double right_y){
@@ -89,11 +99,13 @@ void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance
 //Empty default constructor for blank factory arguments.
 Mech_Drive::Mech_Drive(){}
 void Mech_Drive::create() {
-    _left_front_motor_controller = new Motor_Controller(&left_front_pid_values[0], &left_front_pid_values[1], &left_front_pid_values[2], &left_front_motor);
-    _left_back_motor_controller = new Motor_Controller(&left_back_pid_values[0], &left_back_pid_values[1], &left_back_pid_values[2], &left_back_motor);
-    _right_front_motor_controller = new Motor_Controller(&right_front_pid_values[0], &right_front_pid_values[1], &right_front_pid_values[2], &right_front_motor);
-    _right_back_motor_controller = new Motor_Controller(&left_front_pid_values[0], &left_front_pid_values[1], &left_front_pid_values[2], &right_back_motor);
-    _master_pid = new Pid(&(master_drive_pid_values)[0], &(master_drive_pid_values)[1], &(master_drive_pid_values)[2]);
-    _master_error_average = 0;
-    _master_setpoint = 1;
+  std::array<double, 4> tempArray = {0, 0, 0, 0};
+  initial_position = tempArray;
+  _left_front_motor_controller = new Motor_Controller(&left_front_pid_values[0], &left_front_pid_values[1], &left_front_pid_values[2], &left_front_motor);
+  _left_back_motor_controller = new Motor_Controller(&left_back_pid_values[0], &left_back_pid_values[1], &left_back_pid_values[2], &left_back_motor);
+  _right_front_motor_controller = new Motor_Controller(&right_front_pid_values[0], &right_front_pid_values[1], &right_front_pid_values[2], &right_front_motor);
+  _right_back_motor_controller = new Motor_Controller(&left_front_pid_values[0], &left_front_pid_values[1], &left_front_pid_values[2], &right_back_motor);
+  _master_pid = new Pid(&(master_drive_pid_values)[0], &(master_drive_pid_values)[1], &(master_drive_pid_values)[2]);
+  _master_error_average = 0;
+  _master_setpoint = 1;
 }

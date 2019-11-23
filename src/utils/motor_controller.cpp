@@ -16,7 +16,7 @@ double Motor_Controller::Get_Speed () {
 }
 
 double Motor_Controller::Get_Distance (){
-  return this->motor->get_target_position();
+  return this->motor->get_position();
 }
 
 double Motor_Controller::Set_Speed(double targetValue){

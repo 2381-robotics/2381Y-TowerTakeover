@@ -22,6 +22,10 @@ void AutoSequence::next(){
         {
             it = taskList.erase(it);
         } else {
+            if(!it->initialized){
+                it->init();
+                it->initialized = true;
+            }
             it->run();
             if(it->isSync) {
                 break;

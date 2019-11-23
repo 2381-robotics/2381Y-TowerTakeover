@@ -6,7 +6,8 @@ AutonControl* AutonControl::instance() {
     return &control;
 }
 void AutonControl::run() {
-     _auton_running->run();
+
+     _auton_running->next();
 }
 
 void AutonControl::select_auton(std::string sequenceName){
@@ -15,7 +16,7 @@ void AutonControl::select_auton(std::string sequenceName){
     {
         _auton_running = it->second;
     }
-}
+}   
 
 void AutonControl::define_auton(std::string auton_name, AutoSequence* auton) {
     autonomous_registry[auton_name] = auton;
