@@ -18,14 +18,16 @@ AutoSequence::AutoSequence() {}
 void AutoSequence::next(){
     auto it = taskList.begin();
     while (it!= taskList.end()){
+
+        if (!it->_initialized)
+        {
+            it->init();
+        }
         if (it->done())
         {
+            it->kill();
             it = taskList.erase(it);
         } else {
-            if(!it->initialized){
-                it->init();
-                it->initialized = true;
-            }
             it->run();
             if(it->isSync) {
                 break;

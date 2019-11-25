@@ -76,8 +76,8 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
 
 
 std::array<double, 2> Mech_Drive::Convert(double speed, double direction){
-  double x = cos(direction* (180/3.14159)) *speed;
-  double y = sin(direction * (180 / 3.14159)) * speed;
+  double x = cos(direction* (3.14159/180)) *speed;
+  double y = sin(direction * (3.14159/180)) * speed;
   std::array<double, 2> drive_coordinates = {x, y};
   // drive_coordinates = x, y);
   return drive_coordinates;

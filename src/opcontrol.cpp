@@ -40,7 +40,7 @@ Motor testMotorRight (10, false);
 
     //  pros::lcd::set_text(1, "Target height" + to_string(angler->Get_Height()));
 
-     pros::delay(20);
+     pros::delay(DELAY_INTERVAL);
    }
  }
 

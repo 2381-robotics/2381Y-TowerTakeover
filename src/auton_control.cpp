@@ -6,7 +6,6 @@ AutonControl* AutonControl::instance() {
     return &control;
 }
 void AutonControl::run() {
-
      _auton_running->next();
 }
 

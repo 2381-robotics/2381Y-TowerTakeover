@@ -10,7 +10,7 @@ public:
   Mech_Drive();
   void Set_Drive(double left_x, double left_y, double right_x, double right_y) override;
   void Set_Point_Drive(double speed, double direction, double distance) override;
-
+  
   double Get_Speed() override;
   double Get_Distance() override;
   void create() override;
@@ -22,6 +22,7 @@ public:
   bool get_running() override;
   void Set_Turn(double Speed, double direction, double distance) override;
   std::array<double, 2> Convert(double speed = 0, double direction = 0);
+  
   double _point_drive_distance;
   bool _is_running = false;
 

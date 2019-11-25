@@ -10,7 +10,11 @@
 #include "utils/angler.hpp"
 #include "utils/arm.hpp"
 #include "utils/intake.hpp"
+
+#define DELAY_INTERVAL 20
+
 using namespace std;
+
 
 extern Robot* robot;
 extern AutonControl* auton_control;
