@@ -30,7 +30,9 @@ using namespace std;
 AutoSequence *auton1 = AutoSequence::FromTasks(
     vector<AutoTask>{
         AutoTask::SyncTask(
-            [](void) -> void {robot->set_point_drive(100, 160, 500);}, [](void) -> bool {  return !robot->drive->get_running();}, [](void) -> void { robot->drive->Reset_Point(); }),
+            [](void) -> void {
+                pros::lcd::set_text(5, "YEYEET3EE");
+                robot->set_point_drive(100, 160, 500); }, [](void) -> bool { return !robot->drive->get_running(); }, [](void) -> void { robot->drive->Reset_Point(); }),
         AutoTask::AutoDelay(1000),
         AutoTask::SyncTask(
             [](void) -> void { robot->set_point_drive(100, 70, 500); }, [](void) -> bool { return !robot->drive->get_running(); }, [](void) -> void { robot->drive->Reset_Point(); }),
@@ -43,7 +45,6 @@ AutoSequence *auton1 = AutoSequence::FromTasks(
         AutoTask::SyncTask(
             [](void) -> void {}, [](void) -> bool { return false; }, [](void) -> void {}),
     });
-
 
 void autonomous()
 {

@@ -1,6 +1,7 @@
 #include "robot_factory.hpp"
 #include "robot.hpp"
 #include "structure.hpp"
+#include "utils/robot/drive/drive.hpp"
 Robot* RobotFactory::create_robot(std::string drive_type, std::string lift_type, std::string intake_type) {
 	Robot* instance = nullptr;
 	auto it = factory_function_registry.find("ROBOT_MAIN");

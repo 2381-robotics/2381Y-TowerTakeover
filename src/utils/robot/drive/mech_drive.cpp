@@ -128,9 +128,8 @@ void Mech_Drive::Set_Turn(double speed, double direction, double distance)
 pros::lcd::set_text(4, to_string(get_running()));
 
 }
-//Empty default constructor for blank factory arguments.
-Mech_Drive::Mech_Drive(){}
-void Mech_Drive::create() {
+void Mech_Drive::create()
+{
   std::array<double, 4> tempArray = {0, 0, 0, 0};
   initial_position = tempArray;
   _left_front_motor_controller = new Motor_Controller(&left_front_pid_values[0], &left_front_pid_values[1], &left_front_pid_values[2], &left_front_motor);
@@ -141,3 +140,9 @@ void Mech_Drive::create() {
   _master_error_average = 0;
   _master_setpoint = 1;
 }
+//Empty default constructor for blank factory arguments.
+Mech_Drive::Mech_Drive(){
+  
+}
+
+
