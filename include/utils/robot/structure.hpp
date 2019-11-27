@@ -4,9 +4,14 @@
 
 class Structure {
 	public:
-	Structure(){};
-	virtual void create() = 0;
-protected:
+		/**
+   		* Constructor
+   * Abstract Parent Class, is inherited by structural objects
+   */
+		Structure(){};
+		virtual void create() = 0;
+
+	protected:
 };
 
 #endif

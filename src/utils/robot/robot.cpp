@@ -13,7 +13,7 @@ void Robot::set_point_drive(double speed, double direction, double distance) {
 
 void Robot::create(){
   this->drive->create();
-  this->lift->create();
+  // this->lift->create();
   // this->intake->create();
 }
 Robot::Robot(){}

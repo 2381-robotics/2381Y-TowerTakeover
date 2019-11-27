@@ -38,9 +38,6 @@ void Y_Lift::Move_Lift() {
     // Lift Coefficient is for keeping lift even / not tilted, not sure if it works.
     // Right now it's a constant and is additive, not sure if it should be multiplicative maybe?
     _lift_coefficient = _master_lift_pid->Update(0, _lift_difference);
-    pros::lcd::set_text(2, "asdf" +  to_string(_lift_power));
-    pros::lcd::set_text(3, "asdf" +  to_string(_right_lift_motor->get_position()));
-    pros::lcd::set_text(4, "asdf" +  to_string(_left_lift_motor->get_position()));
     
 
     _right_lift_motor->move(_lift_power);

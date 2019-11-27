@@ -16,12 +16,15 @@ void AutoSequence::add_tasks(vector<AutoTask> tasks){
 AutoSequence::AutoSequence() {}
 
 void AutoSequence::next(){
+    pros::lcd::set_text(7, "Auton Control");
+    int numberRunning = 0;
     auto it = taskList.begin();
     while (it!= taskList.end()){
-
+        numberRunning ++;
         if (!it->_initialized)
         {
-            it->init();
+            it->initialize();
+            it->_initialized = true;
         }
         if (it->done())
         {
@@ -29,10 +32,14 @@ void AutoSequence::next(){
             it = taskList.erase(it);
         } else {
             it->run();
+            // break;
             if(it->isSync) {
                 break;
+                return;
             } 
             it++;
         }
+
     }
+    pros::lcd::set_text(4, to_string(numberRunning));
 }

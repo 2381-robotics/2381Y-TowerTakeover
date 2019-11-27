@@ -58,8 +58,6 @@ if (!_is_moving && !_moving_up) {
     }
 }
   _arm_motor->move(_arm_power);
-  pros::lcd::set_text(1, "arm power" + to_string(_arm_power));
-    pros::lcd::set_text(3, "_current_arm_height" + to_string(_current_arm_height));
 
   // pros::lcd::set_text(2, "angler power" + to_string(_angler_power));
 //   pros::lcd::set_text(3, "angler position" + to_string(_angler_motor->get_position()));

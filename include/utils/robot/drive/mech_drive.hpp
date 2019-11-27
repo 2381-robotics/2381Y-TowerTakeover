@@ -8,7 +8,7 @@
 class Mech_Drive : public Drive {
 public:
   Mech_Drive();
-  
+
   void Set_Drive(double left_x, double left_y, double right_x, double right_y) override;
   void Set_Point_Drive(double speed, double direction, double distance) override;
   
@@ -17,7 +17,7 @@ public:
   void create() override;
 
   void Set_Init_Point() override;
-  std::array<double, 4> initial_position;
+  std::array<double, 4> initial_position = {0,0,0,0};
   void Reset_Point() override;
   double test;
   bool get_running() override;

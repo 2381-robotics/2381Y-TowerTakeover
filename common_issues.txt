@@ -1,0 +1,10 @@
+Linking project with okapilib,libpros [ERRORS]
+./bin/utils/robot/drive/mech_drive.cpp.o:(.rodata._ZTI10Mech_Drive+0x8): undefined reference to `typeinfo for Drive'
+./bin/utils/robot/robot_factory.cpp.o: In function `RobotFactory::create_robot(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)':
+robot_factory.cpp:(.text._ZN12RobotFactory12create_robotENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_S5_+0x154): undefined reference to `typeinfo for Drive'
+collect2.exe: error: ld returned 1 exit status
+make: *** [common.mk:191: bin/monolith.elf] Error 1
+Error: Failed to build
+
+Fix: Make sure all virtual functions are = 0, I.E.
+virtual void Set_Drive(double left_x, double left_y, double right_x, double right_y) = 0;

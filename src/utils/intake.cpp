@@ -17,7 +17,6 @@ void Intake::Set_Intake(double intakeSpeed)
     _intake_setpoint = (intakeSpeed);
     // _outtake_setpoint = (downL * 80);
 
-    pros::lcd::set_text(0, "old master setpoint:" + std::to_string((intakeSpeed)));
     _master_intake_setpoint = (_intake_setpoint);
     // pros::lcd::set_text(1, "new master setpoint:" + std::to_string((_master_intake_setpoint)));
 
@@ -29,11 +28,6 @@ void Intake::Set_Intake(double intakeSpeed)
     _right_intake_value = rightIntakeController->Set_Speed(_master_intake_setpoint * intake_tuning_coefficient);
      _intake_value_average = (_left_intake_value + _right_intake_value) / 2;
 
-     pros::lcd::set_text(1, "new master setpoint:" + std::to_string((_master_intake_setpoint)));
-
-
-    pros::lcd::set_text(3, "motor value average:" + std::to_string((_intake_value_average)));
-
     if (_master_intake_setpoint >= 0)
     {
         _master_intake_error_average = _intake_value_average - _master_intake_setpoint;
@@ -43,7 +37,6 @@ void Intake::Set_Intake(double intakeSpeed)
         _master_intake_error_average = _master_intake_setpoint - _intake_value_average;
     }
 
-    // pros::lcd::set_text(4, "master error average:" + std::to_string((_master_intake_error_average)));
 }
 //Empty default constructor for blank factory arguments.
 Intake::Intake(){};
