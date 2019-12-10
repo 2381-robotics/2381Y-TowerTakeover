@@ -28,24 +28,24 @@ using namespace std;
 int _count = 0;
 AutoSequence *auton1 = AutoSequence::FromTasks(
     vector<AutoTask>{
+        AutoTask::AutoDelay(4000, true),
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(100);
                 robot->set_point_drive(100, 0, 4000);
             },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); pros::lcd::set_text(1, "Drive initialized"); }),
-        // AutoTask::AutoDelay(4000, true),
-        AutoTask::SyncTask(
-            [](void) -> void {
-                intake->Set_Intake(0);
-                robot->set_point_drive(-100, 0, 3000); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); pros::lcd::set_text(1, "Drive initialized"); }),
-        AutoTask::SyncTask(
-            [](void) -> void { robot->drive->Set_Turn(60, 70, 2000); }, [](void) -> bool { return !robot->drive->get_running(); }, [](void) -> void { robot->drive->Reset_Point(); }),
-        AutoTask::SyncTask(
-            [](void) -> void {
-                intake->Set_Intake(0);
-                robot->set_point_drive(100, 0, 3000); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); pros::lcd::set_text(1, "Drive initialized"); })
-        
+            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point();}),
+        // AutoTask::SyncTask(
+        //     [](void) -> void {
+        //         intake->Set_Intake(0);
+        //         robot->set_point_drive(-100, 0, 3000); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); pros::lcd::set_text(1, "Drive initialized"); }),
+        // AutoTask::SyncTask(
+        //     [](void) -> void { robot->drive->Set_Turn(60, 70, 2000); }, [](void) -> bool { return !robot->drive->get_running(); }, [](void) -> void { robot->drive->Reset_Point(); }),
+        // AutoTask::SyncTask(
+        //     [](void) -> void {
+        //         intake->Set_Intake(0);
+        //         robot->set_point_drive(100, 0, 3000); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); pros::lcd::set_text(1, "Drive initialized"); })
+
     });
 
 void autonomous()
@@ -60,19 +60,7 @@ void autonomous()
         pros::delay(20);
     }
 
-    // while (true)
-    // {
-
-    //     // intake->Set_Intake(100);
-    //     // robot->drive->Set_Turn(100, 0, 100);
-
-    //     // robot->set_point_drive(100, 160, 500);
-
-    //     //   auton_control->run();
-
-    //     //   pros::delay(20);
-    //   }
 };
-// //operations are stopped once a sync task is reached and is only continued once the sync task has been completed
-// //multiple operations can be run in one sync task that will be run at the same time
-// //async task runs all operations at the same time
+//operations are stopped once a sync task is reached and is only continued once the sync task has been completed
+//multiple operations can be run in one sync task that will be run at the same time
+//async task runs all operations at the same time

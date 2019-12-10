@@ -8,7 +8,7 @@ AutoTimer::AutoTimer(int duration, bool sync, std::function<void(void)> task, st
             //   task();
               _time += DELAY_INTERVAL;
           },
-          [&](void) -> bool { if(this->isSync){ pros::lcd::set_text(6, "yee" + to_string(this->isSync));}return _time >= duration; }, init, kill}
+          [&](void) -> bool {return (_time >= duration);}, init, kill}
 {
     _duration = duration;
     this->isSync = true;

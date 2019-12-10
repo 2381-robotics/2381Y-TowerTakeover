@@ -8,7 +8,7 @@ class AutoTimer : public AutoTask
 {
 public:
     int _time = 0;
-    int _duration = 0;
+    int _duration = 1;
     AutoTimer(int interval, bool sync = true, std::function<void(void)> task = [](void) -> void {}, std::function<void(void)> init = [](void) -> void {}, std::function<void(void)> kill = [](void) -> void {});
 protected:
 };

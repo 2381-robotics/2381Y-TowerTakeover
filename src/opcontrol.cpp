@@ -25,17 +25,15 @@ Motor testMotorRight (10, false);
      // intake->create();
 
    while (true) {
-     intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2)*127));
+     intake->Set_Intake((master.get_digital(DIGITAL_L1) * 100 - master.get_digital(DIGITAL_L2)*50 ));
       robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
-     // angler->Toggle_Extension(master.get_digital_new_press(DIGITAL_Y));
+    //  angler->Toggle_Extension(master.get_digital_new_press(DIGITAL_Y));
 
      angler->Smooth_Angler(master.get_digital(DIGITAL_X) - master.get_digital(DIGITAL_A));
      angler->Move_Angler();
-    arm->Increment_Arm((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
-    arm->Move_Arm();
-    if(master.get_digital(DIGITAL_UP)){
-         arm_motor.move(-40);
-    }
+    // arm->Increment_Arm((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
+    // arm->Move_Arm();
+
 //     arm->Set_Target(arm->Get_Target() - 40*master.get_digital(DIGITAL_UP));
 
     //  pros::lcd::set_text(1, "Target height" + to_string(angler->Get_Height()));

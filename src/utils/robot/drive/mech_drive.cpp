@@ -26,7 +26,7 @@ double Mech_Drive::Get_Distance() {
 }
 
 void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double right_y){
-
+  // pros::lcd::set_text(1, _left_back_motor_controller->Get_Speed);
   _left_back_setpoint = (left_y - left_x + std::abs(right_x)*(right_x)/127);
   _left_front_setpoint = (left_y + left_x + std::abs(right_x)*(right_x)/127);
   _right_back_setpoint = (left_y + left_x - std::abs(right_x)*(right_x)/127);

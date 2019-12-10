@@ -20,7 +20,7 @@ void AutoSequence::next(){
     int numberRunning = 0;
     auto it = taskList.begin();
     while (it!= taskList.end()){
-        numberRunning ++;
+        numberRunning++;
         if (!it->_initialized)
         {
             it->initialize();
@@ -35,11 +35,10 @@ void AutoSequence::next(){
             // break;
             if(it->isSync) {
                 break;
-                return;
-            } 
-            it++;
+                // return;
+            }
         }
-
+        it++;
     }
     pros::lcd::set_text(4, to_string(numberRunning));
 }

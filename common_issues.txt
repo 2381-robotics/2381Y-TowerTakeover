@@ -1,3 +1,4 @@
+Error:
 Linking project with okapilib,libpros [ERRORS]
 ./bin/utils/robot/drive/mech_drive.cpp.o:(.rodata._ZTI10Mech_Drive+0x8): undefined reference to `typeinfo for Drive'
 ./bin/utils/robot/robot_factory.cpp.o: In function `RobotFactory::create_robot(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)':
@@ -8,3 +9,9 @@ Error: Failed to build
 
 Fix: Make sure all virtual functions are = 0, I.E.
 virtual void Set_Drive(double left_x, double left_y, double right_x, double right_y) = 0;
+
+Error:
+FETCH ERROR [LCD Error]
+
+Fix: Lambda Functions: I.E.
+[&](void) -> bool { if(this->isSync){ pros::lcd::set_text(6, "yee" + to_string(this->isSync));}return _time >= duration; }, init, kill}
