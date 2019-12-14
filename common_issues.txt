@@ -15,3 +15,20 @@ FETCH ERROR [LCD Error]
 
 Fix: Lambda Functions: I.E.
 [&](void) -> bool { if(this->isSync){ pros::lcd::set_text(6, "yee" + to_string(this->isSync));}return _time >= duration; }, init, kill}
+
+Error: 
+MEMORY PERMISSION ERROR 
+
+Cause 1 : Accessing variables that have been declared in initialize.hpp but not initialized, so when 
+you say ```int a;``` in h file, don't give it a value and reference it.
+
+Cause 2 : Using objects that were not created with the ```new``` keyword does this too, I'm not 100% sure why, but 
+objects that don't use the ```new``` keyword are completely wack, they're methods might not give you errors in compile,
+and it will let you create them, but they're instance variables will have really wierd values, like _time in autotimer 
+was always 70000000, even when it was declared as 0 or 1, and sometimes it will just not let you have class variables like
+I tried to define a ```int test = 4;``` and it gave me memory permission for that, it's really weird.
+
+Error: Values that are randomly 77594888 or w/e even when declared as like 1
+
+Cause: Using local variables in & capture - for some reason in an object constructor references to this->whatever will work but not 
+if you have a variable x defined locally in the context, for ints it will just convert to like 7 mil.

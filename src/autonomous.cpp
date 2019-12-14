@@ -8,6 +8,7 @@
 #include "utils/pid.h"
 #include "globals.hpp"
 #include "auton_control.hpp"
+#include "utils/structure/auto_timer.hpp"
 #include "utils/structure/auto_sequence.hpp"
 #include <vector>
 #include <functional>
@@ -23,12 +24,10 @@ using namespace std;
 //  * will be stopped. Re-enabling the robot will restart the task, not re-start it
 //  * from where it left off.
 //  */
-// // Auto_Drive* auto_drive;
-// int times =0 ;
-int _count = 0;
+
 AutoSequence *auton1 = AutoSequence::FromTasks(
     vector<AutoTask>{
-        AutoTask::AutoDelay(4000, true),
+        AutoTask::AutoDelay(4000),
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(100);
@@ -47,6 +46,7 @@ AutoSequence *auton1 = AutoSequence::FromTasks(
         //         robot->set_point_drive(100, 0, 3000); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); pros::lcd::set_text(1, "Drive initialized"); })
 
     });
+
 
 void autonomous()
 {

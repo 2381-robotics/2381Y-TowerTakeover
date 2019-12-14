@@ -28,6 +28,7 @@ void AutoSequence::next(){
         }
         if (it->done())
         {
+            // pros::lcd::set_text(5, "Taskdone");
             it->kill();
             it = taskList.erase(it);
         } else {

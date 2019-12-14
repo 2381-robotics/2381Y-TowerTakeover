@@ -15,7 +15,7 @@ AutoTask AutoTask::SyncTask(std::function<void(void)> task, std::function<bool(v
     return asyncTask;
 }
 AutoTask AutoTask::AutoDelay(int time, bool sync, std::function<void(void)> task, std::function<void(void)> init, std::function<void(void)> kill){
-    return AutoTimer(time, sync, task, init, kill);
+    return *new AutoTimer(time, sync, task, init, kill);
 }
 
 AutoTask::AutoTask(std::function<void(void)> task, std::function<bool(void)> done, std::function<void(void)> init, std::function<void(void)> kill)
