@@ -1,15 +1,15 @@
 #ifndef GLOBALS_H_
 #define GLOBALS_H_
 
-#include "utils/robot/robot.hpp"
+#include "robot/robot.hpp"
 #include <array>
 #include "api.h"
 #include "ports.h"
 #include "okapi/api.hpp"
-#include "auton_control.hpp"
-#include "utils/angler.hpp"
-#include "utils/arm.hpp"
-#include "utils/intake.hpp"
+#include "autonomous/auton_control.hpp"
+#include "robot/modules/angler.hpp"
+#include "robot/modules/arm.hpp"
+#include "robot/modules/intake.hpp"
 
 #define DELAY_INTERVAL 20
 

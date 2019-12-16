@@ -2,12 +2,12 @@
 
 #include "main.h"
 #include "ports.h"
-#include "utils/intake.hpp"
+#include "robot/modules/intake.hpp"
 
-#include "utils/pid.h"
-#include "utils/motor_controller.hpp"
-#include "utils/robot/drive/mech_drive.hpp"
-#include "utils/angler.hpp"
+#include "robot/control/pid.hpp"
+#include "robot/control/motor_controller.hpp"
+#include "robot/modules/drive/mech_drive.hpp"
+#include "robot/modules/angler.hpp"
 
 
 #include <list>

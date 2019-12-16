@@ -2,15 +2,15 @@
 #include "ports.h"
 #include "opcontrol.h"
 
-#include "utils/pid.h"
-#include "utils/motor_controller.hpp"
-#include "utils/robot/drive/mech_drive.hpp"
+#include "robot/control/pid.hpp"
+#include "robot/control/motor_controller.hpp"
+#include "robot/modules/drive/mech_drive.hpp"
 #include "initialize.h"
 
 #include <list>
 #include <map>
 #include "globals.hpp"
-#include "auton_control.hpp"
+#include "autonomous/auton_control.hpp"
 //Initialize Variables
 
 //  Global Variables

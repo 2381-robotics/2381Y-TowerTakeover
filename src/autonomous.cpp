@@ -1,15 +1,15 @@
 #include "main.h"
-#include "utils/motor_controller.hpp"
-#include "utils/robot/drive/mech_drive.hpp"
-#include "utils/robot/drive/drive.hpp"
+#include "robot/control/motor_controller.hpp"
+#include "robot/modules/drive/mech_drive.hpp"
+#include "robot/modules/drive/drive.hpp"
 
 #include "api.h"
 #include <math.h>
-#include "utils/pid.h"
+#include "robot/control/pid.hpp"
 #include "globals.hpp"
-#include "auton_control.hpp"
-#include "utils/structure/auto_timer.hpp"
-#include "utils/structure/auto_sequence.hpp"
+#include "autonomous/auton_control.hpp"
+#include "autonomous/auto_timer.hpp"
+#include "autonomous/auto_sequence.hpp"
 #include <vector>
 #include <functional>
 using namespace std;
