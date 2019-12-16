@@ -32,3 +32,5 @@ Error: Values that are randomly 77594888 or w/e even when declared as like 1
 
 Cause: Using local variables in & capture - for some reason in an object constructor references to this->whatever will work but not 
 if you have a variable x defined locally in the context, for ints it will just convert to like 7 mil.
+
+**Don't use ```using namespace std;``` in .h or .hpp files will break on build something about Okapi def or w/e***

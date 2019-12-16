@@ -9,8 +9,9 @@
 class AutoSequence {
     public: 
     std::future<bool> done();
-    std::function<void(void)> run;
-    void next();
+
+    int tasksRemaining = 0;
+    void run();
     std::vector<AutoTask> taskList;
     std::vector<AutoTask> runningTasks;
     

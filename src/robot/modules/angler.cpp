@@ -80,3 +80,6 @@ double Angler::Get_Target()
   return this->_target_height;
 }
 
+void Angler::Reset(){
+  
+}

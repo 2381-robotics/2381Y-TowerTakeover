@@ -15,6 +15,8 @@ public:
     double Get_Target() override;
     void create() override;
 
+    std::string name = "Y_Lift";
+
     void Increment_Height(int increment) override;
     void Smooth_Lift(int increment) override;
 private:
@@ -25,8 +27,7 @@ private:
     Pid* _master_lift_pid;
     Pid* _lift_pid;
 
-    double _lift_coefficient, _cube_height, _lift_power, _lift_speed;
-    double _max_height, _min_height;
+    double _lift_coefficient, _cube_height, _lift_difference;
 };
 
 

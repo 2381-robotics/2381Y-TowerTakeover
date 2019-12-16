@@ -6,7 +6,7 @@ AutonControl* AutonControl::instance() {
     return &control;
 }
 void AutonControl::run() {
-     _auton_running->next();
+     _auton_running->run();
 }
 
 void AutonControl::select_auton(std::string sequenceName){

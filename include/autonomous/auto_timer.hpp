@@ -16,8 +16,6 @@ public:
     std::function<void(void)> _run_action;
 
     void _run();
-    int test();
-    int testInt;
 protected:
 };
 

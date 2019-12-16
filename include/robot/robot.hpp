@@ -7,6 +7,7 @@
 #include "robot/modules/drive/drive.hpp"
 #include "robot/structure.hpp"
 #include "robot/modules/lift/lift.hpp"
+#include <map>
 /**
  * \class Robot
  * \brief A singleton thread safe robot class
@@ -22,9 +23,21 @@ class Robot : public Structure{
 	void begin_tasks();
 	void set_drive(double left_x, double left_y, double right_x, double right_y);
 	void set_point_drive(double speed, double direction, double distance);
+	enum class Module
+	{
+		Intake = 0,
+		Drive = 1,
+		Arm = 2,
+		Angler =3
+	};
+
+	std::map<int, Structure *> module_list;
 
 	void stop();
 	void create() override;
+	void Reset() override;
+	std::string name = "Robot";
+	// void Debug() override;
 
 	void assign_drive(Drive* drive_instance);
 	void assign_lift(Lift* lift_instance);

@@ -13,9 +13,6 @@ AutoTimer::AutoTimer(int duration, bool sync, std::function<void(void)> task, st
 {
   this->isSync = sync;
 }
-int AutoTimer::test() {
-  return _count;
-}
 void AutoTimer::_run_increment() {
   _time += DELAY_INTERVAL;
 }

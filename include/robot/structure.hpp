@@ -1,7 +1,8 @@
 
 #ifndef STRUCTURE_HPP_
 #define STRUCTURE_HPP_
-
+#include <map>
+#include <vector>
 class Structure {
 	public:
 		/**
@@ -10,6 +11,11 @@ class Structure {
    */
 		Structure(){};
 		virtual void create() = 0;
+		virtual void Reset() = 0;
+
+		std::string name;
+		// virtual void Debug() = 0;
+
 
 	protected:
 };

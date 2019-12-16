@@ -2,6 +2,8 @@
 #include "globals.hpp"
 #include "robot_factory.hpp"
 #include "api.h"
+#include <map>
+
 Robot::~Robot() {}
 
 void Robot::set_drive(double left_x, double left_y, double right_x, double right_y) {
@@ -29,3 +31,9 @@ void Robot::assign_intake(Structure* intake_instance) {
 }
 
 Robot* robot = RobotFactory::instance()->create_robot("Mech_Drive","Y_Lift","");
+
+
+
+void Robot::Reset(){
+}
+// void Robot::Debug() {}

@@ -24,35 +24,34 @@ using namespace std;
 //  * will be stopped. Re-enabling the robot will restart the task, not re-start it
 //  * from where it left off.
 //  */
-
-AutoSequence *auton1 = AutoSequence::FromTasks(
-    vector<AutoTask>{
-        AutoTask::AutoDelay(4000),
-        AutoTask::SyncTask(
-            [](void) -> void {
-                intake->Set_Intake(100);
-                robot->set_point_drive(100, 0, 4000);
-            },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point();}),
-        // AutoTask::SyncTask(
-        //     [](void) -> void {
-        //         intake->Set_Intake(0);
-        //         robot->set_point_drive(-100, 0, 3000); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); pros::lcd::set_text(1, "Drive initialized"); }),
-        // AutoTask::SyncTask(
-        //     [](void) -> void { robot->drive->Set_Turn(60, 70, 2000); }, [](void) -> bool { return !robot->drive->get_running(); }, [](void) -> void { robot->drive->Reset_Point(); }),
-        // AutoTask::SyncTask(
-        //     [](void) -> void {
-        //         intake->Set_Intake(0);
-        //         robot->set_point_drive(100, 0, 3000); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); pros::lcd::set_text(1, "Drive initialized"); })
-
-    });
+AutoSequence* auton1;
+void resetAuton1(int increment) {
+    auton1 = AutoSequence::FromTasks(
+        vector<AutoTask>{
+            AutoTask::AutoDelay(4000 + increment),
+            AutoTask::SyncTask(
+                [](void) -> void {
+                    intake->Set_Intake(100);
+                    robot->set_point_drive(100, 0, 4000);
+                },
+                [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }),
+            // AutoTask::SyncTask(
+            //     [](void) -> void {
+            //         intake->Set_Intake(0);
+            //         robot->set_point_drive(-100, 0, 3000); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); pros::lcd::set_text(1, "Drive initialized"); }),
+            // AutoTask::SyncTask(
+            //     [](void) -> void { robot->drive->Set_Turn(60, 70, 2000); }, [](void) -> bool { return !robot->drive->get_running(); }, [](void) -> void { robot->drive->Reset_Point(); }),
+            // AutoTask::SyncTask(
+            //     [](void) -> void {
+            //         intake->Set_Intake(0);
+            //         robot->set_point_drive(100, 0, 3000); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); pros::lcd::set_text(1, "Drive initialized"); })
+        });
+}
 
 
 void autonomous()
 {
-    auton_control->define_auton("auton1", auton1);
-    auton_control->select_auton("auton1");
-    pros::lcd::set_text(0, "Void Autonomous Function");
+
 
     while (true)
     {

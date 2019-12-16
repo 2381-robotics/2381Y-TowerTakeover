@@ -10,6 +10,8 @@
 #include "robot/modules/angler.hpp"
 #include "robot/modules/arm.hpp"
 #include "robot/modules/intake.hpp"
+#include "master_controller.hpp"
+#include "autonomous/auto_sequence.hpp"
 
 #define DELAY_INTERVAL 20
 
@@ -19,6 +21,16 @@ using namespace std;
 extern Robot* robot;
 extern AutonControl* auton_control;
 extern pros::Controller master;
+extern MasterController* master_control;
+
+// Autonomous
+extern AutoSequence* auton1;
+
+extern void resetAuton1(int increment  = 0);
+
+extern void driver();
+
+extern bool Competition_Env;
 
 // Drive
 extern std::array<double,3> left_back_pid_values, right_back_pid_values, left_front_pid_values, right_front_pid_values;

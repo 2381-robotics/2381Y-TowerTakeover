@@ -9,18 +9,18 @@ AutoSequence* AutoSequence::FromTasks(vector<AutoTask> tasks) {
     instance->add_tasks(tasks);
     return instance;
 }
+
 void AutoSequence::add_tasks(vector<AutoTask> tasks){
     taskList.reserve(taskList.size() + tasks.size());
     taskList.insert(taskList.end(), tasks.begin(), tasks.end());
 }
 AutoSequence::AutoSequence() {}
 
-void AutoSequence::next(){
-    pros::lcd::set_text(7, "Auton Control");
-    int numberRunning = 0;
+
+
+void AutoSequence::run(){
     auto it = taskList.begin();
     while (it!= taskList.end()){
-        numberRunning++;
         if (!it->_initialized)
         {
             it->initialize();
@@ -30,6 +30,9 @@ void AutoSequence::next(){
         {
             // pros::lcd::set_text(5, "Taskdone");
             it->kill();
+            if(it->isSync){
+                
+            }
             it = taskList.erase(it);
         } else {
             it->run();
@@ -41,5 +44,4 @@ void AutoSequence::next(){
         }
         it++;
     }
-    pros::lcd::set_text(4, to_string(numberRunning));
 }

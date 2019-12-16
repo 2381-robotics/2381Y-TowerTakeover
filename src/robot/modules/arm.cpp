@@ -61,6 +61,10 @@ Arm::Arm(){
   create();
 }
 
+void Arm::Reset() {
+
+}
+
 void Arm::Increment_Arm(int increment)
 {
   Set_Target(_target_height + increment * _arm_speed);
