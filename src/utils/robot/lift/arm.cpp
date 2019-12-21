@@ -52,7 +52,19 @@ void Arm::Move_Arm()
 if(!_manual_arm) {
   // max height 2300
   // max height
-        angler->Set_Target(0.40 * _current_arm_height);  
+  //  amgler
+   if (0.40 * _current_arm_height >= 960)
+  {
+    angler->_angler_target_height = 960;
+  }
+  else if (0.40 * _current_arm_height <= 0)
+  {
+    angler->_angler_target_height = 0;
+  }
+  else
+  {
+    angler->_angler_target_height = 0.40 * _current_arm_height;
+  }
 }
   _arm_motor->move(_arm_power);
  

@@ -30,14 +30,19 @@ void Angler::Set_Target(double target_height)
   if (target_height >= _max_height)
   {
     _target_height = _max_height;
+    _angler_target_height = _max_height;
   }
   else if (target_height <= _min_height)
   {
     _target_height = _min_height;
+    _angler_target_height = _min_height;
+
   }
   else
   {
-    _target_height = target_height;
+    _angler_target_height = target_height;
+    _target_height = _angler_target_height;
+
   }
 
 }
