@@ -71,7 +71,7 @@ Arm::Arm(){
 void Arm::Increment_Arm(int increment)
 {
   Set_Target(_target_height + increment * _arm_speed);
-      //  pros::lcd::set_text(6, "current arm height" + to_string(_current_arm_height));
+      //  pros::lcd::set_text(6, "current arm height" + to_string(_current_arm_height)); ;
 
     // for clearances
     if (increment == 1) {
