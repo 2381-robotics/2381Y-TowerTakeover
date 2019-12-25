@@ -23,11 +23,11 @@ class Pid {
    */
   double Update(double setpoint, double current_value);
 
- private:
-  // PID constants (Proportional (P), Integral (I), Derivative (D))
   double* kp_;
   double* ki_;
   double* kd_;
+ private:
+  // PID constants (Proportional (P), Integral (I), Derivative (D))
 
   // Summation of errors used in the integral term
 

@@ -25,16 +25,50 @@ using namespace std;
 //  * from where it left off.
 //  */
 AutoSequence* auton1;
-void resetAuton1(int increment) {
+void resetAuton1() {
     auton1 = AutoSequence::FromTasks(
         vector<AutoTask>{
-            AutoTask::AutoDelay(4000 + increment),
             AutoTask::SyncTask(
                 [](void) -> void {
                     intake->Set_Intake(100);
-                    robot->set_point_drive(100, 0, 4000);
+                    robot->set_point_drive(60, 0, 4000);
                 },
-                [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }),
+                [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {pros::lcd::set_text(5, to_string(robot->drive->Get_Distance())); intake->Stop(); }),
+            AutoTask::AutoDelay(100),
+            AutoTask::SyncTask(
+                [](void) -> void {
+                    intake->Set_Intake(50);
+                    robot->set_point_drive(75, 180, 3500);
+                    pros::lcd::set_text(0, "HELLO THERE");
+                },
+                [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {pros::lcd::set_text(5, to_string(robot->drive->Get_Distance())); intake->Stop(); }),
+            AutoTask::AutoDelay(100),
+            AutoTask::SyncTask(
+                [](void) -> void {
+                    intake->Set_Intake(50);
+                    robot->set_point_drive(60, 90, 2200 +autonomous_increment);
+                    // pros::lcd::set_text(0, "HELLO THERE");
+                },
+                [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {pros::lcd::set_text(5, to_string(robot->drive->Get_Distance())); intake->Stop(); }),
+            AutoTask::AutoDelay(100),
+
+            AutoTask::SyncTask(
+                [](void) -> void {
+                    intake->Set_Intake(100);
+                    robot->set_point_drive(60, 0, 3500);
+                },
+                [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {pros::lcd::set_text(5, to_string(robot->drive->Get_Distance())); intake->Stop(); }),
+            AutoTask::AutoDelay(100),
+            AutoTask::SyncTask(
+                [](void) -> void {
+                    intake->Set_Intake(80);
+                    robot->set_point_drive(75, 180, 3000);
+                    pros::lcd::set_text(0, "HELLO THERE");
+                },
+                [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {pros::lcd::set_text(5, to_string(robot->drive->Get_Distance())); intake->Stop(); }),
+
+            AutoTask::AutoDelay(10000000),
+
             // AutoTask::SyncTask(
             //     [](void) -> void {
             //         intake->Set_Intake(0);

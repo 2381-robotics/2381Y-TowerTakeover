@@ -18,16 +18,16 @@ using namespace pros;
 using namespace std;
 //  Global Variables
 bool Competition_Env = false;
-
+double autonomous_increment = 0;
 Controller master(CONTROLLER_MASTER);
 MasterController* master_control = MasterController::instance();
 AutonControl* auton_control = AutonControl::instance();
 
 // Drive Variables:
-array<double,3> left_back_pid_values = {0.66, 0, 0};
-array<double,3> right_back_pid_values = {0.66, 0, 0};
-array<double,3> left_front_pid_values = {0.66, 0, 0};
-array<double,3> right_front_pid_values = {0.66, 0, 0};
+array<double,3> left_back_pid_values = {0.6, 0, 0};
+array<double,3> right_back_pid_values = {0.6, 0, 0};
+array<double,3> left_front_pid_values = {0.6, 0, 0};
+array<double,3> right_front_pid_values = {0.6, 0, 0};
 
 array<double, 3> master_drive_pid_values = {0, 0.001, 0};
 
@@ -55,7 +55,7 @@ array<double,3> angler_pid_values = {1, 0.1, 0};
 
 double angler_speed = 16;
 double angler_min_height = 0;
-double angler_max_height = 2400;
+double angler_max_height = 3400;
 Angler*  angler = new Angler();
 
 // arm variables
@@ -75,7 +75,7 @@ Motor intakeMotorRight (3, false);
 
 array<double, 3> pid_intake_left_values = {0.1,0,0};
 array<double, 3> pid_intake_right_values = {0.1, 0, 0};
-array<double, 3> master_intake_pid_values = {0,0.001,0};
+array<double, 3> master_intake_pid_values = {0,0.005,0};
 
 Intake* intake =  new Intake();
 

@@ -26,7 +26,9 @@ extern MasterController* master_control;
 // Autonomous
 extern AutoSequence* auton1;
 
-extern void resetAuton1(int increment  = 0);
+extern void resetAuton1();
+
+extern double autonomous_increment;
 
 extern void driver();
 

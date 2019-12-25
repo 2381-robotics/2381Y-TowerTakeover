@@ -4,21 +4,22 @@
 
 AutoTask AutoTask::AsyncTask(std::function<void(void)> task, std::function<bool(void)> done, std::function<void(void)> init, std::function<void(void)> kill)
 {
-    AutoTask asyncTask = AutoTask(task, done, init, kill);
-    asyncTask.isSync = false;
-    return asyncTask;
+    AutoTask* asyncTask = new AutoTask(task, done, init, kill, false);
+    return *asyncTask;
 }
 AutoTask AutoTask::SyncTask(std::function<void(void)> task, std::function<bool(void)> done, std::function<void(void)> init, std::function<void(void)> kill)
 {
-    AutoTask asyncTask = AutoTask(task, done, init, kill);
-    asyncTask.isSync = true;
-    return asyncTask;
+    AutoTask* syncTask = new AutoTask(task, done, init, kill, true);
+    return *syncTask;
 }
 AutoTask AutoTask::AutoDelay(int time, bool sync, std::function<void(void)> task, std::function<void(void)> init, std::function<void(void)> kill){
     return *new AutoTimer(time, sync, task, init, kill);
 }
 
-AutoTask::AutoTask(std::function<void(void)> task, std::function<bool(void)> done, std::function<void(void)> init, std::function<void(void)> kill)
+
+
+AutoTask::AutoTask(std::function<void(void)> task, std::function<bool(void)> done, std::function<void(void)> init, std::function<void(void)> kill, bool sync)
+: isSync(sync)
 {
     this->done = done;
     this->run = task;

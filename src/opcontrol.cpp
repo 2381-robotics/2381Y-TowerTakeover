@@ -32,9 +32,9 @@ void driver()  {
   // arm->Increment_Arm((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
   // arm->Move_Arm();
 
-  //     arm->Set_Target(arm->Get_Target() - 40*master.get_digital(DIGITAL_UP));
+      // arm->Set_Target(arm->Get_Target() - 40*master.get_digital(DIGITAL_UP));
 
-   pros::lcd::set_text(1, "Target height" + to_string(angler->Get_Height()));
+  //  pros::lcd::set_text(1, "Target height" + to_string(angler->Get_Height()));
 }
 
  void opcontrol() {

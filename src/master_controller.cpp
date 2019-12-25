@@ -18,8 +18,8 @@ void MasterController::run() {
         driver();
         return;
     }
-    if(master.get_digital(DIGITAL_L1)&&master.get_digital(DIGITAL_L2)&&master.get_digital(DIGITAL_R1)&&master.get_digital(DIGITAL_R2)&&master.get_digital(DIGITAL_UP)&&master.get_digital(DIGITAL_X)) {
-        set_state(selector_mode);
+    if(master.get_digital(DIGITAL_L1)&&master.get_digital(DIGITAL_L2)&&master.get_digital(DIGITAL_R1)&&master.get_digital(DIGITAL_R2)&&master.get_digital(DIGITAL_RIGHT)&&master.get_digital(DIGITAL_Y)) {
+        set_state(auton_mode);
     }
 
     switch(_active_mode) {
@@ -67,14 +67,29 @@ void MasterController::selector()
 }
 
 void MasterController::autonomous() {
-    lcd::set_text(1, "Increment Value: " + to_string(_autonomous_increment));
+    // lcd::set_text(1, "Increment Value: " + to_string(_autonomous_increment));
 
     if (master.get_digital(DIGITAL_X)){
         auton_control->run();
+    } if(master.get_digital(DIGITAL_B)){
+        robot->stop();
     }
     if(master.get_digital_new_press(DIGITAL_Y)){
         set_state(auton_edit_mode);
     }
+    // lcd::set_text(1, "Current Increment Value: " + to_string(autonomous_increment));
+    // lcd::set_text(2, "Set To " + to_string(_local_increment));
+
+    _local_increment += master.get_digital(DIGITAL_UP) - master.get_digital(DIGITAL_DOWN) + (master.get_digital_new_press(DIGITAL_LEFT) - master.get_digital_new_press(DIGITAL_RIGHT)) * 30;
+    if (master.get_digital_new_press(DIGITAL_A))
+    {
+        autonomous_increment = _local_increment;
+        resetAuton1();
+        auton_control->define_auton("auton1", auton1);
+        auton_control->select_auton("auton1");
+        set_state(auton_mode);
+    }
+
 };
 
 void MasterController::auton_editor() {
@@ -86,7 +101,7 @@ void MasterController::auton_editor() {
     _local_increment += master.get_digital(DIGITAL_UP) - master.get_digital(DIGITAL_DOWN) + (master.get_digital_new_press(DIGITAL_LEFT) - master.get_digital_new_press(DIGITAL_RIGHT))* 30;
     if(master.get_digital_new_press(DIGITAL_A)){
         _autonomous_increment = _local_increment;
-        resetAuton1(_autonomous_increment);
+        resetAuton1();
         auton_control->define_auton("auton1", auton1);
         auton_control->select_auton("auton1");
         set_state(auton_mode);

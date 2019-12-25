@@ -37,3 +37,6 @@ Robot* robot = RobotFactory::instance()->create_robot("Mech_Drive","Y_Lift","");
 void Robot::Reset(){
 }
 // void Robot::Debug() {}
+void Robot::stop() {
+  this->drive->Stop();
+}

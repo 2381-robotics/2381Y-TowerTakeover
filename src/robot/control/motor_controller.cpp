@@ -25,3 +25,4 @@ double Motor_Controller::Set_Speed(double targetValue){
   (*motor).move_voltage(motorValue/127*12000);
   return motorValue;
 }
+

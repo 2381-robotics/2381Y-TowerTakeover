@@ -8,11 +8,9 @@ AutoTimer::AutoTimer(int duration, bool sync, std::function<void(void)> task, st
             _run_action();
             _run_increment();
           },
-          [&](void) -> bool {pros::lcd::set_text(3, to_string(_time) + "DURATION" + to_string(_duration)); return (_time >= _duration); }, init, kill},
+          [&](void) -> bool { return (_time >= _duration); }, init, kill, sync},
       _duration(duration), _run_action(task)
-{
-  this->isSync = sync;
-}
+{}
 void AutoTimer::_run_increment() {
   _time += DELAY_INTERVAL;
 }

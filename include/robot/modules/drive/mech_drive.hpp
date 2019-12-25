@@ -3,6 +3,7 @@
 
 #include "robot/modules/drive/drive.hpp"
 #include "robot/control/motor_controller.hpp"
+#include "robot/control/distance_controller.hpp"
 #include <array>
 
 class Mech_Drive : public Drive {
@@ -25,6 +26,11 @@ public:
   std::array<double, 2> Convert(double speed = 0, double direction = 0);
   std::string name = "Mech Drive";
 
+  std::array<double,3> distance_controller_pid_values = {1.5, 0.0015 ,0};
+  void Stop() override;
+
+  Pid* Drive_Distance_Controller;
+
   double _point_drive_distance;
   bool _is_running = false;
 
@@ -38,6 +44,12 @@ private:
   double _left_back_setpoint;
   double _right_front_setpoint;
   double _right_back_setpoint;
+
+
+  double _master_offset = 0;
+  double lboffset= 0, rboffset= 0, rfoffset = 0, lfoffset = 0;
+  double lbDistance = 0, rbDistance = 0, rfDistance = 0, lfDistance = 0, masterDistance = 0;
+  // double lboffset = 0, rboffset = 0, rfoffset = 0, lfoffset = 0;
 
   double _left_back_motor_value;
   double _left_front_motor_value;

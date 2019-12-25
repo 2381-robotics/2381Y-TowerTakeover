@@ -13,6 +13,7 @@ public:
     double Get_Speed();
     void Auton_Intake(double speed, double time);
     void create();
+    void Stop();
     std::string name = "Intake";
 
 private:
