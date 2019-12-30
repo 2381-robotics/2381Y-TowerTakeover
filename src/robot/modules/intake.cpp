@@ -22,7 +22,7 @@ void Intake::Set_Intake(double intakeSpeed)
 
     double intake_tuning_coefficient = _master_intake_pid->Update(0, _master_intake_error_average);
     pros::lcd::set_text(2, "tuning coeff:" + std::to_string(intake_tuning_coefficient));
-
+    
     _left_intake_value = leftIntakeController->Set_Speed(_master_intake_setpoint * intake_tuning_coefficient);
     _right_intake_value = rightIntakeController->Set_Speed(_master_intake_setpoint * intake_tuning_coefficient);
      _intake_value_average = (_left_intake_value + _right_intake_value) / 2;

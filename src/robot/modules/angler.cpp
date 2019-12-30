@@ -49,6 +49,13 @@ void Angler::Move_Angler()
 Angler::Angler(){
   create();
 }
+
+
+
+
+
+
+
 void Angler::Toggle_Extension(int increment)
 {
   // If its not at max, set to max - if it is at max set to min - 
@@ -64,13 +71,16 @@ void Angler::Toggle_Extension(int increment)
   }
 }
 void Angler::Smooth_Angler(int increment)
-{ if (increment > 0) {
+{ 
   Set_Target(_target_height + increment * _angler_speed);
 }
-else {
-  Set_Target(_target_height + increment * (_angler_speed + 7));
+
+double Angler::Get_Speed() {
+  return _angler_motor->get_actual_velocity();
 }
-}
+
+
+
 double Angler::Get_Height()
 {
   return this->_angler_height;

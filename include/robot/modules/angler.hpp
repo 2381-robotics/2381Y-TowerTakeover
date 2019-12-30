@@ -20,17 +20,19 @@ public:
 
     void create() override;
 
+
+
     void Reset() override;
     double _angler_motor_value, _angler_height, _angler_power, _target_height, _angler_speed;
+    double _min_height, _max_height;
 
-private:
+  private:
     Motor_Controller* _angler_motor_controller;
     pros::Motor* _angler_motor;
     Pid* _angler_pid;
     Pid* _master_pid;
     double _angler_setpoint;
 
-    double _min_height, _max_height;
     
 
 };

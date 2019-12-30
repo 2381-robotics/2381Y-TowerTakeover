@@ -73,8 +73,8 @@ Arm* arm = new Arm();
 Motor intakeMotorLeft (2, true);
 Motor intakeMotorRight (3, false);
 
-array<double, 3> pid_intake_left_values = {0.1,0,0};
-array<double, 3> pid_intake_right_values = {0.1, 0, 0};
+array<double, 3> pid_intake_left_values = {0.6,0,0};
+array<double, 3> pid_intake_right_values = {0.6, 0, 0};
 array<double, 3> master_intake_pid_values = {0,0.005,0};
 
 Intake* intake =  new Intake();
