@@ -130,13 +130,14 @@ void Mech_Drive::Set_Turn(double speed, double direction, double distance)
     _is_running = false;
   }
 }
-  void Mech_Drive:: Set_Point_Drive(double speed, double direction, double distance)
+  void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance, double turnSpeed, double accelScaling)
   {
 
 
     std::array<double, 2> drive_convert = Convert(speed, direction);
-    pros::lcd::set_text(2, "Set Point Drive, Distance:"+  to_string(Get_Distance()));
+    pros::lcd::set_text(3, "Set Point Drive, Distance:"+  to_string(Get_Distance()));
     double actualDistance = this->Get_Distance();
+
     // double distanceControlCoeff = this->Drive_Distance_Controller->Update(0, (actualDistance - distance) / std::abs(distance));
     // pros::lcd::set_text(4, "distance Control : " + to_string(this->Drive_Distance_Controller->error_sum_*0.0015));
     
@@ -147,15 +148,20 @@ void Mech_Drive::Set_Turn(double speed, double direction, double distance)
     if (std::abs(actualDistance - distance) > distance/100 + 15 || this->Get_Speed() > 20)
     {
       if(std::abs(actualDistance- distance) < 400) {
-        Set_Drive(drive_convert[1] * sqrt(std::abs(actualDistance - distance) / 400), drive_convert[0] * sqrt(std::abs(actualDistance - distance)/400), 0 , 0);
-        pros::lcd::set_text(0, "slowing down " + to_string(drive_convert[0] * pow((abs(actualDistance) + 200) / 600, 0.25)));
+        double deaccelCoeff = pow(std::abs(actualDistance - distance)/400, (speed/(127*accelScaling)));
+        double deaccelTurnCoeff = pow(std::abs(actualDistance - distance) / 400, (turnSpeed / (127*accelScaling)));
+        Set_Drive(drive_convert[1] *deaccelCoeff, drive_convert[0] * deaccelCoeff, turnSpeed * deaccelTurnCoeff , 0);
+        pros::lcd::set_text(0, "slowing down " + to_string(deaccelTurnCoeff));
       } else if (std::abs(actualDistance)< 400) {
-        Set_Drive(drive_convert[1] * pow((abs(actualDistance)+200)/600,0.25), drive_convert[0] * pow((abs(actualDistance)+200)/600,0.25), 0 ,0 );
-        pros::lcd::set_text(0, "y drive value " + to_string(drive_convert[0] * pow((abs(actualDistance)+200)/600,0.25)) );
+        double accelCoeff = pow((abs(actualDistance) + 200) / 600, speed/(256*accelScaling));
+        double accelTurnCoeff = pow((abs(actualDistance) + 200) / 600, turnSpeed/(256*accelScaling));
+
+        Set_Drive(drive_convert[1] * accelCoeff, drive_convert[0] * accelCoeff, turnSpeed * accelTurnCoeff, 0);
+        pros::lcd::set_text(0, "y drive value " + to_string(accelTurnCoeff));
 
       }
        else {
-      Set_Drive(drive_convert[1], (drive_convert)[0] , 0, 0);
+      Set_Drive(drive_convert[1], (drive_convert)[0] , turnSpeed, 0);
       }
       _is_running = true;  
   }
