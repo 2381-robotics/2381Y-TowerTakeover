@@ -80,6 +80,10 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
   // pros::lcd::set_text(0, to_string(this->Get_Speed()) +  "Speed ");
   double tuning_coefficient = _master_pid->Update(0, _master_error_average);
 
+
+
+
+
   _left_back_motor_value = _left_back_motor_controller->Set_Speed(_left_back_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, lbDistance, lboffset));
   _left_front_motor_value = _left_front_motor_controller->Set_Speed(_left_front_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, lfDistance, lfoffset));
   _right_back_motor_value = _right_back_motor_controller->Set_Speed(_right_back_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, rbDistance, rboffset));
@@ -122,6 +126,22 @@ std::array<double, 2> Mech_Drive::Convert(double speed, double direction)
   return drive_coordinates;
 }
 
+void Mech_Drive::Module_Move() {
+  if (STOP)
+  {
+    Stop();
+    return;
+  }
+
+}
+
+
+void Mech_Drive::task_fn(void* param) {
+  
+
+}
+
+
 void Mech_Drive::Set_Turn(double speed, double direction, double distance)
 {
   std::array<double, 2> drive_convert = Convert(speed, direction);
@@ -156,7 +176,7 @@ void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance
     pros::lcd::set_text(3, ":" + to_string(Get_Distance()) + "distance away " + to_string(abs(actualDistance - distance)));
 
     if (std::abs(actualDistance) > distance + 400)
-      {
+      { 
         // this->Reset_Point
         Set_Drive(0, 0, 0, 0);
         return;

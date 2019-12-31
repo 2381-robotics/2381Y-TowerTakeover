@@ -29,6 +29,12 @@ public:
   std::array<double,3> distance_controller_pid_values = {1.5, 0.0015 ,0};
   void Stop() override;
 
+
+
+
+
+  void task_fn(void* param) override;
+
   Pid* Drive_Distance_Controller;
 
   double _point_drive_distance;
@@ -51,15 +57,14 @@ private:
   double lbDistance = 0, rbDistance = 0, rfDistance = 0, lfDistance = 0, masterDistance = 0;
   // double lboffset = 0, rboffset = 0, rfoffset = 0, lfoffset = 0;
 
-  double _left_back_motor_value;
-  double _left_front_motor_value;
-  double _right_back_motor_value;
-  double _right_front_motor_value;
+  double _left_back_motor_value, _left_front_motor_value, _right_back_motor_value, _right_front_motor_value;
+
   double _motor_value_average;
   double _master_setpoint;
   double _previous_setpoint;
   double _master_error_average;
 
+  void Module_Move();
 
 };
 #endif

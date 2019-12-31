@@ -17,12 +17,12 @@
 
 using namespace std;
 
-
+extern bool STOP;
 extern Robot* robot;
 extern AutonControl* auton_control;
 extern pros::Controller master;
 extern MasterController* master_control;
-
+extern std::uint32_t now;
 // Autonomous
 extern AutoSequence* auton1;
 

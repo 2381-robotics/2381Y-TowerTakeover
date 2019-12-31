@@ -16,9 +16,11 @@ public:
   double Get_Target();
   double Get_Speed();
   std::string name = "Arm";
-
+  
   void create() override;
   void Reset() override;
+
+  void task_fn(void* param) override;
 
   double test;
 private:

@@ -22,6 +22,8 @@ double autonomous_increment = 0;
 Controller master(CONTROLLER_MASTER);
 MasterController* master_control = MasterController::instance();
 AutonControl* auton_control = AutonControl::instance();
+bool STOP = false;
+std::uint32_t now = pros::millis();
 
 // Drive Variables:
 array<double,3> left_back_pid_values = {0.6, 0, 0};
@@ -100,12 +102,33 @@ static lv_res_t btn_click_action(lv_obj_t *btn)
   return LV_RES_OK;
 }
 
+void angler_task_fn(void* param) {
+  while(true) {
+    angler->Move_Angler();
+    pros::delay(DELAY_INTERVAL);
+  }
+}
+
+void my_task_fn(void *param)
+{
+  while (true)
+  {
+    angler->Move_Angler();
+    pros::delay(DELAY_INTERVAL);
+  }
+  // ...
+}
 void initialize()
 {
   lcd::initialize();
   robot->create();
   intake->create();
   angler->create();
+
+  std::string text("PROS");
+  pros::Task angler_task(my_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
+                     TASK_STACK_DEPTH_DEFAULT, "ANGLER_TASK");
+
   // robot->module_list = {{1, angler}};
 
   // lv_style_copy(&myButtonStyleREL, &lv_style_plain);

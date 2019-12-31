@@ -25,7 +25,7 @@ public:
     void Reset() override;
     double _angler_motor_value, _angler_height, _angler_power, _target_height, _angler_speed;
     double _min_height, _max_height;
-
+    void task_fn(void* param) override;
   private:
     Motor_Controller* _angler_motor_controller;
     pros::Motor* _angler_motor;

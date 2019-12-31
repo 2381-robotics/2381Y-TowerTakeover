@@ -37,11 +37,17 @@ void Angler::Set_Target(double target_height)
 }
 void Angler::Move_Angler()
 {
-  _angler_height = (_angler_motor->get_position()) ;
+  if(STOP) {
+    _angler_motor->move(0);
+    return;
+  }
+ 
+  _angler_height = (_angler_motor->get_position());
   _angler_power = _angler_pid->Update(_target_height, _angler_height);
   // angler Coefficient is for keeping angler even / not tilted, not sure if it works.
   // Right now it's a constant and is additive, not sure if it should be multiplicative maybe
   _angler_motor->move(_angler_power);
+  
   // pros::lcd::set_text(1, "Target height" + to_string(_target_height));
   // pros::lcd::set_text(2, "angler power" + to_string(_angler_power));
   // pros::lcd::set_text(3, "angler position" + to_string(_angler_motor->get_position()));
@@ -50,7 +56,12 @@ Angler::Angler(){
   create();
 }
 
-
+void Angler::task_fn(void* param) {
+  while(true) {
+    this->Move_Angler();
+    pros::Task::delay_until(&now, DELAY_INTERVAL);
+  }
+}
 
 
 

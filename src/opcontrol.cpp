@@ -28,7 +28,6 @@ void driver()  {
   //  angler->Toggle_Extension(master.get_digital_new_press(DIGITAL_Y));
 
   angler->Smooth_Angler(master.get_digital(DIGITAL_X) - master.get_digital(DIGITAL_A));
-  angler->Move_Angler();
   // arm->Increment_Arm((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
   // arm->Move_Arm();
 
@@ -41,10 +40,10 @@ void driver()  {
      // intake->create();
 
    while (true) {
-
+    
      master_control->run();
 
-     pros::delay(DELAY_INTERVAL);
+     pros::Task::delay_until(&now, DELAY_INTERVAL);
    }
  }
 

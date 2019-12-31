@@ -37,8 +37,14 @@ void Arm::Set_Target(double target_height)
     _target_height = _min_height;
   }
 }
+
 void Arm::Move_Arm()
 {
+  if (STOP)
+  {
+    _arm_motor->move(0);
+    return;
+  }
   _current_arm_height = (_arm_motor->get_position());
   _arm_power = _arm_pid->Update(_target_height, _current_arm_height);
 
@@ -52,7 +58,6 @@ if (!_is_moving && !_moving_up) {
         angler->Smooth_Angler(-1);
     }
 }
-  _arm_motor->move(_arm_power);
 
   // pros::lcd::set_text(2, "angler power" + to_string(_angler_power));
 //   pros::lcd::set_text(3, "angler position" + to_string(_angler_motor->get_position()));
@@ -61,9 +66,14 @@ Arm::Arm(){
   create();
 }
 
+void Arm::task_fn(void* param) {
+  
+}
 void Arm::Reset() {
 
 }
+
+
 
 void Arm::Increment_Arm(int increment)
 {
