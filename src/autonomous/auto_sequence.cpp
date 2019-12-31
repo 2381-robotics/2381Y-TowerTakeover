@@ -20,6 +20,8 @@ AutoSequence::AutoSequence() {}
 
 void AutoSequence::run(){
     auto it = taskList.begin();
+    int j = 0;
+
     while (it!= taskList.end()){
         if (!it->_initialized)
         {
@@ -30,18 +32,23 @@ void AutoSequence::run(){
         {
             // pros::lcd::set_text(5, "Taskdone");
             it->kill();
-            if(it->isSync){
-                
-            }
+            
             it = taskList.erase(it);
+            if (it->isSync)
+            {
+                break;
+            }
         } else {
+            
             it->run();
             // break;
             if(it->isSync) {
+                pros::lcd::set_text(6, "j " + to_string(j));
                 break;
-                // return;
+                return;
             }
         }
         it++;
+        j++;
     }
 }
