@@ -15,7 +15,6 @@ public:
   
   double Get_Speed() override;
   double Get_Distance() override;
-  void create() override;
 
   void Set_Init_Point() override;
   std::array<double, 4> initial_position = {0,0,0,0};
@@ -29,18 +28,19 @@ public:
   std::array<double,3> distance_controller_pid_values = {1.5, 0.0015 ,0};
   void Stop() override;
 
-
-
-
-
-  void task_fn(void* param) override;
-
   Pid* Drive_Distance_Controller;
 
   double _point_drive_distance;
   bool _is_running = false;
 
-private:
+  enum Motor_Ref {left_back = 0, left_front, right_back, right_front};
+
+
+protected:
+  void Move_Motor() override;
+
+  std::array<double,4> _pid_inputs = {0,0,0,0};
+
   Motor_Controller *_left_front_motor_controller;
   Motor_Controller *_left_back_motor_controller;
   Motor_Controller *_right_front_motor_controller;
@@ -51,6 +51,7 @@ private:
   double _right_front_setpoint;
   double _right_back_setpoint;
 
+  void Create() override;
 
   double _master_offset = 0;
   double lboffset= 0, rboffset= 0, rfoffset = 0, lfoffset = 0;

@@ -13,7 +13,6 @@ public:
     void Move_Lift() override;
     double Get_Height() override;
     double Get_Target() override;
-    void create() override;
 
     std::string name = "Y_Lift";
 

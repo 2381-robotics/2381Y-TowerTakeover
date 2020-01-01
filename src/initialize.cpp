@@ -12,7 +12,7 @@
 #include "globals.hpp"
 #include "autonomous/auton_control.hpp"
 #include "master_controller.hpp"
-
+#include "robot/task_factory.hpp"
 //Initialize Variables
 using namespace pros;
 using namespace std;
@@ -20,16 +20,15 @@ using namespace std;
 bool Competition_Env = false;
 double autonomous_increment = 0;
 Controller master(CONTROLLER_MASTER);
-MasterController* master_control = MasterController::instance();
-AutonControl* auton_control = AutonControl::instance();
+MasterController *master_control = MasterController::instance();
+AutonControl *auton_control = AutonControl::instance();
 bool STOP = false;
-std::uint32_t now = pros::millis();
 
 // Drive Variables:
-array<double,3> left_back_pid_values = {0.6, 0, 0};
-array<double,3> right_back_pid_values = {0.6, 0, 0};
-array<double,3> left_front_pid_values = {0.6, 0, 0};
-array<double,3> right_front_pid_values = {0.6, 0, 0};
+array<double, 3> left_back_pid_values = {0.6, 0, 0};
+array<double, 3> right_back_pid_values = {0.6, 0, 0};
+array<double, 3> left_front_pid_values = {0.6, 0, 0};
+array<double, 3> right_front_pid_values = {0.6, 0, 0};
 
 array<double, 3> master_drive_pid_values = {0, 0.001, 0};
 
@@ -39,7 +38,7 @@ Motor right_front_motor(RIGHT_FRONT_MOTOR_PORT, true);
 Motor right_back_motor(RIGHT_BACK_MOTOR_PORT, true);
 // Lift Variables:
 
-array<double,3>  lift_pid_values = {0.618, 0, 1.454};
+array<double, 3> lift_pid_values = {0.618, 0, 1.454};
 array<double, 3> master_lift_pid_values = {1, 0.001, 0};
 
 Motor left_lift_motor(LEFT_LIFT_MOTOR_PORT, LEFT_LIFT_MOTOR_ORIENTATION);
@@ -53,33 +52,33 @@ double lift_speed = 10;
 // Angler Variables:
 
 Motor angler_motor(ANGLER_MOTOR_PORT, true);
-array<double,3> angler_pid_values = {1, 0.1, 0};
+array<double, 3> angler_pid_values = {1, 0.1, 0};
 
 double angler_speed = 24;
 double angler_min_height = 0;
 double angler_max_height = 3400;
-Angler*  angler = new Angler();
+Angler *angler = new Angler();
 
 // arm variables
 Motor arm_motor(4, false);
-array<double,3> arm_pid_values = {1, 0, 0};
+array<double, 3> arm_pid_values = {1, 0, 0};
 double arm_speed = 16;
 double arm_min_height = 0;
 double arm_max_height = 10000;
 bool _is_moving = false;
-bool _moving_up= false;
+bool _moving_up = false;
 bool _manual_arm = false;
 
-Arm* arm = new Arm();
+Arm *arm = new Arm();
 
-Motor intakeMotorLeft (2, true);
-Motor intakeMotorRight (3, false);
+Motor intakeMotorLeft(2, true);
+Motor intakeMotorRight(3, false);
 
-array<double, 3> pid_intake_left_values = {0.6,0,0};
+array<double, 3> pid_intake_left_values = {0.6, 0, 0};
 array<double, 3> pid_intake_right_values = {0.6, 0, 0};
-array<double, 3> master_intake_pid_values = {0,0.005,0};
+array<double, 3> master_intake_pid_values = {0, 0.005, 0};
 
-Intake* intake =  new Intake();
+Intake *intake = new Intake();
 
 lv_obj_t *myButton;
 lv_obj_t *myButtonLabel;
@@ -102,9 +101,31 @@ static lv_res_t btn_click_action(lv_obj_t *btn)
   return LV_RES_OK;
 }
 
-void angler_task_fn(void* param) {
-  while(true) {
-    angler->Move_Angler();
+void arm_task_fn(void *param)
+{
+  while (true)
+  {
+    arm->Run();
+    pros::delay(DELAY_INTERVAL);
+  }
+}
+void drive_task_fn(void *param)
+{
+
+  while (true)
+  {
+    // pros::lcd::set_text(0, to_string(pros::millis()));
+
+    robot->drive->Run();
+    pros::delay(DELAY_INTERVAL);
+  }
+}
+
+void angler_task_fn(void *param)
+{
+  while (true)
+  {
+    angler->Run();
     pros::delay(DELAY_INTERVAL);
   }
 }
@@ -113,7 +134,7 @@ void my_task_fn(void *param)
 {
   while (true)
   {
-    angler->Move_Angler();
+    angler->Run();
     pros::delay(DELAY_INTERVAL);
   }
   // ...
@@ -121,13 +142,19 @@ void my_task_fn(void *param)
 void initialize()
 {
   lcd::initialize();
-  robot->create();
+  robot->drive->Create();
   intake->create();
-  angler->create();
+  angler->Create();
+  arm->Create();
+
 
   std::string text("PROS");
-  pros::Task angler_task(my_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
-                     TASK_STACK_DEPTH_DEFAULT, "ANGLER_TASK");
+  pros::Task angler_task(angler_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
+                         TASK_STACK_DEPTH_DEFAULT, "ANGLER_TASK");
+  pros::Task arm_task(arm_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
+                         TASK_STACK_DEPTH_DEFAULT, "ARM_TASK");
+  pros::Task drive_task(drive_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
+                         TASK_STACK_DEPTH_DEFAULT, "DRIVE_TASK");
 
   // robot->module_list = {{1, angler}};
 
@@ -179,6 +206,7 @@ void disabled() {}
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-void competition_initialize() {
+void competition_initialize()
+{
   Competition_Env = true;
 }

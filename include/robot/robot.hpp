@@ -20,6 +20,8 @@ class Robot : public Structure{
 
 	virtual ~Robot();
 
+	void Create() override;
+
 	void begin_tasks();
 	void set_drive(double left_x, double left_y, double right_x, double right_y);
 	void set_point_drive(double speed, double direction, double distance, double turnSpeed = 0, double accelScaling = 1);
@@ -34,7 +36,6 @@ class Robot : public Structure{
 	std::map<int, Structure *> module_list;
 
 	void stop();
-	void create() override;
 	void Reset() override;
 	std::string name = "Robot";
 	// void Debug() override;

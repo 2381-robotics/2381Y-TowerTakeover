@@ -28,7 +28,6 @@ using namespace std;
 AutoTask stackTask = AutoTask::SyncTask(
     [](void) -> void {
         angler->Smooth_Angler(1);
-        angler->Move_Angler();
         robot->set_drive(0,0,0,0);
         intake->Set_Intake(0);
     },

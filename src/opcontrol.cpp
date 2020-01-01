@@ -43,7 +43,7 @@ void driver()  {
     
      master_control->run();
 
-     pros::Task::delay_until(&now, DELAY_INTERVAL);
+     pros::delay(DELAY_INTERVAL);
    }
  }
 

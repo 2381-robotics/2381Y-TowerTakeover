@@ -4,9 +4,7 @@
 #include "globals.hpp"
 #include <array>
 
-Y_Lift::Y_Lift(){};
-
-void Y_Lift::create() {
+Y_Lift::Y_Lift(){
     // Assign motors.
     _left_lift_motor = &left_lift_motor;
     _right_lift_motor = &right_lift_motor;
@@ -19,7 +17,7 @@ void Y_Lift::create() {
     _max_height = lift_max_height;
     _lift_speed = lift_speed;
     _target_height = 0;
-}
+};
 
 void Y_Lift::Set_Target(double target_height) {
     if(target_height > _max_height) {

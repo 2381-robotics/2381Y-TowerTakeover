@@ -2,7 +2,9 @@
 #define DRIVE_HPP
 
 #include "robot/structure.hpp"
-class Drive : public Structure{
+#include "robot/module.hpp"
+
+class Drive : public Module {
 public:
   Drive();
   virtual void Set_Drive(double left_x, double left_y, double right_x, double right_y) = 0;

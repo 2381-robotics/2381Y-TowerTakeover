@@ -15,7 +15,6 @@ public:
     void create();
     void Stop();
     std::string name = "Intake";
-
 private:
     Motor_Controller *rightIntakeController;
     Motor_Controller *leftIntakeController;

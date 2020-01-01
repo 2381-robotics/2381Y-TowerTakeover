@@ -6,19 +6,20 @@
 
 using namespace std;
 
-
-void Angler::create()
-{
-  // Assign motors.
-  _angler_motor = &angler_motor;
-  // Initialize Pids.
-  _angler_pid = new Pid(&angler_pid_values[0], &angler_pid_values[1], &angler_pid_values[2]);
-  // Assign Variables
-  _min_height = angler_min_height;
-  _max_height = angler_max_height;
-  _angler_speed = angler_speed;
-  _target_height = 0;
+void Angler::Move_Motor() {
+  _angler_height = (_angler_motor->get_position());
+  _angler_power = _angler_pid->Update(_target_height, _angler_height);
+  // angler Coefficient is for keeping angler even / not tilted, not sure if it works.
+  // Right now it's a constant and is additive, not sure if it should be multiplicative maybe
+  _angler_motor->move(_angler_power);
 }
+
+
+void Angler::Stop() {
+  _angler_motor->move(0);
+  return;
+}
+
 
 void Angler::Set_Target(double target_height)
 {
@@ -35,37 +36,20 @@ void Angler::Set_Target(double target_height)
     _target_height = target_height;
   }
 }
-void Angler::Move_Angler()
-{
-  if(STOP) {
-    _angler_motor->move(0);
-    return;
-  }
- 
-  _angler_height = (_angler_motor->get_position());
-  _angler_power = _angler_pid->Update(_target_height, _angler_height);
-  // angler Coefficient is for keeping angler even / not tilted, not sure if it works.
-  // Right now it's a constant and is additive, not sure if it should be multiplicative maybe
-  _angler_motor->move(_angler_power);
-  
-  // pros::lcd::set_text(1, "Target height" + to_string(_target_height));
-  // pros::lcd::set_text(2, "angler power" + to_string(_angler_power));
-  // pros::lcd::set_text(3, "angler position" + to_string(_angler_motor->get_position()));
-}
 Angler::Angler(){
-  create();
+ 
 }
-
-void Angler::task_fn(void* param) {
-  while(true) {
-    this->Move_Angler();
-    pros::Task::delay_until(&now, DELAY_INTERVAL);
-  }
+void Angler::Create() {
+  // Assign motors.
+  _angler_motor = &angler_motor;
+  // Initialize Pids.
+  _angler_pid = new Pid(&angler_pid_values[0], &angler_pid_values[1], &angler_pid_values[2]);
+  // Assign Variables
+  _min_height = angler_min_height;
+  _max_height = angler_max_height;
+  _angler_speed = angler_speed;
+  _target_height = 0;
 }
-
-
-
-
 
 void Angler::Toggle_Extension(int increment)
 {

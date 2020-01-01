@@ -13,11 +13,6 @@ void Robot::set_point_drive(double speed, double direction, double distance, dou
   this->drive->Set_Point_Drive(speed, direction, distance, turnSpeed, accelScaling);
 }
 
-void Robot::create(){
-  this->drive->create();
-  // this->lift->create();
-  // this->intake->create();
-}
 Robot::Robot(){}
 
 void Robot::assign_drive(Drive* drive_instance) {
@@ -29,7 +24,9 @@ void Robot::assign_lift(Lift* lift_instance) {
 void Robot::assign_intake(Structure* intake_instance) {
   this->intake = intake_instance;
 }
-
+void Robot::Create() {
+  
+}
 Robot* robot = RobotFactory::instance()->create_robot("Mech_Drive","Y_Lift","");
 
 

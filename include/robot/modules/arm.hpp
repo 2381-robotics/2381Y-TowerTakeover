@@ -1,33 +1,33 @@
 #ifndef ARM_HPP
 #define ARM_HPP
 
-#include "robot/structure.hpp"
+#include "robot/module.hpp"
 #include "robot/modules/drive/drive.hpp"
 #include "robot/control/motor_controller.hpp"
 #include <array>
 
-class Arm : public Structure {
+class Arm : public Module {
 public:
   Arm();
   void Set_Target(double target_height);
-  void Move_Arm();
   void Increment_Arm(int increment);
   double Get_Height();
   double Get_Target();
   double Get_Speed();
   std::string name = "Arm";
-  
-  void create() override;
+
+  void Create() override;
+  void Stop() override;
   void Reset() override;
 
-  void task_fn(void* param) override;
 
   double test;
-private:
+protected:
+
+    void Move_Motor() override;
     Motor_Controller* _arm_motor_controller;
     pros::Motor* _arm_motor;
     Pid* _arm_pid;
-    Pid* _master_pid;
     double _arm_setpoint;
 
     double _arm_motor_value, _current_arm_height, _arm_power;
