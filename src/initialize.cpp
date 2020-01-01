@@ -121,6 +121,15 @@ void drive_task_fn(void *param)
   }
 }
 
+void intake_task_fn(void* param) 
+{
+  while(true)
+  {
+    intake->Run();
+    pros::delay(DELAY_INTERVAL);
+  }
+}
+
 void angler_task_fn(void *param)
 {
   while (true)
@@ -130,20 +139,12 @@ void angler_task_fn(void *param)
   }
 }
 
-void my_task_fn(void *param)
-{
-  while (true)
-  {
-    angler->Run();
-    pros::delay(DELAY_INTERVAL);
-  }
-  // ...
-}
+
 void initialize()
 {
   lcd::initialize();
   robot->drive->Create();
-  intake->create();
+  intake->Create();
   angler->Create();
   arm->Create();
 
@@ -155,6 +156,8 @@ void initialize()
                          TASK_STACK_DEPTH_DEFAULT, "ARM_TASK");
   pros::Task drive_task(drive_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
                          TASK_STACK_DEPTH_DEFAULT, "DRIVE_TASK");
+  pros::Task intake_task(intake_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
+                        TASK_STACK_DEPTH_DEFAULT, "INTAKE_TASK");
 
   // robot->module_list = {{1, angler}};
 

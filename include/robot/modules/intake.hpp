@@ -4,18 +4,29 @@
 #include "robot/modules/drive/drive.hpp"
 #include "robot/control/motor_controller.hpp"
 #include <array>
+#include "robot/module.hpp"
 
-class Intake
+#include <array>
+
+class Intake : public Module
 {
 public:
     Intake();
     void Set_Intake(double intakeSpeed);
     double Get_Speed();
-    void Auton_Intake(double speed, double time);
-    void create();
-    void Stop();
+
+    void Create() override;
+    void Stop() override;
+    void Reset() override;
     std::string name = "Intake";
-private:
+
+    enum Motor_Slot {Left = 0, Right};
+protected:
+    void Move_Motor() override;
+
+    std::array<double, 2> _pid_inputs = {0,0};
+
+
     Motor_Controller *rightIntakeController;
     Motor_Controller *leftIntakeController;
 
@@ -26,7 +37,6 @@ private:
     double _left_intake_value;
     double _right_intake_value;
     double _intake_value_average;
-    double _master_intake_setpoint;
     double _master_intake_error_average;
 
 

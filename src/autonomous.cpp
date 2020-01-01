@@ -45,7 +45,7 @@ AutoSequence *auton1;
 
 void resetAuton1() {
     auton1 = AutoSequence::FromTasks(
-        vector<AutoTask>{
+        vector<AutoTask>{ 
 
             AutoTask::SyncTask(
                 [](void) -> void {
