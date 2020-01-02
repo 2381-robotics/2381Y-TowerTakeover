@@ -15,7 +15,7 @@ public:
     double Get_Target() override;
 
     std::string name = "Y_Lift";
-
+    void Create() override;
     void Increment_Height(int increment) override;
     void Smooth_Lift(int increment) override;
 private:

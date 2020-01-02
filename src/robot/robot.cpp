@@ -9,8 +9,8 @@ Robot::~Robot() {}
 void Robot::set_drive(double left_x, double left_y, double right_x, double right_y) {
   this->drive->Set_Drive(left_x, left_y, right_x, right_y);
 }
-void Robot::set_point_drive(double speed, double direction, double distance, double turnSpeed, double accelScaling) {
-  this->drive->Set_Point_Drive(speed, direction, distance, turnSpeed, accelScaling);
+void Robot::set_point_drive(double speed, double direction, double distance, double turnSpeed, double accelScaling, bool blocking, double criticalPoint) {
+  this->drive->Set_Point_Drive(speed, direction, distance, turnSpeed, accelScaling, blocking, criticalPoint);
 }
 
 Robot::Robot(){}
@@ -25,7 +25,7 @@ void Robot::assign_intake(Structure* intake_instance) {
   this->intake = intake_instance;
 }
 void Robot::Create() {
-  
+
 }
 Robot* robot = RobotFactory::instance()->create_robot("Mech_Drive","Y_Lift","");
 

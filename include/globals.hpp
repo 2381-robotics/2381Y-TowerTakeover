@@ -26,7 +26,7 @@ extern std::uint32_t now;
 // Autonomous
 extern AutoSequence* auton1;
 
-extern void resetAuton1();
+extern void resetAuton1(int choice = 0);
 
 extern double autonomous_increment;
 

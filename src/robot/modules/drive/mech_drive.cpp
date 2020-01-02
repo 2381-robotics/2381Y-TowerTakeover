@@ -148,7 +148,7 @@ void Mech_Drive::Set_Turn(double speed, double direction, double distance)
     _is_running = false;
   }
 }
-void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance, double turnSpeed, double accelScaling)
+void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance, double turnSpeed, double accelScaling, bool blocking, double criticalPoint)
 {
 
   std::array<double, 2> drive_convert = Convert(speed, direction);
@@ -160,16 +160,20 @@ void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance
   // pros::lcd::set_text(0, to_string(_left_back_motor_controller->Get_Distance()) + "leftback");
   // pros::lcd::set_text(3, to_string(_left_front_motor_controller->Get_Distance()) + "left front");
 
-  if (std::abs(actualDistance - distance) > distance / 100 + 15 || this->Get_Speed() > 20)
+  if (std::abs(actualDistance - distance) > distance / 50 + 15 || this->Get_Speed() > 20)
   {
-    pros::lcd::set_text(3, ":" + to_string(Get_Distance()) + "distance away " + to_string(abs(actualDistance - distance)));
+    pros::lcd::set_text(3, ":" + to_string((int)Get_Distance()) + "distance away " + to_string((int)abs(actualDistance - distance)) + "critical" + to_string((int)distance/50 + 15));
 
-    if (std::abs(actualDistance) > distance + 400)
+    if (std::abs(actualDistance) > distance + criticalPoint)
       { 
         // this->Reset_Point
-        Set_Drive(0, 0, 0, 0);
-        return;
+        Stop();
         pros::lcd::set_text(0, "drive exceed" + to_string(actualDistance) + ">" + to_string(distance));
+        if(blocking){
+          return;
+        }
+        _is_running = false;
+  
       }
 
     double leftX = drive_convert[1];
@@ -200,7 +204,6 @@ void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance
     }
 
     Set_Drive(leftX, leftY , rightX, 0);
-    _is_running = true;
   }
   else
   {

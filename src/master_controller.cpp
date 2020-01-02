@@ -71,7 +71,11 @@ void MasterController::autonomous() {
 
     if (master.get_digital(DIGITAL_X)){
         auton_control->run();
-    } if(master.get_digital(DIGITAL_B)){
+        STOP = false;
+    } else {
+        STOP = true;
+    }
+    if(master.get_digital(DIGITAL_B)){
         robot->stop();
     }
     if(master.get_digital_new_press(DIGITAL_Y)){
@@ -87,6 +91,14 @@ void MasterController::autonomous() {
         resetAuton1();
         auton_control->define_auton("auton1", auton1);
         auton_control->select_auton("auton1");
+        set_state(auton_mode);
+    }
+
+    if ( master.get_digital_new_press(DIGITAL_L2)){
+        autonomous_increment = _local_increment;
+        resetAuton1(1);
+        auton_control->define_auton("auton2", auton1);
+        auton_control->select_auton("auton2");
         set_state(auton_mode);
     }
 
