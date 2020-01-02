@@ -60,7 +60,7 @@ double angler_max_height = 3400;
 Angler *angler = new Angler();
 
 // arm variables
-Motor arm_motor(4, false);
+Motor arm_motor(1, false);
 array<double, 3> arm_pid_values = {1, 0, 0};
 double arm_speed = 16;
 double arm_min_height = 0;
@@ -71,8 +71,8 @@ bool _manual_arm = false;
 
 Arm *arm = new Arm();
 
-Motor intakeMotorLeft(2, true);
-Motor intakeMotorRight(3, false);
+Motor intakeMotorLeft(LEFT_INTAKE_PORT, LEFT_INTAKE_ORIENTATION);
+Motor intakeMotorRight(RIGHT_INTAKE_PORT, RIGHT_INTAKE_ORIENTATION);
 
 array<double, 3> pid_intake_left_values = {0.6, 0, 0};
 array<double, 3> pid_intake_right_values = {0.6, 0, 0};

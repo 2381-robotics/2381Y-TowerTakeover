@@ -181,7 +181,7 @@ void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance
     double rightX = turnSpeed;
     if (std::abs(actualDistance - distance) < (distance * speed / 127) / 4)
     {
-      double deaccelCoeff = pow(std::abs(actualDistance - distance) / ((distance * speed / 127) / 4), (speed / (127 * accelScaling)));
+      double deaccelCoeff = pow(std::abs(actualDistance - distance) / ((distance * speed / 127) / 4), (speed / (127 * accelScaling))) * abs(actualDistance - distance) / (distance-actualDistance);
       leftX = leftX * deaccelCoeff;
       leftY = leftY * deaccelCoeff;
     }

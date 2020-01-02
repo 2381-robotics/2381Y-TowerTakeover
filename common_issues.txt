@@ -34,3 +34,7 @@ Cause: Using local variables in & capture - for some reason in an object constru
 if you have a variable x defined locally in the context, for ints it will just convert to like 7 mil.
 
 **Don't use ```using namespace std;``` in .h or .hpp files will break on build something about Okapi def or w/e***
+
+Error: Memory Permission - 
+Cause: Don't assign motors and shit inside constructor of modules - ALWAYS USE Create() method to assign motors because otherwise
+you will assign an extern motor that hasn't been initialized in initialized.cpp yet

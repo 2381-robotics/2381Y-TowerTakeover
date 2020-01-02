@@ -23,8 +23,8 @@ public:
   double _angler_motor_value, _angler_height, _angler_power, _target_height, _angler_speed;
   double _min_height, _max_height;
 
-private:
-  void Move_Motor() override;
+protected:
+    void Move_Motor() override;
     Motor_Controller* _angler_motor_controller;
     pros::Motor* _angler_motor;
     Pid* _angler_pid;

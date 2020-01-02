@@ -31,7 +31,8 @@ void Arm::Move_Motor()
 {
   _current_arm_height = (_arm_motor->get_position());
   _arm_power = _arm_pid->Update(_target_height, _current_arm_height);
-
+  
+  pros::lcd::set_text(3, "HELLO THERE" + to_string(_arm_power));
   if (!_manual_arm)
   {
     if (_is_moving && _moving_up)
@@ -43,6 +44,7 @@ void Arm::Move_Motor()
       angler->Smooth_Angler(-1);
     }
   }
+  _arm_motor->move(_arm_power);
 }
 
 Arm::Arm()
