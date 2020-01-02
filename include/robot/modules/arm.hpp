@@ -20,13 +20,10 @@ public:
   void Stop() override;
   void Reset() override;
 
-
-  double test;
 protected:
 
     void Move_Motor() override;
-  double test, _arm_power, _current_arm_height;
-private:
+  double _arm_power, _current_arm_height;
     Motor_Controller* _arm_motor_controller;
     pros::Motor* _arm_motor;
     Pid* _arm_pid;

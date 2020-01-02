@@ -84,7 +84,7 @@ double Angler::Get_Speed() {
 
 double Angler::Get_Height()
 {
-  return this->_angler_height;
+  return _angler_motor->get_position();
 }
 double Angler::Get_Target()
 {
