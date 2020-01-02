@@ -17,8 +17,8 @@
 
 using namespace pros;
 
-Motor testMotorLeft (1, true);
-Motor testMotorRight (10, false);
+// Motor testMotorLeft (1, true);
+// Motor testMotorRight (10, false);
 
 //   Intake * intake = new Intake();
 

@@ -23,6 +23,7 @@ void Angler::Stop() {
 
 void Angler::Set_Target(double target_height)
 {
+
   if (target_height >= _max_height)
   {
     _target_height = _max_height;
@@ -30,11 +31,14 @@ void Angler::Set_Target(double target_height)
   else if (target_height <= _min_height)
   {
     _target_height = _min_height;
+
   }
   else
   {
     _target_height = target_height;
+
   }
+
 }
 Angler::Angler(){
  
@@ -68,6 +72,8 @@ void Angler::Toggle_Extension(int increment)
 void Angler::Smooth_Angler(int increment)
 { 
   Set_Target(_target_height + increment * _angler_speed);
+                pros::lcd::set_text(5, "current angler position" + to_string(_target_height));
+
 }
 
 double Angler::Get_Speed() {
