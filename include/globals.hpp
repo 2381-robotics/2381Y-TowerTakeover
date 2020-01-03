@@ -1,20 +1,38 @@
 #ifndef GLOBALS_H_
 #define GLOBALS_H_
 
-#include "utils/robot/robot.hpp"
+#include "robot/robot.hpp"
 #include <array>
 #include "api.h"
 #include "ports.h"
 #include "okapi/api.hpp"
-#include "auton_control.hpp"
-#include "utils/angler.hpp"
-#include "utils/arm.hpp"
+#include "autonomous/auton_control.hpp"
+#include "robot/modules/angler.hpp"
+#include "robot/modules/arm.hpp"
+#include "robot/modules/intake.hpp"
+#include "master_controller.hpp"
+#include "autonomous/auto_sequence.hpp"
+
+#define DELAY_INTERVAL 20
 
 using namespace std;
 
+extern bool STOP;
 extern Robot* robot;
 extern AutonControl* auton_control;
 extern pros::Controller master;
+extern MasterController* master_control;
+extern std::uint32_t now;
+// Autonomous
+extern AutoSequence* auton1;
+
+extern void resetAuton1(int choice = 0);
+
+extern double autonomous_increment;
+
+extern void driver();
+
+extern bool Competition_Env;
 
 // Drive
 extern std::array<double,3> left_back_pid_values, right_back_pid_values, left_front_pid_values, right_front_pid_values;
@@ -42,6 +60,7 @@ extern double cube_height, lift_max_height, lift_min_height, lift_speed;
 extern std::array<double, 3> pid_intake_left_values, pid_intake_right_values;
 extern std::array<double, 3> master_intake_pid_values;
 extern pros::Motor intakeMotorLeft, intakeMotorRight;
+extern Intake* intake;
 
 
 #endif

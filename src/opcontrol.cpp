@@ -2,16 +2,17 @@
 
 #include "main.h"
 #include "ports.h"
-#include "utils/intake.hpp"
+#include "robot/modules/intake.hpp"
 
-#include "utils/pid.h"
-#include "utils/motor_controller.hpp"
-#include "utils/robot/drive/mech_drive.hpp"
-#include "utils/angler.hpp"
-
-
-#include <list>
-#include <map>
+#include "robot/control/pid.hpp"
+#include "robot/control/motor_controller.hpp"
+#include "robot/modules/drive/mech_drive.hpp"
+#include "robot/modules/angler.hpp"
+#include "master_controller.hpp" 
+#include <functional>
+  
+#include <list>  
+#include <map> 
 #include "globals.hpp"
 
 using namespace pros;
@@ -19,24 +20,34 @@ using namespace pros;
 Motor testMotorLeft (1, true);
 Motor testMotorRight (10, false);
 
-  Intake * intake = new Intake();
+//   Intake * intake = new Intake();
+
+void driver()  {
+  intake->Set_Intake((master.get_digital(DIGITAL_L1) * 100 - master.get_digital(DIGITAL_L2) * 50));
+  robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
+  //  angler->Toggle_Extension(master.get_digital_new_press(DIGITAL_Y));
+
+  angler->Smooth_Angler(master.get_digital(DIGITAL_X) - master.get_digital(DIGITAL_A));
+  // arm->Increment_Arm((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
+  // arm->Move_Arm();
+
+      // arm->Set_Target(arm->Get_Target() - 40*master.get_digital(DIGITAL_UP));
+
+  //  pros::lcd::set_text(1, "Target height" + to_string(angler->Get_Height()));
+}
 
  void opcontrol() {
-     intake->create();
+     // intake->create();
 
    while (true) {
-     intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_UP)*64));
-      robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
-     angler->Toggle_Extension(master.get_digital_new_press(DIGITAL_Y));
-     angler->Smooth_Angler(master.get_digital(DIGITAL_A) - master.get_digital(DIGITAL_X));
-     angler->Move_Angler();
-    arm->Increment_Arm((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
-    arm->Move_Arm();
-    //  pros::lcd::set_text(1, "Target height" + to_string(angler->Get_Height()));
+    
+     master_control->run();
 
-     pros::delay(20);
+     pros::delay(DELAY_INTERVAL);
    }
  }
+
+
 
 // vision::signature SIG_1 (1, 0, 0, 0, 0, 0, 0, 3.000, 0);
 // vision::signature SIG_2 (2, 0, 0, 0, 0, 0, 0, 3.000, 0);
