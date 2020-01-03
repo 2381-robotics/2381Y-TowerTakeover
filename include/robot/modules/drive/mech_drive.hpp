@@ -11,7 +11,7 @@ public:
   Mech_Drive();
 
   void Set_Drive(double left_x, double left_y, double right_x, double right_y) override;
-  void Set_Point_Drive(double speed, double direction, double distance, double turnDirection = 0, double accelScaling = 1, bool blocking = false, double criticalPoint = 400) override;
+  void Set_Point_Drive(double speed, double direction, double distance, double turnDirection = 0, double accelScaling = 1, bool blocking = false, double criticalPoint = 400, double criticalMultiplier = 1) override;
   
   double Get_Speed() override;
   double Get_Distance() override;
