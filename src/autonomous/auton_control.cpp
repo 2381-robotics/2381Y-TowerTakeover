@@ -9,14 +9,15 @@ void AutonControl::run() {
      _auton_running->run();
 }
 
-void AutonControl::select_auton(std::string sequenceName){
-    auto it = autonomous_registry.find(sequenceName);
+
+void AutonControl::select_auton(Autonomous sequence){
+    auto it = autonomous_registry.find(sequence);
     if (it != autonomous_registry.end())
     {
         _auton_running = it->second;
     }
 }   
 
-void AutonControl::define_auton(std::string auton_name, AutoSequence* auton) {
-    autonomous_registry[auton_name] = auton;
+void AutonControl::define_auton(Autonomous sequence, AutoSequence* auton) {
+    autonomous_registry[sequence] = auton;
 }

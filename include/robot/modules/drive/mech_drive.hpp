@@ -16,6 +16,7 @@ public:
   double Get_Speed() override;
   double Get_Distance() override;
 
+  void Move_Wheel(double Speed) override; 
   void Set_Init_Point() override;
   std::array<double, 4> initial_position = {0,0,0,0};
   void Reset_Point() override;

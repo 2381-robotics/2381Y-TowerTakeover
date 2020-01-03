@@ -189,8 +189,8 @@ void initialize()
   // lv_obj_align(myLabel, NULL, LV_ALIGN_CENTER, 10, 0);         //set the position to center
 
   resetAuton1();
-  auton_control->define_auton("auton1", auton1);
-  auton_control->select_auton("auton1");
+  auton_control->define_auton(AutonControl::RedSmallSideAuton, auton1);
+  auton_control->select_auton(AutonControl::RedSmallSideAuton);
 }
 
 /**

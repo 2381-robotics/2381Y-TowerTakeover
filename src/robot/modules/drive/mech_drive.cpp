@@ -49,6 +49,11 @@ double Mech_Drive::Get_Distance()
   return (std::abs(_left_front_motor_controller->Get_Distance() - initial_position[0]) + std::abs(_left_back_motor_controller->Get_Distance() - initial_position[1]) + std::abs(_right_front_motor_controller->Get_Distance() - initial_position[2]) + std::abs(_right_back_motor_controller->Get_Distance() - initial_position[3])) / 4;
 }
 
+void Mech_Drive::Move_Wheel(double speed) {
+  _pid_inputs[left_front]  = speed;
+_pid_inputs[left_back] = speed;
+}
+
 double trollCalc(double masterDis, double masterOS, double specDis, double specOS)
 {
   if (masterOS == 0 || specDis == 0 || masterDis == 0 || specOS == 0)
