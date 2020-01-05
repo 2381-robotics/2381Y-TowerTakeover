@@ -56,7 +56,7 @@ array<double, 3> angler_pid_values = {1, 0.1, 0};
 
 double angler_speed = 24;
 double angler_min_height = 0;
-double angler_max_height = 3400;
+double angler_max_height = 3590; //3400
 Angler *angler = new Angler();
 
 // arm variables

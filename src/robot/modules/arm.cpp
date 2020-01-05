@@ -54,7 +54,7 @@ void Arm::Create() {
   _target_height = 0;
   _is_moving = false;
   _moving_up = false;
-  _manual_arm = true;
+  _manual_arm = false;
 }
 void Arm::Reset()
 {
@@ -70,9 +70,13 @@ void Arm::Increment_Arm(int increment)
     // max height 2300
     // max height
     //  amgler
-    if (1.1 * _current_arm_height <= 1000)
+    if ( 1.1 * _current_arm_height <= 1000)
     {
       angler->Set_Target(1.1 * _current_arm_height);
+
+    }
+    else {
+        pros::lcd::set_text(6, "moving angler");
     }
   }
   // for clearances

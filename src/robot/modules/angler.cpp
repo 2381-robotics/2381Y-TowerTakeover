@@ -94,3 +94,25 @@ double Angler::Get_Target()
 void Angler::Reset(){
   
 }
+
+
+// for auton 
+void Angler::Smooth_Angler_Auton(int increment)
+{ 
+  _auton_target_height = _target_height + increment * _angler_speed;
+
+  if (_auton_target_height >= _max_height/2.5)
+  {
+    _target_height = _max_height/2.5;
+  }
+  else if (_auton_target_height <= _min_height)
+  {
+    _target_height = _min_height;
+
+  }
+  else
+  {
+    _target_height = _auton_target_height;
+  }
+
+}
