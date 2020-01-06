@@ -17,8 +17,8 @@
 
 using namespace pros;
 
-Motor testMotorLeft (1, true);
-Motor testMotorRight (10, false);
+// Motor testMotorLeft (1, true);
+// Motor testMotorRight (10, false);
 
 //   Intake * intake = new Intake();
 
@@ -28,8 +28,8 @@ void driver()  {
   //  angler->Toggle_Extension(master.get_digital_new_press(DIGITAL_Y));
 
   angler->Smooth_Angler(master.get_digital(DIGITAL_X) - master.get_digital(DIGITAL_A));
-  // arm->Increment_Arm((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
-  // arm->Move_Arm();
+  arm->Increment_Arm((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
+    
 
       // arm->Set_Target(arm->Get_Target() - 40*master.get_digital(DIGITAL_UP));
 
@@ -37,8 +37,6 @@ void driver()  {
 }
 
  void opcontrol() {
-     // intake->create();
-
    while (true) {
     
      master_control->run();

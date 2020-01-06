@@ -20,20 +20,19 @@ public:
   void Stop() override;
   void Reset() override;
 
-
-  double test;
 protected:
 
     void Move_Motor() override;
+  double _arm_power, _current_arm_height;
     Motor_Controller* _arm_motor_controller;
     pros::Motor* _arm_motor;
     Pid* _arm_pid;
     double _arm_setpoint;
 
-    double _arm_motor_value, _current_arm_height, _arm_power;
+    double _arm_motor_value;
     double _min_height, _max_height, _arm_speed, _target_height;
     bool _is_moving, _moving_up, _manual_arm;
-    
+  
 
 };
 #endif

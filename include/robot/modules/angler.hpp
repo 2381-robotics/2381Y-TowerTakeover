@@ -11,6 +11,7 @@ public:
   Angler();
   void Set_Target(double target_height);
   void Smooth_Angler(int increment);
+  void Smooth_Angler_Auton(int increment);
   void Toggle_Extension(int increment);
   double Get_Height();
   double Get_Target();
@@ -20,11 +21,11 @@ public:
   void Create() override;
 
   void Reset() override;
-  double _angler_motor_value, _angler_height, _angler_power, _target_height, _angler_speed;
+  double _angler_motor_value, _angler_height, _angler_power, _target_height, _angler_speed, _auton_target_height;
   double _min_height, _max_height;
 
-private:
-  void Move_Motor() override;
+protected:
+    void Move_Motor() override;
     Motor_Controller* _angler_motor_controller;
     pros::Motor* _angler_motor;
     Pid* _angler_pid;

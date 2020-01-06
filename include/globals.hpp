@@ -25,10 +25,11 @@ extern MasterController* master_control;
 extern std::uint32_t now;
 // Autonomous
 extern AutoSequence* auton1;
-
+extern AutoSequence* invertedSmallSideAuto;
 extern void resetAuton1(int choice = 0);
 
 extern double autonomous_increment;
+
 
 extern void driver();
 

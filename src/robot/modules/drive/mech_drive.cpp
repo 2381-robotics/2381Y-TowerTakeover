@@ -49,6 +49,11 @@ double Mech_Drive::Get_Distance()
   return (std::abs(_left_front_motor_controller->Get_Distance() - initial_position[0]) + std::abs(_left_back_motor_controller->Get_Distance() - initial_position[1]) + std::abs(_right_front_motor_controller->Get_Distance() - initial_position[2]) + std::abs(_right_back_motor_controller->Get_Distance() - initial_position[3])) / 4;
 }
 
+void Mech_Drive::Move_Wheel(double speed) {
+  _pid_inputs[left_front]  = speed;
+_pid_inputs[left_back] = speed;
+}
+
 double trollCalc(double masterDis, double masterOS, double specDis, double specOS)
 {
   if (masterOS == 0 || specDis == 0 || masterDis == 0 || specOS == 0)
@@ -148,7 +153,7 @@ void Mech_Drive::Set_Turn(double speed, double direction, double distance)
     _is_running = false;
   }
 }
-void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance, double turnSpeed, double accelScaling, bool blocking, double criticalPoint)
+void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance, double turnSpeed, double accelScaling, bool blocking, double criticalPoint, double criticalMultiplier)
 {
 
   std::array<double, 2> drive_convert = Convert(speed, direction);
@@ -159,8 +164,7 @@ void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance
 
   // pros::lcd::set_text(0, to_string(_left_back_motor_controller->Get_Distance()) + "leftback");
   // pros::lcd::set_text(3, to_string(_left_front_motor_controller->Get_Distance()) + "left front");
-
-  if (std::abs(actualDistance - distance) > distance / 50 + 15 || this->Get_Speed() > 20)
+  if (std::abs(actualDistance - distance) >( distance / 50 + 15)* criticalMultiplier || this->Get_Speed() > 20)
   {
     pros::lcd::set_text(3, ":" + to_string((int)Get_Distance()) + "distance away " + to_string((int)abs(actualDistance - distance)) + "critical" + to_string((int)distance/50 + 15));
 
@@ -181,7 +185,7 @@ void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance
     double rightX = turnSpeed;
     if (std::abs(actualDistance - distance) < (distance * speed / 127) / 4)
     {
-      double deaccelCoeff = pow(std::abs(actualDistance - distance) / ((distance * speed / 127) / 4), (speed / (127 * accelScaling)));
+      double deaccelCoeff = pow(std::abs(actualDistance - distance) / ((distance * speed / 127) / 4), (speed / (127 * accelScaling))) * abs(actualDistance - distance) / (distance-actualDistance);
       leftX = leftX * deaccelCoeff;
       leftY = leftY * deaccelCoeff;
     }

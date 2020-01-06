@@ -56,13 +56,13 @@ array<double, 3> angler_pid_values = {1, 0.1, 0};
 
 double angler_speed = 24;
 double angler_min_height = 0;
-double angler_max_height = 3400;
+double angler_max_height = 3590; //3400
 Angler *angler = new Angler();
 
 // arm variables
-Motor arm_motor(4, false);
-array<double, 3> arm_pid_values = {1, 0, 0};
-double arm_speed = 16;
+pros::Motor arm_motor(1, false);
+std::array<double,3> arm_pid_values = {1, 0, 0};
+double arm_speed = 30;
 double arm_min_height = 0;
 double arm_max_height = 10000;
 bool _is_moving = false;
@@ -71,8 +71,8 @@ bool _manual_arm = false;
 
 Arm *arm = new Arm();
 
-Motor intakeMotorLeft(2, true);
-Motor intakeMotorRight(3, false);
+Motor intakeMotorLeft(LEFT_INTAKE_PORT, LEFT_INTAKE_ORIENTATION);
+Motor intakeMotorRight(RIGHT_INTAKE_PORT, RIGHT_INTAKE_ORIENTATION);
 
 array<double, 3> pid_intake_left_values = {0.6, 0, 0};
 array<double, 3> pid_intake_right_values = {0.6, 0, 0};
@@ -189,8 +189,8 @@ void initialize()
   // lv_obj_align(myLabel, NULL, LV_ALIGN_CENTER, 10, 0);         //set the position to center
 
   resetAuton1();
-  auton_control->define_auton("auton1", auton1);
-  auton_control->select_auton("auton1");
+  auton_control->define_auton(AutonControl::RedSmallSideAuton, auton1);
+  auton_control->select_auton(AutonControl::RedSmallSideAuton);
 }
 
 /**

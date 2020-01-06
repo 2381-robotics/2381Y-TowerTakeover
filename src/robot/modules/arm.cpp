@@ -32,17 +32,9 @@ void Arm::Move_Motor()
   _current_arm_height = (_arm_motor->get_position());
   _arm_power = _arm_pid->Update(_target_height, _current_arm_height);
 
-  if (!_manual_arm)
-  {
-    if (_is_moving && _moving_up)
-    {
-      angler->Smooth_Angler(1);
-    }
-    if (!_is_moving && !_moving_up)
-    {
-      angler->Smooth_Angler(-1);
-    }
-  }
+  //allows for clearance
+
+  _arm_motor->move(_arm_power);
 }
 
 Arm::Arm()
@@ -62,7 +54,7 @@ void Arm::Create() {
   _target_height = 0;
   _is_moving = false;
   _moving_up = false;
-  _manual_arm = true;
+  _manual_arm = false;
 }
 void Arm::Reset()
 {
@@ -71,7 +63,22 @@ void Arm::Reset()
 void Arm::Increment_Arm(int increment)
 {
   Set_Target(_target_height + increment * _arm_speed);
+  pros::lcd::set_text(3, "armheight " + to_string(_arm_motor->get_position()));
+  pros::lcd::set_text(4, "ang height " + to_string(angler->Get_Height()));
+  if (!_manual_arm && _is_moving)
+  {
+    // max height 2300
+    // max height
+    //  amgler
+    if ( 1.1 * _current_arm_height <= 1000)
+    {
+      angler->Set_Target(1.1 * _current_arm_height);
 
+    }
+    else {
+        pros::lcd::set_text(6, "moving angler");
+    }
+  }
   // for clearances
   if (increment == 1)
   {
@@ -97,3 +104,7 @@ double Arm::Get_Target()
 {
   return this->_target_height;
 }
+
+// double Mech_Drive::Get_Speed() {
+//   return (_left_front_motor_controller->Get_Speed()+_left_back_motor_controller->Get_Speed()+ _right_back_motor_controller->Get_Speed() + _right_front_motor_controller->Get_Speed())/4;
+// }

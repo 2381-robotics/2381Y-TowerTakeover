@@ -2,6 +2,7 @@
 #include "main.h"
 #include "ports.h"
 #include "globals.hpp"
+#include "autonomous/auton_control.hpp"
 #include <map>
 using namespace pros;
 using namespace std;
@@ -89,16 +90,16 @@ void MasterController::autonomous() {
     {
         autonomous_increment = _local_increment;
         resetAuton1();
-        auton_control->define_auton("auton1", auton1);
-        auton_control->select_auton("auton1");
+        auton_control->define_auton(auton_control->RedSmallSideAuton, auton1);
+        auton_control->select_auton(AutonControl::RedSmallSideAuton);
         set_state(auton_mode);
     }
 
     if ( master.get_digital_new_press(DIGITAL_L2)){
         autonomous_increment = _local_increment;
         resetAuton1(1);
-        auton_control->define_auton("auton2", auton1);
-        auton_control->select_auton("auton2");
+        auton_control->define_auton(auton_control->RedSmallSideAuton, auton1);
+        auton_control->select_auton(AutonControl::RedSmallSideAuton);
         set_state(auton_mode);
     }
 
@@ -114,8 +115,8 @@ void MasterController::auton_editor() {
     if(master.get_digital_new_press(DIGITAL_A)){
         _autonomous_increment = _local_increment;
         resetAuton1();
-        auton_control->define_auton("auton1", auton1);
-        auton_control->select_auton("auton1");
+        auton_control->define_auton(AutonControl::RedSmallSideAuton, auton1);
+        auton_control->select_auton(AutonControl::RedSmallSideAuton);
         set_state(auton_mode);
     } else if (master.get_digital_new_press(DIGITAL_X)){
         _local_increment = _autonomous_increment;

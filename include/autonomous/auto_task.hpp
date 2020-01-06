@@ -2,7 +2,9 @@
 #define AUTO_TASK_HPP
 
 #include <functional>
-#include <future>
+
+
+
 
 class AutoTask {
     public: 

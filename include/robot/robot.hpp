@@ -24,7 +24,7 @@ class Robot : public Structure{
 
 	void begin_tasks();
 	void set_drive(double left_x, double left_y, double right_x, double right_y);
-	void set_point_drive(double speed, double direction, double distance, double turnSpeed = 0, double accelScaling = 1, bool blocking = false, double criticalPoint = 400);
+	void set_point_drive(double speed, double direction, double distance, double turnSpeed = 0, double accelScaling = 1, bool blocking = false, double criticalPoint = 400, double criticalMultiplier = 1);
 	enum class Module
 	{
 		Intake = 0,
