@@ -190,7 +190,8 @@ void initialize()
 
   resetAuton1();
   auton_control->define_auton(AutonControl::RedSmallSideAuton, auton1);
-  auton_control->select_auton(AutonControl::RedSmallSideAuton);
+  // auton_control->define_auton(AutonControl::BlueSmallSideAuton, someotherAuton);
+  auton_control->select_auton(AutonControl::BlueSmallSideAuton);
 }
 
 /**
