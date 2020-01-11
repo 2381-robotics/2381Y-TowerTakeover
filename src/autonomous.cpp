@@ -84,16 +84,20 @@ AutoTask InvertTurn90Deg = AutoTask::SyncTask(
     },
     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); });
 
-
 AutoTask DeployTask = AutoTask::SyncTask(
     [](void) -> void {
-        robot->set_point_drive(50, 0, 100, 0, 1, false, 400, 3);  
-        arm->Set_Target(500);
-
+        robot->set_point_drive(127, 0, 700, 0, 1, false, 400, 3);  
+        arm->Set_Target(300);
+        intake->Set_Intake(-80);
     },
-    [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); });
+    [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Set_Intake(127); arm->Set_Target(0); });
 
-AutoSequence *auton1;
+AutoTask OnSpotDeploy = AutoTask::AutoDelay(
+                            500, true, [](void) -> void {
+                                arm->Set_Target(300);
+                                intake->Set_Intake(-80); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Set_Intake(127); arm->Set_Target(0); });
+
+AutoSequence *  auton1;
 
 void resetAuton1(int choice)
 {
@@ -106,6 +110,7 @@ void resetAuton1(int choice)
             // }, [](void)->void{
             //     intake->Set_Intake(127);
             // }),
+            OnSpotDeploy,
             // DeployTask,
 
             // AutoTask::SyncTask([](void) -> void {
@@ -136,7 +141,7 @@ void resetAuton1(int choice)
             AutoTask::SyncTask(
                 [](void) -> void {
                     intake->Set_Intake(127);
-                    robot->set_point_drive(70, 0, 2900);
+                    robot->set_point_drive(59, 0, 3100);
                 },
                 [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
             AutoTask::AutoDelay(200, true, [](void) -> void { intake->Set_Intake(127); }),
@@ -152,7 +157,7 @@ void resetAuton1(int choice)
 //strafe a bit 
             AutoTask::SyncTask(
                 [](void) -> void {
-                    robot->set_point_drive(127, -90, 395, 0, 1.5, false, 100);
+                    robot->set_point_drive(127, -90, 430, 0, 1.5, false, 100);
                 },
                 [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),       
 
