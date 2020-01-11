@@ -80,7 +80,7 @@ AutoTask InvertTurn45Deg = AutoTask::SyncTask(
     [](void) -> void {
         intake->Set_Intake(127);
         // 625
-        robot->set_point_drive(0, 0, 650 + autonomous_increment, -100, 2.5);
+        robot->set_point_drive(0, 0, 650 + autonomous_increment, -80, 2.5);
         // pros::lcd::set_text(0, "wa");s
     },
     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); });
@@ -89,7 +89,7 @@ AutoTask InvertTurn45Deg = AutoTask::SyncTask(
 AutoTask InvertTurn90Deg = AutoTask::SyncTask(
     [](void) -> void {
         intake->Set_Intake(127);
-        robot->set_point_drive(0, 0, 1295 + autonomous_increment, -127, 2.5);
+        robot->set_point_drive(0, 0, 1295 + autonomous_increment, -80, 2.5);
         // pros::lcd::set_text(0, "wa");s
     },
     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); });
@@ -116,21 +116,28 @@ AutoSequence* blue5PointAuton = AutoSequence::FromTasks(
                 },
                 [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
             AutoTask::AutoDelay(200, true, [](void) -> void { intake->Set_Intake(127); }),
+AutoTask::SyncTask(
+                [](void) -> void {
+                    intake->Set_Intake(127);
+                    robot->set_point_drive(127, 180, 3000);
+                },
+                [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+            AutoTask::AutoDelay(200, true, [](void) -> void { intake->Set_Intake(127); }),
 
             InvertTurn90Deg,
 
 //strafe to wall
-             AutoTask::AutoDelay(2590, true, [](void) -> void {
-                 intake->Set_Intake(127);
-                 robot->set_point_drive(100, -90, 4300, 0, 1.5, false, 100);
-            }),
+            //  AutoTask::AutoDelay(2590, true, [](void) -> void {
+            //      intake->Set_Intake(127);
+            //      robot->set_point_drive(100, -90, 4300, 0, 1.5, false, 100);
+            // }),
            
 //strafe a bit 
-            AutoTask::SyncTask(
-                [](void) -> void {
-                    robot->set_point_drive(127, 90, 500, 0, 1.5, false, 100);
-                },
-                [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),       
+            // AutoTask::SyncTask(
+            //     [](void) -> void {
+            //         robot->set_point_drive(127, 90, 500, 0, 1.5, false, 100);
+            //     },
+            //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),       
 
             InvertTurn45Deg,
            
