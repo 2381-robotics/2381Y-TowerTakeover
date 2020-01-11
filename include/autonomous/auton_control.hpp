@@ -10,11 +10,11 @@
 class AutonControl
 {
 public:
-    enum Autonomous {RedSmallSideAuton = 0, BlueSmallSideAuton};
+    enum Autonomous {RedSmallSideAuton = 0, BlueSmallSideAuton, Blue5PointAuton, Red5PointAuton};
 
 
     std::map<Autonomous, AutoSequence*> autonomous_registry;
-    void define_auton(Autonomous sequence, AutoSequence* auton);
+    int define_auton(Autonomous sequence, AutoSequence* auton);
 
     void select_auton(Autonomous sequence);
     static AutonControl* instance();
