@@ -23,8 +23,8 @@ using namespace pros;
 //   Intake * intake = new Intake();
 
 void driver()  {
-  intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 50));
-  robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
+  intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 50- master.get_digital(DIGITAL_Y) * 127));
+    robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
   //  angler->Toggle_Extension(master.get_digital_new_press(DIGITAL_Y));
 
   angler->Smooth_Angler(master.get_digital(DIGITAL_X) - master.get_digital(DIGITAL_A));

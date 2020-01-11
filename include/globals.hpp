@@ -26,7 +26,7 @@ extern std::uint32_t now;
 // Autonomous
 extern AutoSequence* auton1;
 extern AutoSequence* blue5PointAuton;
-
+extern AutoSequence* straightRedAuton;
 extern AutoSequence* invertedSmallSideAuto;
 extern void resetAuton1(int choice = 0);
 

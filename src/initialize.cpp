@@ -192,9 +192,9 @@ void initialize()
   auton_control->define_auton(AutonControl::RedSmallSideAuton, auton1);
   // auton_control->define_auton(AutonControl::RedSmallSideAuton, auton1);
 
-
+  auton_control->define_auton(AutonControl::Red5PointAuton, straightRedAuton);
   auton_control->define_auton(AutonControl::Blue5PointAuton, blue5PointAuton);
-  auton_control->select_auton(AutonControl::Blue5PointAuton);
+  auton_control->select_auton(AutonControl::RedSmallSideAuton);
 }
 
 /**
