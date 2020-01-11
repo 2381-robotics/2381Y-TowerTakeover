@@ -18,6 +18,7 @@ void AutonControl::select_auton(Autonomous sequence){
     }
 }   
 
-void AutonControl::define_auton(Autonomous sequence, AutoSequence* auton) {
+int AutonControl::define_auton(Autonomous sequence, AutoSequence* auton) {
     autonomous_registry[sequence] = auton;
+    return 4;
 }

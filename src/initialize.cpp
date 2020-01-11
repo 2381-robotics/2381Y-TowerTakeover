@@ -62,7 +62,7 @@ Angler *angler = new Angler();
 // arm variables
 pros::Motor arm_motor(1, false);
 std::array<double,3> arm_pid_values = {1, 0, 0};
-double arm_speed = 40;
+double arm_speed = 34;
 double arm_min_height = 0;
 double arm_max_height = 10000;
 bool _is_moving = false;
@@ -190,8 +190,11 @@ void initialize()
 
   resetAuton1();
   auton_control->define_auton(AutonControl::RedSmallSideAuton, auton1);
-  // auton_control->define_auton(AutonControl::BlueSmallSideAuton, someotherAuton);
-  auton_control->select_auton(AutonControl::BlueSmallSideAuton);
+  // auton_control->define_auton(AutonControl::RedSmallSideAuton, auton1);
+
+
+  auton_control->define_auton(AutonControl::Blue5PointAuton, blue5PointAuton);
+  auton_control->select_auton(AutonControl::Blue5PointAuton);
 }
 
 /**

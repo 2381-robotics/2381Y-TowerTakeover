@@ -70,9 +70,9 @@ void Arm::Increment_Arm(int increment)
     // max height 2300
     // max height
     //  amgler
-    if ( 1.1 * _current_arm_height <= 1000)
+    if ( 1.2 * _current_arm_height <= 1300)
     {
-      angler->Set_Target(1.1 * _current_arm_height);
+      angler->Set_Target(1.2 * _current_arm_height);
 
     }
     else {
