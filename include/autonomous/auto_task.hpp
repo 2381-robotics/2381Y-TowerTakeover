@@ -19,7 +19,8 @@ class AutoTask {
     static AutoTask AutoDelay(int interval, bool sync = true, std::function<void(void)> task = [](void) -> void {}, std::function<void(void)> init = [&](void) -> void {}, std::function<void(void)> kill = [](void) -> void {});
     // static AutoTask DriveTask()
 
-
+    AutoTask TimeLimit(int time);
+    
     bool isSync;
     bool _initialized = false;
     int _count = 0;

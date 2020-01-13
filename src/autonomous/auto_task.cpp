@@ -24,3 +24,10 @@ AutoTask::AutoTask(std::function<void(void)> task, std::function<bool(void)> don
     this->initialize = init;
     this->kill = kill;
 }
+
+
+AutoTask AutoTask::TimeLimit(int time)
+{
+    AutoTask* timedTask = new AutoTimer(time, isSync, run, done, initialize, kill);
+    return *timedTask;
+}
