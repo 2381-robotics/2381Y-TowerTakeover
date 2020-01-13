@@ -7,12 +7,58 @@
 #include "main.h"
 #include "opcontrol.h"
 #include "ports.h"
+#include "pros/api_legacy.h"
 
 #include "pros/misc.h"
 
 using namespace std;
 using namespace pros;
+// double notCurrentL, notCurrentR, notCurrentF, notChangeL, notChangeR, notChangeR, notChangeF, notLastL, notLastR, notLastF;
 
+// void trackLocalPos(int offsetL, int offsetR, int offsetF)
+// {
+//   notCurrentL = pros::c::encoderGet(left) - offsetL;
+//   notCurrentR = pros::c::encoderGet(right) - offsetR;
+//   notCurrentF = pros::c::encoderGet(back) - offsetF;
+
+//   notChangeL = (notCurrentL - notLastL) * PI * WHEEL_DIAMETER / 360; // The amount the left side of the robot moved
+//   notChangeR = (notCurrentR - notLastR) * PI * WHEEL_DIAMETER / 360; // The amount the right side of the robot moved
+//   notChangeF = (notCurrentF - notLastF) * PI * WHEEL_DIAMETER / 360; // The amount the front of the robot moved
+//   //update last values
+//   notLastL = notCurrentL;
+//   notLastR = notCurrentR;
+//   notLastF = notCurrentF;
+
+//   float hyp;                                                       //hypotenuse of triangle (starting center, end center, middle of circle it goes around)
+//   float i;                                                         //angle travelled * 0.5
+//   float h2;                                                        //same as hyp but using the back instead of the side wheels
+//   float angle = (notChangeL - notChangeR) / (L_TO_MID + R_TO_MID); //angle travelled
+//   if (angle != 0)
+//   {
+//     float radius = notChangeR / angle; // The radius of the circle the robot travel's around with the right side of the robot
+//     i = angle / 2.0;
+//     float sinI = sin(i);
+//     hyp = ((radius + R_TO_MID) * sinI) * 2.0;
+//     float r2 = notChangeF / angle; // The radius of the circle the robot travel's around with the back of the robot
+//     h2 = ((r2 + F_TO_MID) * sinI) * 2.0;
+//   }
+//   else
+//   {
+//     hyp = notChangeR;
+//     i = 0;
+//     h2 = notChangeF;
+//   }
+//   float p = i + localTheta; //ending angle
+//   float cosP = cos(p);
+//   float sinP = sin(p);
+
+//   //local position and angle update
+//   localPosY += hyp * cosP;
+//   localPosX += hyp * sinP;
+//   localPosY += h2 * -sinP;
+//   localPosX += h2 * cosP;
+//   localTheta += angle;
+// }
 
 void Mech_Drive::Move_Motor() {
 
@@ -75,7 +121,6 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
   {
     _master_error_average = _master_setpoint - _motor_value_average;
   }
-  pros::lcd::set_text(1, "adsf" + to_string(_pid_inputs[left_back]));
   _left_back_setpoint = (left_y - left_x + std::abs(right_x) * (right_x) / 127);
   _left_front_setpoint = (left_y + left_x + std::abs(right_x) * (right_x) / 127);
   _right_back_setpoint = (left_y + left_x - std::abs(right_x) * (right_x) / 127);
@@ -83,8 +128,6 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
 
   _master_setpoint = (abs(_left_back_setpoint) + abs(_left_front_setpoint) + abs(_right_back_setpoint) + abs(_right_front_setpoint)) / 4;
   _master_offset += (_master_setpoint);
-  // pros::lcd::set_text(0, "master setpoint integral - " + to_string(_master_offset));
-  rfoffset += (abs(_right_front_setpoint));
   lfoffset += (abs(_left_front_setpoint));
   rboffset += (abs(_right_back_setpoint));
   lboffset += (abs(_left_back_setpoint));
@@ -95,11 +138,8 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
   rbDistance += abs(_right_back_motor_controller->Get_Speed()) / DELAY_INTERVAL;
   lbDistance += abs(_left_back_motor_controller->Get_Speed()) / DELAY_INTERVAL;
 
-  // pros::lcd::set_text(4, "rightDistance" + to_string(rfDistance + rbDistance));
-  // pros::lcd::set_text(3, "leftDistance" + to_string(lfDistance + lbDistance));
 
   masterDistance += (abs(_right_front_motor_controller->Get_Speed()) + abs(_left_back_motor_controller->Get_Speed()) + abs(_right_back_motor_controller->Get_Speed()) + abs(_left_front_motor_controller->Get_Speed())) / (4 * DELAY_INTERVAL);
-  // lcd::set_text(3, "calcVal" + to_string(masterDistance * rfoffset - rfDistance * _master_offset));
   double calcValue = masterDistance * rfoffset - rfDistance * _master_offset;
 
   // pros::lcd::set_text(0, to_string(this->Get_Speed()) +  "Speed ");

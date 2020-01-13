@@ -13,6 +13,7 @@
 #include "autonomous/auton_control.hpp"
 #include "master_controller.hpp"
 #include "robot/task_factory.hpp"
+#include "robot/modules/drive/position_tracker.hpp"
 //Initialize Variables
 using namespace pros;
 using namespace std;
@@ -80,26 +81,18 @@ array<double, 3> master_intake_pid_values = {0, 0.005, 0};
 
 Intake *intake = new Intake();
 
-lv_obj_t *myButton;
-lv_obj_t *myButtonLabel;
-lv_obj_t *myLabel;
+//  Encoder Variables
+array<int, 3> encoder_ports_left = {0,0,0}; //Top Port, Bottom Port, Inverted (0 or 1)
+array<int, 3> encoder_ports_right = {0,0,0}; //Top Port, Bottom Port, Inverted (0 or 1)
+array<int, 3> encoder_ports_back = {0,0,0}; //Top Port, Bottom Port, Inverted (0 or 1)
 
-lv_style_t myButtonStyleREL; //relesed style
-lv_style_t myButtonStylePR;  //pressed style
+array<double, 3> wheel_diameters = {0, 0, 0}; // Wheel Diameters in Inches, (Left - Right - Back)
+array<double, 3> wheel_offsets = {0, 0, 0};   //Perpindicular Wheel Offsets from Center in Inches, (Left - Right - Back)
+Position_Tracker* position_tracker = Position_Tracker::instance();
 
-static lv_res_t btn_click_action(lv_obj_t *btn)
-{
-  uint8_t id = lv_obj_get_free_num(btn); //id usefull when there are multiple buttons
-
-  if (id == 0)
-  {
-    char buffer[100];
-    sprintf(buffer, "button was clicked %i milliseconds from start", pros::millis());
-    lv_label_set_text(myLabel, buffer);
-  }
-
-  return LV_RES_OK;
-}
+ADIEncoder encoder_left(encoder_ports_left[0], encoder_ports_left[1], encoder_ports_left[2]);
+ADIEncoder encoder_right(encoder_ports_right[0], encoder_ports_right[1], encoder_ports_right[2]);
+ADIEncoder encoder_back(encoder_ports_back[0], encoder_ports_back[1], encoder_ports_back[2]);
 
 void arm_task_fn(void *param)
 {
@@ -138,6 +131,14 @@ void angler_task_fn(void *param)
     pros::delay(DELAY_INTERVAL);
   }
 }
+void tracking_task_fn(void *param)
+{
+  while (true)
+  {
+    position_tracker->Track_Position();
+    pros::delay(DELAY_INTERVAL);
+  }
+}
 
 
 void initialize()
@@ -147,7 +148,7 @@ void initialize()
   intake->Create();
   angler->Create();
   arm->Create();
-
+  position_tracker->Create();
 
   std::string text("PROS");
   pros::Task angler_task(angler_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
@@ -158,36 +159,7 @@ void initialize()
                          TASK_STACK_DEPTH_DEFAULT, "DRIVE_TASK");
   pros::Task intake_task(intake_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
                         TASK_STACK_DEPTH_DEFAULT, "INTAKE_TASK");
-
-  // robot->module_list = {{1, angler}};
-
-  // lv_style_copy(&myButtonStyleREL, &lv_style_plain);
-  // myButtonStyleREL.body.main_color = LV_COLOR_MAKE(150, 0, 0);
-  // myButtonStyleREL.body.grad_color = LV_COLOR_MAKE(0, 0, 150);
-  // myButtonStyleREL.body.radius = 0;
-  // myButtonStyleREL.text.color = LV_COLOR_MAKE(255, 255, 255);
-
-  // lv_style_copy(&myButtonStylePR, &lv_style_plain);
-  // myButtonStylePR.body.main_color = LV_COLOR_MAKE(255, 0, 0);
-  // myButtonStylePR.body.grad_color = LV_COLOR_MAKE(0, 0, 255);
-  // myButtonStylePR.body.radius = 0;
-  // myButtonStylePR.text.color = LV_COLOR_MAKE(255, 255, 255);
-
-  // myButton = lv_btn_create(lv_scr_act(), NULL);                       //create button, lv_scr_act() is deafult screen object
-  // lv_obj_set_free_num(myButton, 0);                                   //set button is to 0
-  // lv_btn_set_action(myButton, LV_BTN_ACTION_CLICK, btn_click_action); //set function to be called on button click
-  // lv_btn_set_style(myButton, LV_BTN_STYLE_REL, &myButtonStyleREL);    //set the relesed style
-  // lv_btn_set_style(myButton, LV_BTN_STYLE_PR, &myButtonStylePR);      //set the pressed style
-  // lv_obj_set_size(myButton, 200, 50);                                 //set the button size
-  // lv_obj_align(myButton, NULL, LV_ALIGN_IN_TOP_LEFT, 10, 10);         //set the position to top mid
-
-  // myButtonLabel = lv_label_create(myButton, NULL);      //create label and puts it inside of the button
-  // lv_label_set_text(myButtonLabel, "Click the Button"); //sets label text
-
-  // myLabel = lv_label_create(lv_scr_act(), NULL);                 //create label and puts it on the screen
-  // lv_label_set_text(myLabel, "Button has not been clicked yet"); //sets label text
-  // lv_obj_align(myLabel, NULL, LV_ALIGN_CENTER, 10, 0);         //set the position to center
-
+  pros::Task tracking_task(tracking_task_fn, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "TRACKING_TASK");
   resetAuton1();
   // auton_control->define_auton(AutonControl::RedSmallSideAuton, auton1);
   // auton_control->define_auton(AutonControl::RedSmallSideAuton, auton1);

@@ -149,7 +149,7 @@ AutoSequence *straightRedAuton = AutoSequence::FromTasks(
         AutoTask::SyncTask( //Diagonal
             [](void) -> void {
                 intake->Set_Intake(0); //590
-                robot->set_point_drive(127, -90, 900, 0, 1.5, false, 100);
+                robot->set_point_drive(127, -90, 1000, 0, 1.5, false, 100);
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
