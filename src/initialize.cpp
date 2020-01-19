@@ -88,7 +88,7 @@ array<int, 3> encoder_ports_back = {0,0,0}; //Top Port, Bottom Port, Inverted (0
 
 array<double, 3> wheel_diameters = {0, 0, 0}; // Wheel Diameters in Inches, (Left - Right - Back)
 array<double, 3> wheel_offsets = {0, 0, 0};   //Perpindicular Wheel Offsets from Center in Inches, (Left - Right - Back)
-Position_Tracker* position_tracker = Position_Tracker::instance();
+// Position_Tracker* position_tracker = Position_Tracker::instance();
 
 ADIEncoder encoder_left(encoder_ports_left[0], encoder_ports_left[1], encoder_ports_left[2]);
 ADIEncoder encoder_right(encoder_ports_right[0], encoder_ports_right[1], encoder_ports_right[2]);
@@ -148,7 +148,7 @@ void initialize()
   intake->Create();
   angler->Create();
   arm->Create();
-  position_tracker->Create();
+  // position_tracker->Create();
 
   std::string text("PROS");
   pros::Task angler_task(angler_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
@@ -159,7 +159,7 @@ void initialize()
                          TASK_STACK_DEPTH_DEFAULT, "DRIVE_TASK");
   pros::Task intake_task(intake_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
                         TASK_STACK_DEPTH_DEFAULT, "INTAKE_TASK");
-  pros::Task tracking_task(tracking_task_fn, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "TRACKING_TASK");
+  // pros::Task tracking_task(tracking_task_fn, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "TRACKING_TASK");
   resetAuton1();
   // auton_control->define_auton(AutonControl::RedSmallSideAuton, auton1);
   // auton_control->define_auton(AutonControl::RedSmallSideAuton, auton1);

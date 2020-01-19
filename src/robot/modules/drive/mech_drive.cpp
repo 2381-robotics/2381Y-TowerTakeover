@@ -99,7 +99,7 @@ void Mech_Drive::Move_Wheel(double speed) {
   _pid_inputs[left_front]  = speed;
 _pid_inputs[left_back] = speed;
 }
-
+//  
 double trollCalc(double masterDis, double masterOS, double specDis, double specOS)
 {
   if (masterOS == 0 || specDis == 0 || masterDis == 0 || specOS == 0)
@@ -109,8 +109,14 @@ double trollCalc(double masterDis, double masterOS, double specDis, double specO
   return (masterDis * specOS / (masterOS * specDis));
 }
 
+// Desired Parallel Velocity Magnitude, Desired Perpindicular Velocity Magnitude, Desired Angular Velocity Magnitudes
+// Issues: Strafing - turns for some fucking reason, strafes in general are kinda inconsistent, 
+// Driving straight and stopping turns the robot sometimes, position is wack.
 
-void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double right_y)
+
+
+
+void Mech_Drive::Set_Drive(double left_x , double left_y, double right_x, double right_y)
 {
   _motor_value_average = (abs(_left_back_motor_value) + abs(_left_front_motor_value) + abs(_right_back_motor_value) + abs(_right_front_motor_value)) / 4;
   if (_master_setpoint >= 0)
@@ -127,10 +133,13 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
   _right_front_setpoint = (left_y - left_x - std::abs(right_x) * (right_x) / 127);
 
   _master_setpoint = (abs(_left_back_setpoint) + abs(_left_front_setpoint) + abs(_right_back_setpoint) + abs(_right_front_setpoint)) / 4;
+
   _master_offset += (_master_setpoint);
   lfoffset += (abs(_left_front_setpoint));
   rboffset += (abs(_right_back_setpoint));
   lboffset += (abs(_left_back_setpoint));
+  rfoffset += (abs(_right_front_setpoint));
+
 
   // pros::lcd::set_text(1, "right front offset - " + to_string(rfoffset));
   rfDistance += abs(_right_front_motor_controller->Get_Speed()) / DELAY_INTERVAL;
@@ -140,7 +149,6 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
 
 
   masterDistance += (abs(_right_front_motor_controller->Get_Speed()) + abs(_left_back_motor_controller->Get_Speed()) + abs(_right_back_motor_controller->Get_Speed()) + abs(_left_front_motor_controller->Get_Speed())) / (4 * DELAY_INTERVAL);
-  double calcValue = masterDistance * rfoffset - rfDistance * _master_offset;
 
   // pros::lcd::set_text(0, to_string(this->Get_Speed()) +  "Speed ");
   double tuning_coefficient = _master_pid->Update(0, _master_error_average);
