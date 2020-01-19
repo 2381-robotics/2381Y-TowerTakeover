@@ -1,12 +1,13 @@
 #include "arm.hpp"
+#include "pros/misc.h"
 #include "robot/control/motor_controller.hpp"
 #include "api.h"
 #include "globals.hpp"
 #include <array>
-
 #include "robot/modules/angler.hpp"
 
 using namespace std;
+using namespace pros;
 
 void Arm::Set_Target(double target_height)
 {
@@ -29,10 +30,19 @@ void Arm::Stop()
 
 void Arm::Move_Motor()
 {
+  if(_target_height== 0 && master.get_digital(pros::E_CONTROLLER_DIGITAL_B))
+  {
+    // _arm_motor->move(-50);
+    _arm_motor->set_zero_position(_arm_motor->get_position()+5);
+    // return;
+  }
+
   _current_arm_height = (_arm_motor->get_position());
   _arm_power = _arm_pid->Update(_target_height, _current_arm_height);
 
   //allows for clearance
+
+  pros::lcd::set_text(3, "arm " + to_string((int)_arm_motor->get_position()) + "ang" + to_string((int)angler->Get_Height()) + "power ang" + to_string((int)_arm_power));
 
   _arm_motor->move(_arm_power);
 }
@@ -63,16 +73,14 @@ void Arm::Reset()
 void Arm::Increment_Arm(int increment)
 {
   Set_Target(_target_height + increment * _arm_speed);
-  pros::lcd::set_text(3, "armheight " + to_string(_arm_motor->get_position()));
-  pros::lcd::set_text(4, "ang height " + to_string(angler->Get_Height()));
   if (!_manual_arm && _is_moving)
   {
     // max height 2300
     // max height
     //  amgler
-    if ( 1 * _current_arm_height <= 1300)
+    if (  _target_height <= 1900 && _target_height >= 200)
     {
-      angler->Set_Target(1 * _current_arm_height);
+      angler->Set_Target(0.9*(_target_height-200));
 
     }
     else {

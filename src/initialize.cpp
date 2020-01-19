@@ -51,7 +51,7 @@ double lift_speed = 10;
 
 // Angler Variables:
 
-Motor angler_motor(ANGLER_MOTOR_PORT, true);
+Motor angler_motor(ANGLER_MOTOR_PORT, ANGLER_MOTOR_ORIENTATION);
 array<double, 3> angler_pid_values = {1, 0.1, 0};
 
 double angler_speed = 22;
@@ -60,14 +60,14 @@ double angler_max_height = 3590; //3400
 Angler *angler = new Angler();
 
 // arm variables
-pros::Motor arm_motor(1, false);
+pros::Motor arm_motor(20, true);
 std::array<double,3> arm_pid_values = {1, 0, 0};
-double arm_speed = 34;
+double arm_speed = 18;
 double arm_min_height = 0;
-double arm_max_height = 10000;
+double arm_max_height = 5000;
 bool _is_moving = false;
 bool _moving_up = false;
-bool _manual_arm = false;
+bool _manual_arm = false; 
 
 Arm *arm = new Arm();
 
@@ -83,7 +83,7 @@ Intake *intake = new Intake();
 lv_obj_t *myButton;
 lv_obj_t *myButtonLabel;
 lv_obj_t *myLabel;
-
+ 
 lv_style_t myButtonStyleREL; //relesed style
 lv_style_t myButtonStylePR;  //pressed style
 
@@ -158,7 +158,7 @@ void initialize()
                          TASK_STACK_DEPTH_DEFAULT, "DRIVE_TASK");
   pros::Task intake_task(intake_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
                         TASK_STACK_DEPTH_DEFAULT, "INTAKE_TASK");
-
+ 
   // robot->module_list = {{1, angler}};
 
   // lv_style_copy(&myButtonStyleREL, &lv_style_plain);
