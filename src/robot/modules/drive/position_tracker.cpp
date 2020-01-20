@@ -74,7 +74,7 @@ void Position_Tracker::Track_Position()
         velLastChecked = currentTime;
     }
 
-    lcd::set_text(1, "Current Pos: X-" + to_string((int)current_position[0])+ "Y-" + to_string((int)current_position[1])+ "W" + to_string((int)current_position[2]));
+    lcd::set_text(1, "Current Pos: X-" + to_string((float)current_position[0])+ "Y-" + to_string((float)current_position[1])+ "W" + to_string((float)current_position[2]));
 }  
 
 array<double,3> Position_Tracker::Get_Position()
