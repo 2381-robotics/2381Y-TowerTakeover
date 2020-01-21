@@ -16,6 +16,12 @@ public:
   double Get_Speed() override;
   double Get_Distance() override;
 
+  void Set_Path();
+  void Follow_Path();
+
+  std::array<double,2> lookaheadPoint = {0,0};
+
+
   void Move_Wheel(double Speed) override; 
   void Set_Init_Point() override;
   std::array<double, 4> initial_position = {0,0,0,0};
