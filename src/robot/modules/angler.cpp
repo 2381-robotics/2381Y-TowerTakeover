@@ -71,10 +71,25 @@ void Angler::Toggle_Extension(int increment)
 }
 void Angler::Smooth_Angler(int increment)
 { 
+  if( increment != 0)
+  {
+    _auto_angler_increment = 0;
+  }
   Set_Target(_target_height + increment * _angler_speed);
                 pros::lcd::set_text(5, "current angler position" + to_string(_target_height));
 
 }
+
+void Angler::Auto_Angler(int increment)
+{
+  if( increment != 0)
+  {
+    _auto_angler_increment = increment;
+  }
+  Set_Target(_target_height + _auto_angler_increment * _angler_speed);
+
+}
+
 
 double Angler::Get_Speed() {
   return _angler_motor->get_actual_velocity();

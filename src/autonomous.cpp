@@ -30,14 +30,6 @@ AutoTask stackTask = AutoTask::SyncTask(
         // intake->Set_Intake(0);
         robot->set_drive(0, 15, 0, 0);
         angler->Smooth_Angler(1.7);
-        // 25 0 250
-
-        // robot->set_point_drive(20, 0, 500);
-        // intake->Set_Intake(-20);
-        // robot->drive->Move_Wheel(30);
-        // robot->set_point_drive(30, 0, 1500);
-        // robot->set_drive(40, 50, 0, 0);
-
     },
     [](void) -> bool { return ((angler->Get_Height() >= angler->_max_height) && (abs(angler->Get_Speed() < 20))); });
 
