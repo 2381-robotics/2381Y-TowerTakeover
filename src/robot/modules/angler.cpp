@@ -8,13 +8,26 @@ using namespace std;
 
 void Angler::Move_Motor() {
   _angler_height = (_angler_motor->get_position());
-  _angler_power = _angler_pid->Update(_target_height, _angler_height);
+  _angler_power = _angler_pid->Update(Get_Real_Target(), _angler_height);
   // angler Coefficient is for keeping angler even / not tilted, not sure if it works.
   // Right now it's a constant and is additive, not sure if it should be multiplicative maybe
   _angler_motor->move(_angler_power);
 }
 
 
+double Angler::Get_Real_Target()
+{
+  double real_target = _target_height;
+  if(_target_height - _previous_target > _max_angler_speed) {
+     real_target = _previous_target + _max_angler_speed;
+  }
+  else if (_previous_target - _target_height > _max_angler_speed)
+  {
+    real_target = _previous_target - _max_angler_speed;
+  }
+  _previous_target = real_target;
+  return real_target;
+}
 void Angler::Stop() {
   _angler_motor->move(0);
   return;
@@ -52,7 +65,7 @@ void Angler::Create() {
   _min_height = angler_min_height;
   _max_height = angler_max_height;
   _angler_speed = angler_speed;
-  _target_height = 0;
+  _max_angler_speed = 2 * angler_speed;
 }
 
 void Angler::Toggle_Extension(int increment)
