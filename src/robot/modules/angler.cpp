@@ -95,12 +95,12 @@ void Angler::Smooth_Angler(int increment)
 
 void Angler::Auto_Angler(int increment)
 {
-  if( increment != 0)
+  if (increment != 0)
   {
-    _auto_angler_increment = increment;
+      _auto_angler_increment = increment;
+
   }
   Set_Target(_target_height + _auto_angler_increment * _angler_speed);
-
 }
 
 

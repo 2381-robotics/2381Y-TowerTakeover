@@ -38,7 +38,7 @@ void Arm::Move_Motor()
   }
 
   _current_arm_height = (_arm_motor->get_position());
-  _arm_power = _arm_pid->Update(_target_height, _current_arm_height);
+  _arm_power = _arm_pid->Update(Get_Real_Target(), _current_arm_height);
 
   //allows for clearance
 
@@ -47,10 +47,27 @@ void Arm::Move_Motor()
   _arm_motor->move(_arm_power);
 }
 
+
+double Arm::Get_Real_Target()
+{
+  double real_target = _target_height;
+  if(_target_height - _previous_target > _max_arm_speed) {
+     real_target = _previous_target + _max_arm_speed;
+  }
+  else if (_previous_target - _target_height > _max_arm_speed)
+  {
+    real_target = _previous_target - _max_arm_speed;
+  }
+  _previous_target = real_target;
+  return real_target;
+}
+
+
 Arm::Arm()
 {
 
 }
+
 
 void Arm::Create() {
   // Assign motors.
@@ -61,7 +78,7 @@ void Arm::Create() {
   _min_height = arm_min_height;
   _max_height = arm_max_height;
   _arm_speed = arm_speed;
-  _target_height = 0;
+  _max_arm_speed = 2 * arm_speed;
   _is_moving = false;
   _moving_up = false;
   _manual_arm = false;
