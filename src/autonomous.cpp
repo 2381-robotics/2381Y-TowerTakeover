@@ -149,14 +149,14 @@ AutoSequence *straightRedAuton = AutoSequence::FromTasks(
         // starting intake
         AutoTask::AutoDelay(400, true, [](void) -> void {
             intake->Set_Intake(100);
-            robot->set_drive(0, 60, 0, 0);
+            robot->set_drive(0, 65, 0, 0);
         }),
 
         // reverse intake
         AutoTask::AutoDelay(400, true, [](void) -> void {
             robot->set_drive(0, 40, 0, 0);
             // robot->set_point_drive(127, 0, 625);
-            intake->Set_Intake(-29);
+            intake->Set_Intake(-20);
         }),
         stackTask,
 
