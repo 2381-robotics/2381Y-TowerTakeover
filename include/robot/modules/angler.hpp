@@ -20,7 +20,7 @@ public:
   void Stop() override;
   void Create() override;
 
-  void Auto_Angler(int increment);
+  void Auto_Angler(int increment, bool disable = false);
   void Reset() override;
 
 

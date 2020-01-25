@@ -17,19 +17,19 @@ void Intake::Move_Motor() {
 }
 
 
-double Intake::Get_Real_Target()
-{
-  double real_target = _target_height;
-  if(_target_height - _previous_target > _max_angler_speed) {
-     real_target = _previous_target + _max_angler_speed;
-  }
-  else if (_previous_target - _target_height > _max_angler_speed)
-  {
-    real_target = _previous_target - _max_angler_speed;
-  }
-  _previous_target = real_target;
-  return real_target;
-}
+// double Intake::Get_Real_Target()
+// {
+//   double real_target = _target_height;
+//   if(_target_height - _previous_target > _max_intake_speed) {
+//      real_target = _previous_target + _max_intake_speed;
+//   }
+//   else if (_previous_target - _target_height > _max_intake_speed)
+//   {
+//     real_target = _previous_target - _max_intake_speed;
+//   }
+//   _previous_target = real_target;
+//   return real_target;
+// }
 
 
 void Intake::Set_Intake(double intakeSpeed)

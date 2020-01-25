@@ -23,6 +23,7 @@ public:
     enum Motor_Slot {Left = 0, Right};
 protected:
     void Move_Motor() override;
+  double Get_Real_Target();
 
     std::array<double, 2> _pid_inputs = {0,0};
 

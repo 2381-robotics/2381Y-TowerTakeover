@@ -39,10 +39,10 @@ Motor right_front_motor(RIGHT_FRONT_MOTOR_PORT, true);
 Motor right_back_motor(RIGHT_BACK_MOTOR_PORT, true);
 // Lift Variables:
 
-array<double, 3> lift_pid_values = {0.618, 0, 1.454};
-array<double, 3> master_lift_pid_values = {1, 0.001, 0};
-
-Motor left_lift_motor(LEFT_LIFT_MOTOR_PORT, LEFT_LIFT_MOTOR_ORIENTATION);
+array<double, 3> lift_pid_values = {0.618, 0, 1.454}; 
+array<double, 3> master_lift_pid_values = {1, 0.001, 0}; 
+ 
+Motor left_lift_motor(LEFT_LIFT_MOTOR_PORT, LEFT_LIFT_MOTOR_ORIENTATION); 
 Motor right_lift_motor(RIGHT_LIFT_MOTOR_PORT, RIGHT_LIFT_MOTOR_ORIENTATION);
 
 double cube_height = 280;
@@ -53,17 +53,17 @@ double lift_speed = 10;
 // Angler Variables:
 
 Motor angler_motor(ANGLER_MOTOR_PORT, ANGLER_MOTOR_ORIENTATION);
-array<double, 3> angler_pid_values = {1, 0.1, 0};
+array<double, 3> angler_pid_values = {2, 0.01, 0.01};
 
-double angler_speed = 22;
+double angler_speed = 25;
 double angler_min_height = 0;
-double angler_max_height = 3590; //3400
+double angler_max_height = 3400;
 Angler *angler = new Angler();
 
 // arm variables
 pros::Motor arm_motor(20, true);
 std::array<double,3> arm_pid_values = {1, 0, 0};
-double arm_speed = 18;
+double arm_speed = 40;
 double arm_min_height = 0;
 double arm_max_height = 5000;
 bool _is_moving = false;
