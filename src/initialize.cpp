@@ -53,7 +53,7 @@ double lift_speed = 10;
 // Angler Variables:
 
 Motor angler_motor(ANGLER_MOTOR_PORT, ANGLER_MOTOR_ORIENTATION);
-array<double, 3> angler_pid_values = {2, 0.01, 0.01};
+array<double, 3> angler_pid_values = {2, 0.01, 0.05};
 
 double angler_speed = 25;
 double angler_min_height = 0;
@@ -168,7 +168,7 @@ void initialize()
 
   auton_control->define_auton(AutonControl::Red5PointAuton, straightRedAuton);
   auton_control->define_auton(AutonControl::Blue5PointAuton, blue5PointAuton);
-  auton_control->select_auton(AutonControl::Blue5PointAuton);
+  auton_control->select_auton(AutonControl::Red5PointAuton);
 }
 
 /**
