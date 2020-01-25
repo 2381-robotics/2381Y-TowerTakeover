@@ -11,9 +11,9 @@ void Angler::Move_Motor() {
 
   if(isOverrideMode) {
     _angler_power = override_power;
+    _angler_pid->Update(Get_Real_Target(), _angler_height);
   }
   else {
-
     _angler_power = _angler_pid->Update(Get_Real_Target(), _angler_height);
   }
 
@@ -93,18 +93,23 @@ void Angler::Toggle_Extension(int increment)
 
 void Angler::Override_Mode(int toggle)
 {
-  if(toggle != 0) 
+  pros::lcd::set_text(4, "Override Mode" + to_string(isOverrideMode));
+
+  if(toggle == 0 && isOverrideMode) 
   {
+    
     _target_height = Get_Height();
-    _angler_pid->ResetError();
-    if(toggle == 1)
-    {
-      isOverrideMode = true;
-    } else if (toggle == -1) 
-    {
-      isOverrideMode = false;
-    }
+    // _angler_pid->ResetError();
+    override_power = 0;
+    isOverrideMode = false;
   }
+   else if (toggle == 1) {
+    _target_height = Get_Height();
+    // _angler_pid->ResetError();
+    isOverrideMode = true;  
+   } else if (toggle == -1) {
+     _target_height = Get_Height();
+   }
 }
 
 void Angler::Smooth_Angler(int increment)
@@ -113,6 +118,7 @@ void Angler::Smooth_Angler(int increment)
   {
     _auto_angler_increment = 0;
   }
+
   if(isOverrideMode)
   {
     if(increment > 0)

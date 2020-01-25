@@ -28,8 +28,8 @@ void driver()  {
 /*done just upload*/
   angler->Smooth_Angler(master.get_digital(DIGITAL_X));
   angler->Auto_Angler(-2 * master.get_digital_new_press(DIGITAL_A));
-  angler->Override_Mode(master.get_digital(DIGITAL_UP) - master.get_digital(DIGITAL_DOWN));
-
+  angler->Override_Mode(2* master.get_digital_new_press(DIGITAL_X) - master.get_digital(DIGITAL_X));
+  
   arm->Increment_Arm((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
     
 

@@ -28,7 +28,7 @@ using namespace std;
 AutoTask stackTask = AutoTask::SyncTask(
     [](void) -> void {
         // intake->Set_Intake(0);
-        robot->set_drive(0, 15, 0, 0);
+        robot->set_drive(0, 20, 0, 0);
         angler->Smooth_Angler(1.7);
     },
     [](void) -> bool { return ((angler->Get_Height() >= angler->_max_height) && (abs(angler->Get_Speed() < 20))); });
@@ -141,7 +141,7 @@ AutoSequence *straightRedAuton = AutoSequence::FromTasks(
         AutoTask::SyncTask( //Diagonal
             [](void) -> void {
                 intake->Set_Intake(0); //590
-                robot->set_point_drive(127, -90, 1000, 0, 1.5, false, 100);
+                robot->set_point_drive(127, -90, 900, 0, 1.5, false, 100);
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
@@ -155,7 +155,7 @@ AutoSequence *straightRedAuton = AutoSequence::FromTasks(
         AutoTask::AutoDelay(400, true, [](void) -> void {
             robot->set_drive(0, 40, 0, 0);
             // robot->set_point_drive(127, 0, 625);
-            intake->Set_Intake(-20);
+            intake->Set_Intake(-29);
         }),
         stackTask,
 
@@ -190,12 +190,12 @@ AutoSequence *blue5PointAuton = AutoSequence::FromTasks(
         //         robot->set_point_drive(127, 180, 3300);
         //     },
         //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-        AutoTask::AutoDelay(1800, true, [](void) -> void {
+        AutoTask::AutoDelay(2000, true, [](void) -> void {
             intake->Set_Intake(127);
-            robot->set_point_drive(127, 180, 3600, 0, 1.5, false, 100); }, [](void) -> void { robot->drive->Reset_Point(); }),
+            robot->set_point_drive(127, 180, 3700, 0, 1.5, false, 100); }, [](void) -> void { robot->drive->Reset_Point(); }),
         // AutoTask::AutoDelay(500, true, [](void) -> void { robot->set_drive(0, -80, 0, 0); }),
-        AutoTask::AutoDelay(800, true, [](void) -> void {intake->Set_Intake(127);
-                robot->set_point_drive(127, 0, 700); },
+        AutoTask::AutoDelay(900, true, [](void) -> void {intake->Set_Intake(127);
+                robot->set_point_drive(127, 0, 800); },
                             [](void) -> void {
                                 robot->drive->Reset_Point();
                             }),
@@ -209,21 +209,21 @@ AutoSequence *blue5PointAuton = AutoSequence::FromTasks(
         AutoTask::SyncTask( //Diagonal
             [](void) -> void {
                 intake->Set_Intake(0); //590
-                robot->set_point_drive(127, 90, 900, 0, 1.5, false, 100);
+                robot->set_point_drive(127, 90, 1000, 0, 1.5, false, 100);
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
         // starting intake
         AutoTask::AutoDelay(300, true, [](void) -> void {
-            intake->Set_Intake(100);
+            intake->Set_Intake(-20);
             robot->set_drive(0, 30, 0, 0);
         }),
 
         // reverse intake
-        AutoTask::AutoDelay(600, true, [](void) -> void {
+        AutoTask::AutoDelay(700, true, [](void) -> void {
             robot->set_drive(0, 40, 0, 0);
             // robot->set_point_drive(127, 0, 625);
-            intake->Set_Intake(-20);
+            intake->Set_Intake(-30);
         }),
         stackTask,
 
@@ -311,7 +311,7 @@ void resetAuton1(int choice)
             AutoTask::SyncTask( //Diagonal 
                 [](void) -> void {
                     intake->Set_Intake(0);//590
-                    robot->set_point_drive(127, -90, 850, 0, 1.5, false, 100);
+                    robot->set_point_drive(127, -90, 800, 0, 1.5, false, 100);
                 },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
