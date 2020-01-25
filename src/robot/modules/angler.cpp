@@ -8,7 +8,15 @@ using namespace std;
 
 void Angler::Move_Motor() {
   _angler_height = (_angler_motor->get_position());
-  _angler_power = _angler_pid->Update(_target_height, _angler_height);
+
+  if(isOverrideMode) {
+    _angler_power = override_power;
+  }
+  else {
+
+    _angler_power = _angler_pid->Update(_target_height, _angler_height);
+  }
+
   // angler Coefficient is for keeping angler even / not tilted, not sure if it works.
   // Right now it's a constant and is additive, not sure if it should be multiplicative maybe
   _angler_motor->move(_angler_power);
@@ -69,8 +77,40 @@ void Angler::Toggle_Extension(int increment)
     };
   }
 }
+
+void Angler::Override_Mode(int toggle)
+{
+  if(toggle != 0) 
+  {
+    _target_height = Get_Height();
+    _angler_pid->ResetError();
+    if(toggle == 1)
+    {
+      isOverrideMode = true;
+    } else if (toggle == -1) 
+    {
+      isOverrideMode = false;
+    }
+  }
+}
+
 void Angler::Smooth_Angler(int increment)
 { 
+  if(isOverrideMode)
+  {
+    if(increment > 0)
+    {
+      override_power = 80;
+    } else if (increment < 0)
+    {
+      override_power = -80;
+    } else 
+    {
+      override_power = 0;
+    }
+    return;
+
+  }
   Set_Target(_target_height + increment * _angler_speed);
                 pros::lcd::set_text(5, "current angler position" + to_string(_target_height));
 

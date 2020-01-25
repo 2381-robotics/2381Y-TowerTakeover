@@ -21,15 +21,22 @@ using namespace pros;
 // Motor testMotorRight (10, false);
 
 //   Intake * intake = new Intake();
-
+int anglerGoingDown = 0;
 void driver()  {
   intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 50- master.get_digital(DIGITAL_Y) * 127));
     robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
   //  angler->Toggle_Extension(master.get_digital_new_press(DIGITAL_Y));
 
-  angler->Smooth_Angler(master.get_digital(DIGITAL_X) - master.get_digital(DIGITAL_A) * 1.5);
-  arm->Increment_Arm((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
-    
+if(master.get_digital_new_press(DIGITAL_A)){
+  anglerGoingDown += 1;
+  anglerGoingDown = anglerGoingDown%2;
+}
+ 
+
+  angler->Smooth_Angler(master.get_digital(DIGITAL_X) - 2 * master.get_digital(DIGITAL_A));
+  angler->Override_Mode(master.get_digital(DIGITAL_UP) - master.get_digital(DIGITAL_DOWN));
+  arm->Increment_Arm((master.get_digital(DIGITAL_R1) -  1.7 * master.get_digital(DIGITAL_R2)));
+  
 
       // arm->Set_Target(arm->Get_Target() - 40*master.get_digital(DIGITAL_UP));
 

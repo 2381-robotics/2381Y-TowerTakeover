@@ -53,9 +53,9 @@ double lift_speed = 10;
 // Angler Variables:
 
 Motor angler_motor(ANGLER_MOTOR_PORT, ANGLER_MOTOR_ORIENTATION);
-array<double, 3> angler_pid_values = {1, 0.1, 0};
+array<double, 3> angler_pid_values = {1, 0.05, 0};
 
-double angler_speed = 22;
+double angler_speed = 33;
 double angler_min_height = 0;
 double angler_max_height = 3590; //3400
 Angler *angler = new Angler();
