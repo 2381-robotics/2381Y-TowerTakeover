@@ -6,12 +6,13 @@
 #include <vector>
 #include "auto_task.hpp"
 
-class AutoSequence {
+class AutoSequence : public AutoTask{
     public: 
-    std::future<bool> done();
 
     int tasksRemaining = 0;
-    void run();
+    void run_sequence();
+    bool isSequenceFinished = false;
+    
     std::vector<AutoTask> taskList;
     std::vector<AutoTask> runningTasks;
     

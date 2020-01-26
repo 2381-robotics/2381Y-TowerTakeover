@@ -16,6 +16,12 @@ public:
   double Get_Speed() override;
   double Get_Distance() override;
 
+  void Set_Path();
+  void Follow_Path();
+
+  std::array<double,2> lookaheadPoint = {0,0};
+
+
   void Move_Wheel(double Speed) override; 
   void Set_Init_Point() override;
   std::array<double, 4> initial_position = {0,0,0,0};
@@ -62,7 +68,7 @@ protected:
   double _left_back_motor_value, _left_front_motor_value, _right_back_motor_value, _right_front_motor_value;
 
   double _motor_value_average;
-  double _master_setpoint;
+  double _master_setpoint;  
   double _previous_setpoint;
   double _master_error_average;
 

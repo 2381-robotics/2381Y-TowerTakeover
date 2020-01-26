@@ -8,13 +8,34 @@ using namespace std;
 
 void Angler::Move_Motor() {
   _angler_height = (_angler_motor->get_position());
-  _angler_power = _angler_pid->Update(_target_height, _angler_height);
+
+  if(isOverrideMode) {
+    _angler_power = override_power;
+    _angler_pid->Update(Get_Real_Target(), _angler_height);
+  }
+  else {
+    _angler_power = _angler_pid->Update(Get_Real_Target(), _angler_height);
+  }
+
   // angler Coefficient is for keeping angler even / not tilted, not sure if it works.
   // Right now it's a constant and is additive, not sure if it should be multiplicative maybe
   _angler_motor->move(_angler_power);
 }
 
 
+double Angler::Get_Real_Target()
+{
+  double real_target = _target_height;
+  if(_target_height - _previous_target > _max_angler_speed) {
+     real_target = _previous_target + _max_angler_speed;
+  }
+  else if (_previous_target - _target_height > _max_angler_speed)
+  {
+    real_target = _previous_target - _max_angler_speed;
+  }
+  _previous_target = real_target;
+  return real_target;
+}
 void Angler::Stop() {
   _angler_motor->move(0);
   return;
@@ -52,7 +73,7 @@ void Angler::Create() {
   _min_height = angler_min_height;
   _max_height = angler_max_height;
   _angler_speed = angler_speed;
-  _target_height = 0;
+  _max_angler_speed = 2 * angler_speed;
 }
 
 void Angler::Toggle_Extension(int increment)
@@ -69,12 +90,68 @@ void Angler::Toggle_Extension(int increment)
     };
   }
 }
+
+void Angler::Override_Mode(int toggle)
+{
+  pros::lcd::set_text(4, "Override Mode" + to_string(isOverrideMode));
+
+  if(toggle == 0 && isOverrideMode) 
+  {
+    
+    _target_height = Get_Height();
+    // _angler_pid->ResetError();
+    override_power = 0;
+    isOverrideMode = false;
+  }
+   else if (toggle == 1) {
+    _target_height = Get_Height();
+    // _angler_pid->ResetError();
+    isOverrideMode = true;  
+   } else if (toggle == -1) {
+     _target_height = Get_Height();
+   }
+}
+
 void Angler::Smooth_Angler(int increment)
 { 
+  if( increment != 0)
+  {
+    _auto_angler_increment = 0;
+  }
+
+  if(isOverrideMode)
+  {
+    if(increment > 0)
+    {
+      override_power = 80;
+    } else if (increment < 0)
+    {
+      override_power = -80;
+    } else 
+    {
+      override_power = 0;
+    }
+    return;
+
+  }
   Set_Target(_target_height + increment * _angler_speed);
                 pros::lcd::set_text(5, "current angler position" + to_string(_target_height));
 
 }
+
+void Angler::Auto_Angler(int increment, bool disable)
+{
+  if (increment != 0)
+  {
+      _auto_angler_increment = increment;
+  }
+  if (disable)
+  {
+     _auto_angler_increment = 0;
+  }
+  Set_Target(_target_height + _auto_angler_increment * _angler_speed);
+}
+
 
 double Angler::Get_Speed() {
   return _angler_motor->get_actual_velocity();
