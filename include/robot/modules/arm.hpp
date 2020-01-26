@@ -21,8 +21,11 @@ public:
   void Reset() override;
 
 protected:
-
-    void Move_Motor() override;
+  double _previous_target = 0, _max_arm_speed;
+  
+  double Get_Real_Target();
+ 
+  void Move_Motor() override;
   double _arm_power, _current_arm_height;
     Motor_Controller* _arm_motor_controller;
     pros::Motor* _arm_motor;
@@ -30,7 +33,7 @@ protected:
     double _arm_setpoint;
 
     double _arm_motor_value;
-    double _min_height, _max_height, _arm_speed, _target_height;
+    double _min_height, _max_height, _arm_speed, _target_height = 0;
     bool _is_moving, _moving_up, _manual_arm;
   
 

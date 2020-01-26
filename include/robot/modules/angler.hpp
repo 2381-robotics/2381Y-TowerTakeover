@@ -20,11 +20,26 @@ public:
   void Stop() override;
   void Create() override;
 
+  void Auto_Angler(int increment, bool disable = false);
   void Reset() override;
-  double _angler_motor_value, _angler_height, _angler_power, _target_height, _angler_speed, _auton_target_height;
+
+
+  double _angler_motor_value, _angler_height, _angler_power,  _angler_speed, _auton_target_height, _target_height = 0;
   double _min_height, _max_height;
 
+  void Override_Mode(int power);
+
 protected:
+
+    double _previous_target = 0;
+    double _max_angler_speed = 0;
+    double Get_Real_Target();
+    double _auto_angler_increment = 0;
+
+
+
+  bool isOverrideMode = false;
+  float override_power = 0;
     void Move_Motor() override;
     Motor_Controller* _angler_motor_controller;
     pros::Motor* _angler_motor;
