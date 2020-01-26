@@ -8,5 +8,5 @@ void Module::Run() {
         return;
     }
     this->Move_Motor();
-    pros::lcd::set_text(0, to_string(pros::millis()));
+    // pros::lcd::set_text(0, to_string(pros::millis()));
 }

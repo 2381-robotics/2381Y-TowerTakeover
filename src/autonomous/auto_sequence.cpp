@@ -42,8 +42,8 @@ void AutoSequence::run_sequence(){
             it->initialize();
             it->_initialized = true;
         }
-
         it->run();
+
         if (it->done())
         {
             // pros::lcd::set_text(5, "Taskdone");

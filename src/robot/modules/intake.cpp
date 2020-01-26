@@ -49,7 +49,7 @@ void Intake::Set_Intake(double intakeSpeed)
     // pros::lcd::set_text(1, "new master setpoint:" + std::to_string((_master_intake_setpoint)));
 
     double intake_tuning_coefficient = _master_intake_pid->Update(0, _master_intake_error_average);
-    pros::lcd::set_text(2, "tuning coeff:" + std::to_string(intake_tuning_coefficient));
+    // pros::lcd::set_text(2, "tuning coeff:" + std::to_string(intake_tuning_coefficient));
 
     _pid_inputs[Left] = _intake_setpoint * intake_tuning_coefficient;
     _pid_inputs[Right] = _intake_setpoint * intake_tuning_coefficient;

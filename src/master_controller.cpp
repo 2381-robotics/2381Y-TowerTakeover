@@ -14,7 +14,7 @@ MasterController *MasterController::instance()
 }
 
 void MasterController::run() {
-    lcd::set_text(7, "CURRENT STATE : " +  stateList[State(_active_mode)]);
+    lcd::set_text(7, "STATE: " + stateList[State(_active_mode)] + " -Time: " + to_string(pros::millis()));
     if(Competition_Env){
         driver();
         return;
@@ -82,8 +82,8 @@ void MasterController::autonomous() {
     if(master.get_digital_new_press(DIGITAL_Y)){
         set_state(auton_edit_mode);
     }
-    lcd::set_text(1, "Current Increment Value: " + to_string(autonomous_increment));
-    lcd::set_text(2, "Set To " + to_string(_local_increment));
+    // lcd::set_text(1, "Current Increment Value: " + to_string(autonomous_increment));
+    // lcd::set_text(2, "Set To " + to_string(_local_increment));
 
     _local_increment += master.get_digital(DIGITAL_UP) - master.get_digital(DIGITAL_DOWN) + (master.get_digital_new_press(DIGITAL_LEFT) - master.get_digital_new_press(DIGITAL_RIGHT)) * 30;
     if (master.get_digital_new_press(DIGITAL_A))

@@ -93,7 +93,7 @@ void Angler::Toggle_Extension(int increment)
 
 void Angler::Override_Mode(int toggle)
 {
-  pros::lcd::set_text(4, "Override Mode" + to_string(isOverrideMode));
+  // pros::lcd::set_text(4, "Override Mode" + to_string(isOverrideMode));
 
   if(toggle == 0 && isOverrideMode) 
   {
@@ -135,7 +135,7 @@ void Angler::Smooth_Angler(int increment)
 
   }
   Set_Target(_target_height + increment * _angler_speed);
-                pros::lcd::set_text(5, "current angler position" + to_string(_target_height));
+                // pros::lcd::set_text(5, "current angler position" + to_string(_target_height));
 
 }
 

@@ -55,7 +55,7 @@ AutoTask Turn90Deg = AutoTask::SyncTask(
         robot->set_point_drive(0, 0, 1290 , 100, 2.5);
         // pros::lcd::set_text(0, "wa");s
     },
-    [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); });
+    [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); robot->drive->Stop();});
 
 // acc like 55 degrees
 AutoTask Turn45Deg = AutoTask::SyncTask(
@@ -102,6 +102,45 @@ AutoTask OnSpotDeploy = AutoTask::AutoDelay(
 AutoSequence *  auton1;
 AutoSequence *straightRedAuton = AutoSequence::FromTasks(
     vector<AutoTask>{
+        AutoTask::SyncTask(
+            [](void) -> void {
+                // intake->Set_Intake(127);
+                robot->set_point_drive(127, 0, 3000);
+            },
+            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+        AutoTask::SyncTask(
+            [](void) -> void {
+                // intake->Set_Intake(127);
+                robot->set_point_drive(127, 180, 3000);
+            },
+            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+        AutoTask::SyncTask(
+            [](void) -> void {
+                // intake->Set_Intake(127);
+                robot->set_point_drive(127, 0, 3000);
+            },
+            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+        AutoTask::SyncTask(
+            [](void) -> void {
+                // intake->Set_Intake(127);
+                robot->set_point_drive(127, 180, 3000);
+            },
+            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+        AutoTask::SyncTask(
+            [](void) -> void {
+                // intake->Set_Intake(127);
+                robot->set_point_drive(127, 0, 3000);
+            },
+            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+        AutoTask::SyncTask(
+            [](void) -> void {
+                // intake->Set_Intake(127);
+                robot->set_point_drive(127, 180, 3000);
+            },
+            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+
+        AutoTask::AutoDelay(10000000),
+
         OnSpotDeploy,
         AutoTask::SyncTask(
             [](void) -> void {
@@ -137,7 +176,6 @@ AutoSequence *straightRedAuton = AutoSequence::FromTasks(
                 // pros::lcd::set_text(0, "wa");s
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-
 
         AutoTask::SyncTask( //Diagonal
             [](void) -> void {

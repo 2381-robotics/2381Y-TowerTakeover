@@ -41,7 +41,7 @@ void Arm::Move_Motor()
   _arm_power = _arm_pid->Update(Get_Real_Target(), _current_arm_height);
 
   //allows for clearance
-  pros::lcd::set_text(3, "arm " + to_string((int)_arm_motor->get_position()) + "ang" + to_string((int)angler->Get_Height()) + "power ang" + to_string((int)_arm_power));
+  // pros::lcd::set_text(3, "arm " + to_string((int)_arm_motor->get_position()) + "ang" + to_string((int)angler->Get_Height()) + "power ang" + to_string((int)_arm_power));
 
   _arm_motor->move(_arm_power);
 }
@@ -100,7 +100,7 @@ void Arm::Increment_Arm(int increment)
       angler->Set_Target(1.4 *(_target_height - 200));
     }
     else {
-        pros::lcd::set_text(6, "moving angler");
+        // pros::lcd::set_text(6, "moving angler");
     }
   }
   // for clearances
