@@ -15,7 +15,7 @@ void Robot::set_point_drive(double speed, double direction, double distance, dou
 
 Robot::Robot(){}
 
-void Robot::assign_drive(Drive* drive_instance) {
+void Robot::assign_drive(Mech_Drive* drive_instance) {
   this->drive = drive_instance;
 }
 void Robot::assign_lift(Lift* lift_instance) {

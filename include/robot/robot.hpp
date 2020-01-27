@@ -5,6 +5,8 @@
 #ifndef ROBOT_HPP_
 #define ROBOT_HPP_
 #include "robot/modules/drive/drive.hpp"
+#include "robot/modules/drive/mech_drive.hpp"
+
 #include "robot/structure.hpp"
 #include "robot/modules/lift/lift.hpp"
 #include <map>
@@ -40,11 +42,11 @@ class Robot : public Structure{
 	std::string name = "Robot";
 	// void Debug() override;
 
-	void assign_drive(Drive* drive_instance);
+	void assign_drive(Mech_Drive* drive_instance);
 	void assign_lift(Lift* lift_instance);
 	void assign_intake(Structure* intake_instance);
 
-	Drive* drive = nullptr;
+	Mech_Drive* drive = nullptr;
 	Lift* lift = nullptr;
 	Structure* intake = nullptr;
 };

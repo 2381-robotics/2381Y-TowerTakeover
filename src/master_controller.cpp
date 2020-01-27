@@ -19,7 +19,7 @@ void MasterController::run() {
         driver();
         return;
     }
-    if(master.get_digital(DIGITAL_L1)&&master.get_digital(DIGITAL_L2)&&master.get_digital(DIGITAL_R1)&&master.get_digital(DIGITAL_R2)&&master.get_digital(DIGITAL_RIGHT)&&master.get_digital(DIGITAL_Y)) {
+    if(master.get_digital(E_CONTROLLER_DIGITAL_L1)&&master.get_digital(E_CONTROLLER_DIGITAL_L2)&&master.get_digital(E_CONTROLLER_DIGITAL_R1)&&master.get_digital(E_CONTROLLER_DIGITAL_R2)&&master.get_digital(E_CONTROLLER_DIGITAL_RIGHT)&&master.get_digital(E_CONTROLLER_DIGITAL_Y)) {
         set_state(auton_mode);
     }
 
@@ -58,10 +58,10 @@ void MasterController::selector()
         string select_prefix = it->first == _selected_mode ? "      " : "";
         lcd::set_text(distance(stateList.begin(), it), select_prefix + it->second);
     }
-    _selected_mode -= master.get_digital_new_press(DIGITAL_UP) - master.get_digital_new_press(DIGITAL_DOWN);
+    _selected_mode -= master.get_digital_new_press(E_CONTROLLER_DIGITAL_UP) - master.get_digital_new_press(E_CONTROLLER_DIGITAL_DOWN);
     _selected_mode = _selected_mode % stateList.size();
 
-    if(master.get_digital_new_press(DIGITAL_A)){ 
+    if(master.get_digital_new_press(E_CONTROLLER_DIGITAL_A)){ 
         set_state(State(_selected_mode));
     }
     
@@ -70,23 +70,23 @@ void MasterController::selector()
 void MasterController::autonomous() {
     // lcd::set_text(1, "Increment Value: " + to_string(_autonomous_increment));
 
-    if (master.get_digital(DIGITAL_X)){
+    if (master.get_digital(E_CONTROLLER_DIGITAL_X)){
         auton_control->run();
         STOP = false;
     } else {
         STOP = true;
     }
-    if(master.get_digital(DIGITAL_B)){
+    if(master.get_digital(E_CONTROLLER_DIGITAL_B)){
         robot->stop();
     }
-    if(master.get_digital_new_press(DIGITAL_Y)){
+    if(master.get_digital_new_press(E_CONTROLLER_DIGITAL_Y)){
         set_state(auton_edit_mode);
     }
     // lcd::set_text(1, "Current Increment Value: " + to_string(autonomous_increment));
     // lcd::set_text(2, "Set To " + to_string(_local_increment));
 
-    _local_increment += master.get_digital(DIGITAL_UP) - master.get_digital(DIGITAL_DOWN) + (master.get_digital_new_press(DIGITAL_LEFT) - master.get_digital_new_press(DIGITAL_RIGHT)) * 30;
-    if (master.get_digital_new_press(DIGITAL_A))
+    _local_increment += master.get_digital(E_CONTROLLER_DIGITAL_UP) - master.get_digital(E_CONTROLLER_DIGITAL_DOWN) + (master.get_digital_new_press(E_CONTROLLER_DIGITAL_LEFT) - master.get_digital_new_press(E_CONTROLLER_DIGITAL_RIGHT)) * 30;
+    if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_A))
     {
         autonomous_increment = _local_increment;
         resetAuton1();
@@ -95,7 +95,7 @@ void MasterController::autonomous() {
         set_state(auton_mode);
     }
 
-    if ( master.get_digital_new_press(DIGITAL_L2)){
+    if ( master.get_digital_new_press(E_CONTROLLER_DIGITAL_L2)){
         autonomous_increment = _local_increment;
         resetAuton1(1);
         auton_control->define_auton(auton_control->RedSmallSideAuton, auton1);
@@ -111,14 +111,14 @@ void MasterController::auton_editor() {
     lcd::set_text(3, "A : SAVE");
     lcd::set_text(4, "X : RESET");
 
-    _local_increment += master.get_digital(DIGITAL_UP) - master.get_digital(DIGITAL_DOWN) + (master.get_digital_new_press(DIGITAL_LEFT) - master.get_digital_new_press(DIGITAL_RIGHT))* 30;
-    if(master.get_digital_new_press(DIGITAL_A)){
+    _local_increment += master.get_digital(E_CONTROLLER_DIGITAL_UP) - master.get_digital(E_CONTROLLER_DIGITAL_DOWN) + (master.get_digital_new_press(E_CONTROLLER_DIGITAL_LEFT) - master.get_digital_new_press(E_CONTROLLER_DIGITAL_RIGHT))* 30;
+    if(master.get_digital_new_press(E_CONTROLLER_DIGITAL_A)){
         _autonomous_increment = _local_increment;
         resetAuton1();
         auton_control->define_auton(AutonControl::RedSmallSideAuton, auton1);
         // auton_control->select_auton(AutonControl::RedSmallSideAuton);
         set_state(auton_mode);
-    } else if (master.get_digital_new_press(DIGITAL_X)){
+    } else if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_X)){
         _local_increment = _autonomous_increment;
     }
 }
@@ -128,10 +128,10 @@ void MasterController::debug() {
         string select_prefix = it->first ==  (_selected_module) ? "      " : "";
         lcd::set_text(distance(robot->module_list.begin(), it), select_prefix + it->second->name);
     }
-    _selected_module -= master.get_digital_new_press(DIGITAL_UP) - master.get_digital_new_press(DIGITAL_DOWN);
+    _selected_module -= master.get_digital_new_press(E_CONTROLLER_DIGITAL_UP) - master.get_digital_new_press(E_CONTROLLER_DIGITAL_DOWN);
     _selected_module = _selected_mode % stateList.size();
 
-    if (master.get_digital_new_press(DIGITAL_A))
+    if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_A))
     {
         set_state(State(_selected_mode));
     }

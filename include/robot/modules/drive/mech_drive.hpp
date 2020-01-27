@@ -11,7 +11,8 @@ public:
   Mech_Drive();
 
   void Set_Drive(double left_x, double left_y, double right_x, double right_y) override;
-  void Set_Point_Drive(double speed, double direction, double distance, double turnDirection = 0, double accelScaling = 1, bool blocking = false, double criticalPoint = 400, double criticalMultiplier = 1, std::array<double, 4> endVelo = {0, 0, 0, 0}) override;
+  void Set_Point_Drive(double speed, double direction, double distance, double turnSpeed = 0, double accelSpeed =  1, double deaccelSpeed = 1,  bool blocking = false, double criticalPoint = 400, double criticalMultiplier = 1, std::array<double, 4> endVelo = {0, 0, 0, 0});
+
   std::array<double,4> previousVelo;
 
   int started;
@@ -46,6 +47,7 @@ public:
 
   enum Motor_Ref {left_back = 0, left_front, right_back, right_front};
 
+  void Create() override;
 
 protected:
   void Move_Motor() override;
@@ -62,7 +64,6 @@ protected:
   double _right_front_setpoint;
   double _right_back_setpoint;
 
-  void Create() override;
 
   double _master_offset = 0;
   double lboffset= 0, rboffset= 0, rfoffset = 0, lfoffset = 0;

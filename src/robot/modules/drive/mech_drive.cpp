@@ -184,10 +184,8 @@ array<double,4> Mech_Drive::unstartedArray()
 {
   return {444.4, 444.4, 0,7923};
 }
-void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance, double turnSpeed, double accelScaling, bool blocking, double criticalPoint, double criticalMultiplier, std::array<double, 4> endVelo)
+void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance, double turnSpeed, double accelSpeed, double deaccelSpeed, bool blocking, double criticalPoint, double criticalMultiplier, std::array<double, 4> endVelo)
 {
-
-  
 
   bool stopIfOver = false;
   std::array<double, 2> drive_convert = Convert(speed, direction);
@@ -240,10 +238,10 @@ void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance
   {
     pros::lcd::set_text(3,   to_string((int)Get_Distance()) + "distance away " + to_string((int)abs(travelledDistance - distance)) + "critical" + to_string((int)distance / 50 + 15));
 
-    // double accelCoeff = pow((abs(travelledDistance) + (distance/8)) / ((distance)) / 1, (1 / (2 * accelScaling))) * abs(travelledDistance) / (travelledDistance) * 127;
-    double accelCoeff = (pros::c::millis() - started)*127/1000;
-
-    double deaccelCoeff = pow(abs(travelledDistance - distance) / ((distance)) / 1, (1 / (2 * accelScaling))) * abs(travelledDistance - distance) / (distance - travelledDistance) * 150;
+    // double accelCoeff = pow((abs(travelledDistance) + (distance/8)) / ((distance)) / 1, (1 / (2 * accelSpeed))) * abs(travelledDistance) / (travelledDistance) * 127;
+    // double deaccelCoeff = pow(abs(travelledDistance - distance) / ((distance)) / 1, (1 / (2 * accelSpeed))) * abs(travelledDistance - distance) / (distance - travelledDistance) * 150;
+    double accelCoeff = (pros::c::millis() - started)*127*accelSpeed/1000;
+    double deaccelCoeff = ((abs(travelledDistance - distance) * deaccelSpeed * 127)/(400));
 
     if (deaccelCoeff < speedDifference)
     {
@@ -267,7 +265,7 @@ void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance
     }
 
     pros::lcd::set_text(5, "deaccel" + to_string((int)deaccelCoeff) + "speedDiff" + to_string((int)speedDifference) + "accel" + to_string((int)accelCoeff));
-    pros::lcd::set_text(6, "leftX" + to_string((int)leftY) + "endVelo" + to_string((int)endVelo[1]) + "previousVelo" + to_string((int)previousVelo[1]));
+    pros::lcd::set_text(6, "leftX" + to_string((int)rightX) + "endVelo" + to_string((int)endVelo[2]) + "previousVelo" + to_string((int)previousVelo[2]));
 
     Set_Drive(leftX, leftY, rightX, 0);
   }
