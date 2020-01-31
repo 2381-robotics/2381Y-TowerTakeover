@@ -7,20 +7,20 @@
 #include "main.h"
 #include "opcontrol.h"
 #include "ports.h"
-
+#include "pros/api_legacy.h"
+#include "position_tracker.hpp"
 #include "pros/misc.h"
 
 using namespace std;
 using namespace pros;
 
+void Mech_Drive::Move_Motor()
+{
 
-void Mech_Drive::Move_Motor() {
-
-
-    _left_back_motor_value = _left_back_motor_controller->Set_Speed(_pid_inputs[left_back]);
-    _left_front_motor_value = _left_front_motor_controller->Set_Speed(_pid_inputs[left_front]);
-    _right_back_motor_value = _right_back_motor_controller->Set_Speed(_pid_inputs[right_back]);
-    _right_front_motor_value = _right_front_motor_controller->Set_Speed(_pid_inputs[right_front]);
+  _left_back_motor_value = _left_back_motor_controller->Set_Speed(_pid_inputs[left_back]);
+  _left_front_motor_value = _left_front_motor_controller->Set_Speed(_pid_inputs[left_front]);
+  _right_back_motor_value = _right_back_motor_controller->Set_Speed(_pid_inputs[right_back]);
+  _right_front_motor_value = _right_front_motor_controller->Set_Speed(_pid_inputs[right_front]);
 }
 
 double Mech_Drive::Get_Speed()
@@ -39,6 +39,7 @@ bool Mech_Drive::get_running()
 }
 void Mech_Drive::Reset_Point()
 {
+  started = pros::c::millis();
   Set_Init_Point();
   // Drive_Distance_Controller->ResetError();
   _is_running = true;
@@ -49,15 +50,44 @@ double Mech_Drive::Get_Distance()
   return (std::abs(_left_front_motor_controller->Get_Distance() - initial_position[0]) + std::abs(_left_back_motor_controller->Get_Distance() - initial_position[1]) + std::abs(_right_front_motor_controller->Get_Distance() - initial_position[2]) + std::abs(_right_back_motor_controller->Get_Distance() - initial_position[3])) / 4;
 }
 
+void Mech_Drive::Move_Wheel(double speed)
+{
+  _pid_inputs[left_front] = speed;
+  _pid_inputs[left_back] = speed;
+}
+//
 double trollCalc(double masterDis, double masterOS, double specDis, double specOS)
 {
   if (masterOS == 0 || specDis == 0 || masterDis == 0 || specOS == 0)
   {
     return 1;
   }
-  return (masterDis * specOS / (masterOS * specDis));
+  return pow((masterDis * specOS / (masterOS * specDis)), 6);
 }
 
+// Desired Parallel Velocity Magnitude, Desired Perpindicular Velocity Magnitude, Desired Angular Velocity Magnitudes
+// Issues: Strafing - turns for some fucking reason, strafes in general are kinda inconsistent,
+// Driving straight and stopping turns the robot sometimes, position is wack.
+
+double turningCoefficient = 1;
+
+vector<double[]> Path_Inject(vector<double[]> path, double interval)
+{
+  
+}
+
+
+void Mech_Drive::Follow_Path()
+{
+  array<double, 3> currentPosition = position_tracker->Get_Position();
+  double parDistance = sqrt(pow((currentPosition[0] - lookaheadPoint[0]), 2) + pow(currentPosition[1] - lookaheadPoint[1], 2));
+  float lookaheadAngle = atan2(lookaheadPoint[1], lookaheadPoint[0]);
+  float currentAngle = currentPosition[2];
+  float angleDifference = lookaheadAngle - currentAngle;
+  double perpendicularDistance = parDistance * sin(angleDifference) / sin(PI - 2 * parDistance);
+  double curvature = perpendicularDistance == 0 ? 256 : 1 / perpendicularDistance;
+  Set_Drive(0, 60, curvature * turningCoefficient, 0);
+}
 
 void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double right_y)
 {
@@ -70,19 +100,18 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
   {
     _master_error_average = _master_setpoint - _motor_value_average;
   }
-  pros::lcd::set_text(1, "adsf" + to_string(_pid_inputs[left_back]));
   _left_back_setpoint = (left_y - left_x + std::abs(right_x) * (right_x) / 127);
   _left_front_setpoint = (left_y + left_x + std::abs(right_x) * (right_x) / 127);
   _right_back_setpoint = (left_y + left_x - std::abs(right_x) * (right_x) / 127);
   _right_front_setpoint = (left_y - left_x - std::abs(right_x) * (right_x) / 127);
 
   _master_setpoint = (abs(_left_back_setpoint) + abs(_left_front_setpoint) + abs(_right_back_setpoint) + abs(_right_front_setpoint)) / 4;
+
   _master_offset += (_master_setpoint);
-  // pros::lcd::set_text(0, "master setpoint integral - " + to_string(_master_offset));
-  rfoffset += (abs(_right_front_setpoint));
   lfoffset += (abs(_left_front_setpoint));
   rboffset += (abs(_right_back_setpoint));
   lboffset += (abs(_left_back_setpoint));
+  rfoffset += (abs(_right_front_setpoint));
 
   // pros::lcd::set_text(1, "right front offset - " + to_string(rfoffset));
   rfDistance += abs(_right_front_motor_controller->Get_Speed()) / DELAY_INTERVAL;
@@ -90,36 +119,35 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
   rbDistance += abs(_right_back_motor_controller->Get_Speed()) / DELAY_INTERVAL;
   lbDistance += abs(_left_back_motor_controller->Get_Speed()) / DELAY_INTERVAL;
 
-  // pros::lcd::set_text(4, "rightDistance" + to_string(rfDistance + rbDistance));
-  // pros::lcd::set_text(3, "leftDistance" + to_string(lfDistance + lbDistance));
-
   masterDistance += (abs(_right_front_motor_controller->Get_Speed()) + abs(_left_back_motor_controller->Get_Speed()) + abs(_right_back_motor_controller->Get_Speed()) + abs(_left_front_motor_controller->Get_Speed())) / (4 * DELAY_INTERVAL);
-  // lcd::set_text(3, "calcVal" + to_string(masterDistance * rfoffset - rfDistance * _master_offset));
-  double calcValue = masterDistance * rfoffset - rfDistance * _master_offset;
 
   // pros::lcd::set_text(0, to_string(this->Get_Speed()) +  "Speed ");
   double tuning_coefficient = _master_pid->Update(0, _master_error_average);
 
-  _pid_inputs[left_back] = _left_back_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, lbDistance, lboffset);
+  _pid_inputs[left_back] =  _left_back_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, lbDistance, lboffset);
   _pid_inputs[left_front] = _left_front_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, lfDistance, lfoffset);
-  _pid_inputs[right_back] = _right_back_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, rbDistance, rboffset);
+  _pid_inputs[right_back] =  _right_back_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, rbDistance, rboffset);
   _pid_inputs[right_front] = _right_front_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, rfDistance, rfoffset);
+  // lcd::set_text(3, "front" + to_string((int)_pid_inputs[left_front]) + "back" + (to_string((int)_pid_inputs[left_back])));
+  // lcd::set_text(4, "front" + to_string(trollCalc(masterDistance, _master_offset, lfDistance, lfoffset)) + "back" + (to_string(trollCalc(masterDistance, _master_offset, lbDistance, lboffset))));
+  // lcd::set_text(5, "front" + to_string(_left_front_motor_value) + "back" + (to_string(_left_back_motor_value)));
 
-  // if (master.get_digital(E_CONTROLLER_DIGITAL_X))
-  // {
-  //   lcd::set_text(0, to_string(lboffset) + "leftback");
-  //   lcd::set_text(1, to_string(rboffset) + "right back");
-  //   lcd::set_text(2, to_string(lfoffset)  + "l front");
-  //   lcd::set_text(3, to_string(rfoffset) + "r front");
+  // lcd::set_text(3, "rf" + to_string((int)rfDistance) +  "rb" + to_string((int)rbDistance) + "lf" + to_string((int)lfDistance) + "lb" + to_string((int)lbDistance) + "master" + to_string((int)masterDistance));
+  // lcd::set_text(4, "rf" + to_string((int)rfoffset) + "rb" + to_string((int)rboffset) + "lf" + to_string((int)lfoffset) + "lb" + to_string((int)lboffset) + "master" + to_string((int)_master_offset));
+  // lcd::set_text(5, "pid_error" + to_string(_master_pid->error_sum_) + "master_error" + to_string(_master_error_average));
+    // if (master.get_digital(E_CONTROLLER_DIGITAL_X))
+    // { 
+    //   lcd::set_text(0, to_string(lboffset) + "leftback");
+    //   lcd::set_text(1, to_string(rboffset) + "right back");
+    //   lcd::set_text(2, to_string(lfoffset)  + "l front");
+    //   lcd::set_text(3, to_string(rfoffset) + "r front");
 
-  //   // lcd::set_text(4, to_string(_master_offset) + "master");
-  //   lcd::set_text(5, to_string(trollCalc(_right_front_motor_controller->Get_Speed(), _right_front_setpoint)) + "master");
-  // }
+    //   // lcd::set_text(4, to_string(_master_offset) + "master");
+    // lcd::set_text(6, to_string((float)trollCalc(masterDistance, _master_offset, rbDistance, rboffset)) + " bk:" + to_string((float)trollCalc(masterDistance, _master_offset, rfDistance, rfoffset)));
+    // }
 
-  // // _master_offset = pow((trollCalc(_left_back_motor_controller->Get_Speed(), _left_back_setpoint) * trollCalc(_right_back_motor_controller->Get_Speed(), _right_back_setpoint) * trollCalc(_left_front_motor_controller->Get_Speed(), _left_front_setpoint) * trollCalc(_right_front_motor_controller->Get_Speed(), _right_front_setpoint)), 0.25);
-  // _master_offset = ((trollCalc(_left_back_motor_controller->Get_Speed(), _left_back_setpoint) + trollCalc(_right_back_motor_controller->Get_Speed(), _right_back_setpoint) + trollCalc(_left_front_motor_controller->Get_Speed(), _left_front_setpoint) + trollCalc(_right_front_motor_controller->Get_Speed(), _right_front_setpoint))* 0.25);
-
-  
+    // // _master_offset = pow((trollCalc(_left_back_motor_controller->Get_Speed(), _left_back_setpoint) * trollCalc(_right_back_motor_controller->Get_Speed(), _right_back_setpoint) * trollCalc(_left_front_motor_controller->Get_Speed(), _left_front_setpoint) * trollCalc(_right_front_motor_controller->Get_Speed(), _right_front_setpoint)), 0.25);
+    // _master_offset = ((trollCalc(_left_back_motor_controller->Get_Speed(), _left_back_setpoint) + trollCalc(_right_back_motor_controller->Get_Speed(), _right_back_setpoint) + trollCalc(_left_front_motor_controller->Get_Speed(), _left_front_setpoint) + trollCalc(_right_front_motor_controller->Get_Speed(), _right_front_setpoint))* 0.25);
 }
 
 std::array<double, 2> Mech_Drive::Convert(double speed, double direction)
@@ -129,7 +157,6 @@ std::array<double, 2> Mech_Drive::Convert(double speed, double direction)
   std::array<double, 2> drive_coordinates = {x, y};
   return drive_coordinates;
 }
-
 
 void Mech_Drive::Set_Turn(double speed, double direction, double distance)
 {
@@ -148,88 +175,132 @@ void Mech_Drive::Set_Turn(double speed, double direction, double distance)
     _is_running = false;
   }
 }
-void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance, double turnSpeed, double accelScaling, bool blocking, double criticalPoint)
+int getSignOf(double yeet)
+{
+  if (yeet == 0)
+  {
+    return 0;
+  }
+  return (abs(yeet) / yeet);
+}
+array<double,4> Mech_Drive::unstartedArray()
+{
+  return {444.4, 444.4, 0,7923};
+}
+void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance, double turnSpeed, double accelSpeed, double deaccelSpeed, bool blocking, double criticalPoint, double criticalMultiplier, std::array<double, 4> endVelo)
 {
 
+  bool stopIfOver = false;
   std::array<double, 2> drive_convert = Convert(speed, direction);
-  double actualDistance = this->Get_Distance();
 
-  // double distanceControlCoeff = this->Drive_Distance_Controller->Update(0, (actualDistance - distance) / std::abs(distance));
-  // pros::lcd::set_text(4, "distance Control : " + to_string(this->Drive_Distance_Controller->error_sum_*0.0015));
+  double travelledDistance = this->Get_Distance();
 
-  // pros::lcd::set_text(0, to_string(_left_back_motor_controller->Get_Distance()) + "leftback");
-  // pros::lcd::set_text(3, to_string(_left_front_motor_controller->Get_Distance()) + "left front");
+  double leftX = drive_convert[1];
+  double leftY = drive_convert[0];
+  double rightX = turnSpeed;
 
-  if (std::abs(actualDistance - distance) > distance / 50 + 15 || this->Get_Speed() > 20)
+  if (previousVelo == unstartedArray())
   {
-    pros::lcd::set_text(3, ":" + to_string((int)Get_Distance()) + "distance away " + to_string((int)abs(actualDistance - distance)) + "critical" + to_string((int)distance/50 + 15));
+    previousVelo ={0, 0, 0, 0};
+  }
 
-    if (std::abs(actualDistance) > distance + criticalPoint)
-      { 
-        // this->Reset_Point
-        Stop();
-        pros::lcd::set_text(0, "drive exceed" + to_string(actualDistance) + ">" + to_string(distance));
-        if(blocking){
-          return;
-        }
-        _is_running = false;
-  
-      }
+  double accelSpeedDifference = sqrt((leftX - previousVelo[0]) * (leftX - previousVelo[0]) + (leftY - previousVelo[1]) * (leftY - previousVelo[1]));
 
-    double leftX = drive_convert[1];
-    double leftY = drive_convert[0];
-    double rightX = turnSpeed;
-    if (std::abs(actualDistance - distance) < (distance * speed / 127) / 4)
+  double speedDifference = sqrt((leftX - endVelo[0]) * (leftX - endVelo[0]) + (leftY - endVelo[1]) * (leftY - endVelo[1]));
+
+
+
+
+  if (abs(this->Get_Speed()) < 30 && abs(travelledDistance) > criticalPoint && !blocking)
+  {
+    pros::lcd::set_text(4, "Stopped" + to_string((int)Get_Speed()) + "Distance" + to_string((int)travelledDistance));
+
+    Stop();
+    previousVelo = endVelo;
+    _is_running = false;
+    return;
+  }
+
+  if (std::abs(travelledDistance) > distance + criticalPoint && stopIfOver)
+  {
+    // this->Reset_Point
+
+    Stop();
+    pros::lcd::set_text(4, "drive exceed" + to_string((int)travelledDistance) + ">" + to_string((int)distance));
+    if (blocking)
     {
-      double deaccelCoeff = pow(std::abs(actualDistance - distance) / ((distance * speed / 127) / 4), (speed / (127 * accelScaling)));
-      leftX = leftX * deaccelCoeff;
-      leftY = leftY * deaccelCoeff;
+      return;
     }
-    if (std::abs(actualDistance - distance) < (distance * abs(turnSpeed) / 127) / 4)
-    {
-      double deaccelTurnCoeff = pow(std::abs(actualDistance - distance) / ((distance * abs(turnSpeed) / 127) / 4), (abs(turnSpeed) / (127 * accelScaling)));
-      rightX = rightX*deaccelTurnCoeff;
-    }
-    if (std::abs(actualDistance) < (distance * speed / 127) / 4){
-      double accelCoeff = pow((abs(actualDistance) + (distance * speed / 127) / 8) / ((3 * distance * speed / 127) / 8), speed / (256 * accelScaling));
-      leftX = leftX * accelCoeff;
-      leftY = leftY * accelCoeff;
-    }
-    if (std::abs(actualDistance) < (distance * abs(turnSpeed) / 127) / 4)
-    {
+    previousVelo = endVelo;
 
-      double accelCoeff = pow((abs(actualDistance) + (distance * abs(turnSpeed) / 127) / 8) / ((3 * distance * abs(turnSpeed) / 127) / 8), abs(turnSpeed) / (256 * accelScaling));
-      lcd::set_text(0, "turn Accel +"  + to_string(accelCoeff));
-      rightX  = rightX  * accelCoeff;
+    _is_running = false;
+  }
+
+  if (std::abs(travelledDistance - distance) > (distance / 50 + 15) * criticalMultiplier)
+  {
+    pros::lcd::set_text(3,   to_string((int)Get_Distance()) + "distance away " + to_string((int)abs(travelledDistance - distance)) + "critical" + to_string((int)distance / 50 + 15));
+
+    // double accelCoeff = pow((abs(travelledDistance) + (distance/8)) / ((distance)) / 1, (1 / (2 * accelSpeed))) * abs(travelledDistance) / (travelledDistance) * 127;
+    // double deaccelCoeff = pow(abs(travelledDistance - distance) / ((distance)) / 1, (1 / (2 * accelSpeed))) * abs(travelledDistance - distance) / (distance - travelledDistance) * 150;
+    double accelCoeff = (pros::c::millis() - started)*127*accelSpeed/1000;
+    double deaccelCoeff = ((abs(travelledDistance - distance) * deaccelSpeed * 127)/(800));
+
+    if (deaccelCoeff < speedDifference)
+    {
+      leftX = leftX / abs(speed) * deaccelCoeff + endVelo[0];
+      leftY = leftY / abs(speed) * deaccelCoeff + endVelo[1];
+    }
+    if((accelCoeff < accelSpeedDifference) && previousVelo != unstartedArray())
+    {
+      leftX = leftX / abs(speed) * accelCoeff + previousVelo[0];
+      leftY = leftY / abs(speed) * accelCoeff + previousVelo[1];
     }
 
-    Set_Drive(leftX, leftY , rightX, 0);
+    if (deaccelCoeff < abs(rightX - endVelo[2]))
+    {
+      rightX = deaccelCoeff * getSignOf(rightX - endVelo[2]);
+    }
+
+    if (accelCoeff < abs(rightX - previousVelo[2]) && previousVelo != unstartedArray())
+    {
+      rightX = accelCoeff * getSignOf(rightX - previousVelo[2]);
+    }
+
+    pros::lcd::set_text(5, "deaccel" + to_string((int)deaccelCoeff) + "speedDiff" + to_string((int)speedDifference) + "accel" + to_string((int)accelCoeff));
+    pros::lcd::set_text(6, "rightX" + to_string((int)rightX) + "endVelo" + to_string((int)endVelo[2]) + "previousVelo" + to_string((int)previousVelo[2]));
+    // pros::lcd::set_text(6, "leftY" + to_string((int)leftY) + "endVelo" + to_string((int)endVelo[1]) + "previousVelo" + to_string((int)previousVelo[1]));
+
+    Set_Drive(leftX, leftY, rightX, 0);
   }
   else
   {
+    // if(endVelo == array<double,4> {0,0,0,0}){
     // Set_Drive(0, 0, 0, 0);
-    Stop();
-    // pros::lcd::set_text(4, "HELLO THERE" + to_string(distance));
+    // Stop();
+    // }
+    Set_Drive(endVelo[0], endVelo[1], endVelo[2] , 0);
+    previousVelo = endVelo;
+    // pros::lcd::set_text(4, "Drive Stopped" + to_string(distance));
     _is_running = false;
   }
 }
-
 void Mech_Drive::Stop()
 {
   left_front_motor.move(0);
   right_front_motor.move(0);
   right_back_motor.move(0);
   left_back_motor.move(0);
+  _pid_inputs = {0,0,0,0};
 }
 
 //Empty default constructor for blank factory arguments.
 Mech_Drive::Mech_Drive()
 {
- 
 }
 
-void Mech_Drive::Create() {
-   std::array<double, 4>
+void Mech_Drive::Create()
+{
+  std::array<double, 4>
       tempArray = {0, 0, 0, 0};
   initial_position = {0, 0, 0, 0};
   _left_front_motor_controller = new Motor_Controller(&left_front_pid_values[0], &left_front_pid_values[1], &left_front_pid_values[2], &left_front_motor);
@@ -239,4 +310,6 @@ void Mech_Drive::Create() {
   _master_pid = new Pid(&(master_drive_pid_values)[0], &(master_drive_pid_values)[1], &(master_drive_pid_values)[2]);
   _master_error_average = 0;
   _master_setpoint = 1;
-}
+  // _master_pid->Set_Error(2600); 
+  previousVelo = unstartedArray();
+} 

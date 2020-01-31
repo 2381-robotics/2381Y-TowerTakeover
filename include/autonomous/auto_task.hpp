@@ -2,7 +2,9 @@
 #define AUTO_TASK_HPP
 
 #include <functional>
-#include <future>
+
+
+
 
 class AutoTask {
     public: 
@@ -17,11 +19,11 @@ class AutoTask {
     static AutoTask AutoDelay(int interval, bool sync = true, std::function<void(void)> task = [](void) -> void {}, std::function<void(void)> init = [&](void) -> void {}, std::function<void(void)> kill = [](void) -> void {});
     // static AutoTask DriveTask()
 
-
+    AutoTask TimeLimit(int time);
+    
     bool isSync;
     bool _initialized = false;
-    int _count = 0;
-    AutoTask(std::function<void(void)> task, std::function<bool(void)> done, std::function<void(void)> init = [](void)-> void{}, std::function<void(void)> kill = [](void)->void{}, bool sync = false);
+    AutoTask(std::function<void(void)> task, std::function<bool(void)> done, std::function<void(void)> init = [](void)-> void{}, std::function<void(void)> kill = [](void)->void{}, bool sync = true);
 
 
 protected:

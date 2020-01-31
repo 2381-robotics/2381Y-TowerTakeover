@@ -2,6 +2,7 @@
 #include "autonomous/auto_task.hpp"
 #include "autonomous/auto_sequence.hpp"
 #include <vector>
+#include <functional>
 using namespace std;
 
 AutoSequence* AutoSequence::FromTasks(vector<AutoTask> tasks) {
@@ -14,13 +15,26 @@ void AutoSequence::add_tasks(vector<AutoTask> tasks){
     taskList.reserve(taskList.size() + tasks.size());
     taskList.insert(taskList.end(), tasks.begin(), tasks.end());
 }
-AutoSequence::AutoSequence() {}
+AutoSequence::AutoSequence() : AutoTask(
+    [&](void) -> void {//run
+        run_sequence();
+    },
+    [&](void)->bool {//done
+        return isSequenceFinished;
+    })
+{
+
+}
 
 
 
-void AutoSequence::run(){
+void AutoSequence::run_sequence(){
+    if(taskList.empty()) 
+    {  
+        isSequenceFinished = true;
+        return;
+    }
     auto it = taskList.begin();
-    int j = 0;
 
     while (it!= taskList.end()){
         if (!it->_initialized)
@@ -28,27 +42,18 @@ void AutoSequence::run(){
             it->initialize();
             it->_initialized = true;
         }
+        it->run();
+
         if (it->done())
         {
             // pros::lcd::set_text(5, "Taskdone");
             it->kill();
-            
-            it = taskList.erase(it);
-            if (it->isSync)
-            {
-                break;
-            }
-        } else {
-            
-            it->run();
-            // break;
-            if(it->isSync) {
-                pros::lcd::set_text(6, "j " + to_string(j));
-                break;
-                return;
-            }
+            it = taskList.erase(it);   
+        }
+        if (it->isSync)
+        {
+            break;
         }
         it++;
-        j++;
     }
 }

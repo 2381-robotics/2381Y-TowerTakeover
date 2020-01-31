@@ -11,11 +11,23 @@ public:
   Mech_Drive();
 
   void Set_Drive(double left_x, double left_y, double right_x, double right_y) override;
-  void Set_Point_Drive(double speed, double direction, double distance, double turnDirection = 0, double accelScaling = 1, bool blocking = false, double criticalPoint = 400) override;
-  
+  void Set_Point_Drive(double speed, double direction, double distance, double turnSpeed = 0, double accelSpeed =  1, double deaccelSpeed = 1,  bool blocking = false, double criticalPoint = 400, double criticalMultiplier = 1, std::array<double, 4> endVelo = {0, 0, 0, 0});
+
+  std::array<double,4> previousVelo;
+
+  int started;
+  std::array<double,4> unstartedArray();
+
   double Get_Speed() override;
   double Get_Distance() override;
 
+  void Set_Path();
+  void Follow_Path();
+
+  std::array<double,2> lookaheadPoint = {0,0};
+
+
+  void Move_Wheel(double Speed) override; 
   void Set_Init_Point() override;
   std::array<double, 4> initial_position = {0,0,0,0};
   void Reset_Point() override;
@@ -35,6 +47,7 @@ public:
 
   enum Motor_Ref {left_back = 0, left_front, right_back, right_front};
 
+  void Create() override;
 
 protected:
   void Move_Motor() override;
@@ -51,17 +64,19 @@ protected:
   double _right_front_setpoint;
   double _right_back_setpoint;
 
-  void Create() override;
 
-  double _master_offset = 0;
-  double lboffset= 0, rboffset= 0, rfoffset = 0, lfoffset = 0;
-  double lbDistance = 0, rbDistance = 0, rfDistance = 0, lfDistance = 0, masterDistance = 0;
-  // double lboffset = 0, rboffset = 0, rfoffset = 0, lfoffset = 0;
+  // double _master_offset = 2550;
+  double _master_offset = 1;
+
+  // double lboffset = 2500, rboffset = 2500, rfoffset = 2600, lfoffset = 2600;
+  // double lbDistance = 42731, rbDistance = 42877, rfDistance = 42731, lfDistance = 42977, masterDistance = 42854;
+  double lboffset = 1, rboffset = 1, rfoffset = 1, lfoffset = 1;
+  double lbDistance = 1, rbDistance = 1, rfDistance = 1, lfDistance = 1, masterDistance = 1;
 
   double _left_back_motor_value, _left_front_motor_value, _right_back_motor_value, _right_front_motor_value;
 
   double _motor_value_average;
-  double _master_setpoint;
+  double _master_setpoint;  
   double _previous_setpoint;
   double _master_error_average;
 

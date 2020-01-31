@@ -1,7 +1,7 @@
 #include "robot_factory.hpp"
 #include "robot.hpp"
 #include "structure.hpp"
-#include "modules/drive/drive.hpp"
+#include "modules/drive/mech_drive.hpp"
 Robot* RobotFactory::create_robot(std::string drive_type, std::string lift_type, std::string intake_type) {
 	Robot* instance = nullptr;
 	auto it = factory_function_registry.find("ROBOT_MAIN");
@@ -14,7 +14,7 @@ Robot* RobotFactory::create_robot(std::string drive_type, std::string lift_type,
 		auto drive_instance = factory_function_registry.find(drive_type);
 		if (drive_instance != factory_function_registry.end()) {
 			// mapped value (std::function<Robot*(void)>).
-			instance->assign_drive(dynamic_cast<Drive*>(drive_instance->second()));
+			instance->assign_drive(dynamic_cast<Mech_Drive*>(drive_instance->second()));
 		}
 		auto lift_instance = factory_function_registry.find(lift_type);
 		if (lift_instance != factory_function_registry.end()) {

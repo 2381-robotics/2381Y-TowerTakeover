@@ -12,6 +12,7 @@
 #include "robot/modules/intake.hpp"
 #include "master_controller.hpp"
 #include "autonomous/auto_sequence.hpp"
+#include "robot/modules/drive/position_tracker.hpp"
 
 #define DELAY_INTERVAL 20
 
@@ -25,10 +26,13 @@ extern MasterController* master_control;
 extern std::uint32_t now;
 // Autonomous
 extern AutoSequence* auton1;
-
+extern AutoSequence* blue5PointAuton;
+extern AutoSequence* straightRedAuton;
+extern AutoSequence* invertedSmallSideAuto;
 extern void resetAuton1(int choice = 0);
 
 extern double autonomous_increment;
+
 
 extern void driver();
 
@@ -62,5 +66,12 @@ extern std::array<double, 3> master_intake_pid_values;
 extern pros::Motor intakeMotorLeft, intakeMotorRight;
 extern Intake* intake;
 
+// Tracking Wheels
+extern Position_Tracker* position_tracker;
+
+extern std::array<int,3> encoder_ports_left, encoder_ports_right, encoder_ports_back;
+
+extern std::array<double,3> wheel_diameters, wheel_offsets;
+extern pros::ADIEncoder encoder_left, encoder_right, encoder_back;
 
 #endif
