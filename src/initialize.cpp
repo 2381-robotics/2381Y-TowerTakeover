@@ -162,7 +162,7 @@ void initialize()
   pros::Task intake_task(intake_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
                         TASK_STACK_DEPTH_DEFAULT, "INTAKE_TASK");
   pros::Task tracking_task(tracking_task_fn, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "TRACKING_TASK");
-  resetAuton1();
+  // resetAuton1();
   // auton_control->define_auton(AutonControl::RedSmallSideAuton, auton1);
   // auton_control->define_auton(AutonControl::RedSmallSideAuton, auton1);
 

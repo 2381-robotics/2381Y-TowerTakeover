@@ -38,3 +38,8 @@ double Pid::Update(double setpoint, double current_value) {
   last_error_ = error;
   return p + i + d;
 }
+
+void Pid::Set_Error(double Error)
+{
+  error_sum_ = Error;
+}

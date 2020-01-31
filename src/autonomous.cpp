@@ -28,8 +28,8 @@ using namespace std;
 AutoTask stackTask = AutoTask::SyncTask(
     [](void) -> void {
         // intake->Set_Intake(0);
-        // robot->set_drive(0, 20, 0, 0);
-        angler->Smooth_Angler(1.7);
+        robot->set_drive(0, 0, 0, 0);
+        angler->Smooth_Angler(3.5);
     },
     [](void) -> bool { return ((angler->Get_Height() >= angler->_max_height) && (abs(angler->Get_Speed() < 20))); });
 
@@ -116,344 +116,167 @@ AutoSequence *  auton1;
 
 AutoSequence *testDriveStraightAuton2 = AutoSequence::FromTasks(
     vector<AutoTask>{
+        // AutoTask::SyncTask(
+        //     [](void) -> void {
+        //         intake->Set_Intake(200);
+        //         robot->drive->Set_Point_Drive(40, 0, 5000, 0, 2, 0.8, false, 4000, 1, {0, 0, 0, 0});
+        //     },
+        //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+
+        // AutoTask::AutoDelay(10000000),
+        OnSpotDeploy,
         AutoTask::SyncTask(
             [](void) -> void {
-                intake->Set_Intake(127);
-                robot->drive->Set_Point_Drive(127, 0, 1000,0,1,1,false,400,1,array<double,4>{0,60,0,0});
+                intake->Set_Intake(200);
+                robot->drive->Set_Point_Drive(127, 0, 2750, 0, 2, 0.8, false, 400, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+        // AutoTask::SyncTask(
+        //     [](void) -> void {
+        //         intake->Set_Intake(127);
+        //         robot->drive->Set_Point_Drive(60, 0, 1000, 0, 1, 1, false, 400, 1, {0, 0, 0, 0});
+        //     },
+        //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
         AutoTask::SyncTask(
             [](void) -> void {
-                // intake->Set_Intake(127);
-                robot->drive->Set_Point_Drive(40, 0, 2000);
-            },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
-        AutoTask::AutoDelay(200),
-        AutoTask::SyncTask(
-            [](void) -> void {
-                robot->drive->Set_Point_Drive(100, 180, 2000);
                 intake->Set_Intake(80);
+                robot->drive->Set_Point_Drive(127, 160, 2100, 0, 1, 1, false, 400, 1, {100, 0, 0, 0});
             },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
+            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(0);
-
-                robot->drive->Set_Point_Drive(0, 0, 2100, 127, 1.5, 0.8);
+                robot->drive->Set_Point_Drive(127, 90, 700, -20, 20,4, false, 400, 1, {0,60, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-        AutoTask::AsyncTask(
+
+        // drive straight to reach the cubes
+        // AutoTask::SyncTask(
+        //     [](void) -> void {
+        //         intake->Set_Intake(127);
+        //         robot->drive->Set_Point_Drive(127, 0, 1000,0,1,1,false,400,1, {0,60,0,0});
+        //     },
+        //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+
+        // slow downs while picking up cubes
+        AutoTask::SyncTask(
             [](void) -> void {
-                angler->Smooth_Angler(1.7);
+                intake->Set_Intake(200);
+                robot->drive->Set_Point_Drive(40, 0, 2650, 0, 2, 100, false, 2650, 1, {0, 0, 0, 0});
             },
-            [](void) -> bool { return ((angler->Get_Height() >= angler->_max_height/3)); }),
+            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
+        // extend angler a bit
+
+        AutoTask::AutoDelay(200),
+        // AutoTask::AsyncTask(
+        //     [](void) -> void {
+        //         angler->Smooth_Angler(1.8);
+        //         intake->Set_Intake(-20);
+        //     },
+        //     [](void) -> bool { return ((angler->Get_Height() >= angler->_max_height / 3.2)); }),
+        // AutoTask::SyncTask(
+        //     [](void) -> void {
+        //         intake->Set_Intake(60);
+
+        //         robot->drive->Set_Point_Drive(127, 110, 2500, 127, 1, 1, false, 400, 1, {0,70,0,0});
+        //     },
+        //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+
+        // AutoTask::SyncTask(
+        //     [](void) -> void {
+        //         robot->drive->Set_Point_Drive(127, 0, 1300);
+        //         intake->Set_Intake(-40);
+        //         angler->Smooth_Angler(1);
+        //     },
+        //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+        AutoTask::SyncTask(
+            [](void) -> void {
+                intake->Set_Intake(60);
+
+                robot->drive->Set_Point_Drive(127, 180, 1100, 127, 2, 1, false, 1050, 1, {100, 0, 127, 0});
+            },
+            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(-20);
-                robot->drive->Set_Point_Drive(60, 0, 800);
+
+                robot->drive->Set_Point_Drive(127, 0, 1700, 127, 2, 2, false, 1000, 1, {0, 127, 0, 0});
             },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
-        stackTask,
-        AutoTask::AutoDelay(400, true, [](void) -> void {
-            robot->set_drive(0, 40, 0, 0);
-        }),
+            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(-40);
-                robot->drive->Set_Point_Drive(127, 180, 800);
+                angler->Smooth_Angler(1);
+
+                robot->drive->Set_Point_Drive(127, 0, 1000, 0, 2, 2, false, 400, 1, {0, 0, 0, 0});
             },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
-        AutoTask::AutoDelay(1000),
+            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+        stackTask,
+        AutoTask::AutoDelay(600, true, [](void) -> void {
+            robot->set_drive(0, 20, 0, 0);
+        }),
+        AutoTask::AutoDelay(200),
+
+        AutoTask::SyncTask([](void) -> void {
+                // intake->Set_Intake(-40);
+                robot->drive->Set_Point_Drive(127, 180, 800); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
 
         AutoTask::AutoDelay(10000000),
     });
 
+// bruh test auton boi
+//5 point
 AutoSequence *testDriveStraightAuton = AutoSequence::FromTasks(
     vector<AutoTask>{
-        AutoTask::SyncTask(
-            [](void) -> void {
-                // intake->Set_Intake(127);
-                robot->drive->Set_Point_Drive(127, 0, 3000);
-            },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-        AutoTask::SyncTask(
-            [](void) -> void {
-                // intake->Set_Intake(127);
-                robot->drive->Set_Point_Drive(127, 180, 3000);
-            },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-        AutoTask::SyncTask(
-            [](void) -> void {
-                // intake->Set_Intake(127);
-                robot->drive->Set_Point_Drive(127, 0, 3000);
-            },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-        AutoTask::SyncTask(
-            [](void) -> void {
-                // intake->Set_Intake(127);
-                robot->drive->Set_Point_Drive(127, 180, 3000);
-            },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-        AutoTask::SyncTask(
-            [](void) -> void {
-                // intake->Set_Intake(127);
-                robot->drive->Set_Point_Drive(127, 0, 3000);
-            },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-        AutoTask::SyncTask(
-            [](void) -> void {
-                // intake->Set_Intake(127);
-                robot->drive->Set_Point_Drive(127, 180, 3000);
-            },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-
-        AutoTask::AutoDelay(10000000),
-    });
-
-AutoSequence *straightRedAuton = testDriveStraightAuton2;
-
-AutoSequence *straightRedAuton3 =  AutoSequence::FromTasks(
-    vector<AutoTask>{
-        
-
-        OnSpotDeploy,
+        // drive straight to reach the cubes
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(127);
-                robot->drive->Set_Point_Drive(127, 0, 1000);
+                robot->drive->Set_Point_Drive(127, 0, 1000,0,1,1,false,400,1, {0,60,0,0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+
+        // slow downs while picking up cubes
         AutoTask::SyncTask(
             [](void) -> void {
-                intake->Set_Intake(127);
-                robot->drive->Set_Point_Drive(60, 0, 2650);
+                // intake->Set_Intake(127);
+                robot->drive->Set_Point_Drive(60, 0, 2100);
             },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-        AutoTask::AutoDelay(200, true, [](void) -> void { intake->Set_Intake(127); }),
-        // AutoTask::SyncTask(
+            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
+        // extend angler a bit
+
+        AutoTask::AutoDelay(200),
+        // AutoTask::AsyncTask(
         //     [](void) -> void {
-        //         intake->Set_Intake(127);
-        //         robot->drive->Set_Point_Drive(127, 180, 3300);
+        //         angler->Smooth_Angler(1.8);
+        //         intake->Set_Intake(-20);
         //     },
-        //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-        AutoTask::AutoDelay(2150, true, [](void) -> void {
-            intake->Set_Intake(127);
-            robot->drive->Set_Point_Drive(127, 180, 3650, 0, 1.5, false, 100); }, [](void) -> void { robot->drive->Reset_Point(); }),
-        // AutoTask::AutoDelay(500, true, [](void) -> void { robot->set_drive(0, -80, 0, 0); }),
-        AutoTask::SyncTask([](void) -> void {
-                intake->Set_Intake(127);
-                robot->drive->Set_Point_Drive(100, 0, 700); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+        //     [](void) -> bool { return ((angler->Get_Height() >= angler->_max_height / 3.2)); }),
+        AutoTask::SyncTask(
+            [](void) -> void {
+                intake->Set_Intake(40);
+                robot->drive->Set_Point_Drive(127, 110, 2600, 110, 1, 1, false, 400, 1, {0, 70, 0, 0});
+            },
+            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
         AutoTask::SyncTask(
             [](void) -> void {
-                intake->Set_Intake(127);
-                robot->drive->Set_Point_Drive(0, 0, 1295 + 650 + autonomous_increment, 90, 2.5);
-                // pros::lcd::set_text(0, "wa");s
+                robot->drive->Set_Point_Drive(127, 0, 500);
+                intake->Set_Intake(-40);
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
-        AutoTask::SyncTask( //Diagonal
-            [](void) -> void {
-                intake->Set_Intake(0); //590
-                robot->drive->Set_Point_Drive(127, -90, 900, 0, 1.5, false, 100);
-            },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-
-        // starting intake
-        AutoTask::AutoDelay(400, true, [](void) -> void {
-            intake->Set_Intake(100);
-            robot->set_drive(0, 65, 0, 0);
-        }),
-
-        // reverse intake
+        stackTask,
         AutoTask::AutoDelay(400, true, [](void) -> void {
             robot->set_drive(0, 40, 0, 0);
-            // robot->drive->Set_Point_Drive(127, 0, 625);
-            intake->Set_Intake(-20);
-        }),
-        stackTask,
-
-        AutoTask::AutoDelay(400, true, [](void) -> void {
-            robot->set_drive(0, 60, 0, 0);
         }),
         AutoTask::SyncTask([](void) -> void {
-                    intake->Set_Intake(0);
-                    robot->drive->Set_Point_Drive(127, 180, 1200); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+                // intake->Set_Intake(-40);
+                robot->drive->Set_Point_Drive(127, 180, 800); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
+
         AutoTask::AutoDelay(10000000),
     });
-
-// Blue auton
-AutoSequence *blue5PointAuton = AutoSequence::FromTasks(
-    vector<AutoTask>{
-        OnSpotDeploy,
-        AutoTask::SyncTask(
-            [](void) -> void {
-                intake->Set_Intake(127);
-                robot->drive->Set_Point_Drive(127, 0, 1000);
-            },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-        AutoTask::SyncTask(
-            [](void) -> void {
-                intake->Set_Intake(127);
-                robot->drive->Set_Point_Drive(60, 0, 2500);
-            },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-        AutoTask::AutoDelay(200, true, [](void) -> void { intake->Set_Intake(127); }),
-        // AutoTask::SyncTask(
-        //     [](void) -> void {
-        //         intake->Set_Intake(127);
-        //         robot->drive->Set_Point_Drive(127, 180, 3300);
-        //     },
-        //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-        AutoTask::AutoDelay(2150, true, [](void) -> void {
-            intake->Set_Intake(127);
-            robot->drive->Set_Point_Drive(127, 180, 3750, 0, 1.5, false, 100); }, [](void) -> void { robot->drive->Reset_Point(); }),
-        // AutoTask::AutoDelay(500, true, [](void) -> void { robot->set_drive(0, -80, 0, 0); }),
-        AutoTask::SyncTask([](void) -> void {
-                intake->Set_Intake(127);
-                robot->drive->Set_Point_Drive(100, 0, 700); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-
-        // AutoTask::SyncTask([](void) -> void {
-        //         intake->Set_Intake(127);
-        //         robot->drive->Set_Point_Drive(500, 0, 600); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-
-        InvertTurn90Deg,
-
-        AutoTask::SyncTask( //Diagonal
-            [](void) -> void {
-                intake->Set_Intake(0); //590
-                robot->drive->Set_Point_Drive(127, 90, 1050, 0, 1.5, false, 100);
-            },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-
-        // starting intake
-
-        AutoTask::AutoDelay(400, true, [](void) -> void {
-            intake->Set_Intake(100);
-            robot->set_drive(0, 60, 0, 0);
-            intake->Set_Intake(-10);
-        }),
-
-        // reverse intake
-        AutoTask::AutoDelay(700, true, [](void) -> void {
-            robot->set_drive(0, 40, 0, 0);
-            // robot->drive->Set_Point_Drive(127, 0, 625);
-            intake->Set_Intake(-10);
-        }),
-        stackTask,
-
-        AutoTask::AutoDelay(500, true, [](void) -> void {
-            robot->set_drive(0, 60, 0, 0);
-        }),
-        AutoTask::SyncTask([](void) -> void {
-                    intake->Set_Intake(0);
-                    robot->drive->Set_Point_Drive(127, 180, 1200); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-        AutoTask::AutoDelay(10000000),
-    });
-// int four = AutonControl::instance()->define_auton(AutonControl::BlueSmallSideAuton, blue5PointAuton);
-
-void resetAuton1(int choice)
-{
-    auton1 = AutoSequence::FromTasks(
-        vector<AutoTask>{
-
-
-            // AutoTask::AutoDelay(500, false, [](void)->void{
-            //     intake->Set_Intake(-80);
-            // }, [&](void)->void{
-            //     return;
-            // }, [](void)->void{
-            //     intake->Set_Intake(127);
-            // }),
-            OnSpotDeploy,
-            // DeployTask,
-
-            // AutoTask::SyncTask([](void) -> void {
-            //         intake->Set_Intake(127);
-            //         arm->Set_Target(0);
-            //         robot->drive->Set_Point_Drive(60, 0, 1700); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-                        // // AutoTask::AutoDelay(200, true, [](void) -> void { intake->Set_Intake(127); }),
-                        // AutoTask::SyncTask(
-                        //     [](void) -> void { // diagonal drive
-                        //         intake->Set_Intake(127);
-                        //         robot->drive->Set_Point_Drive(127, 140, 2800 + autonomous_increment);
-                        //         pros::lcd::set_text(6, "HELLO THERE");
-                        //     },
-                        //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-                        // AutoTask::SyncTask(
-                        //     [](void) -> void {
-                        //         intake->Set_Intake(127);
-                        //         robot->drive->Set_Point_Drive(50, 90, 250, 0, 0.2);
-                        //         pros::lcd::set_text(6, "HELLO THERE");
-                        //     },
-                        //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-                        // AutoTask::SyncTask(
-                        //     [](void) -> void {
-                        //         intake->Set_Intake(127);
-                        //         robot->drive->Set_Point_Drive(127, 0, 1000, 0, 1, false, 400, 3);
-                        //     },
-                            // [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-            AutoTask::SyncTask(
-                [](void) -> void {
-                    intake->Set_Intake(127);
-                    robot->drive->Set_Point_Drive(59, 0, 3100);
-                },
-                [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-            AutoTask::AutoDelay(200, true, [](void) -> void { intake->Set_Intake(127); }),
-
-            Turn90Deg,
-
-//strafe to wall
-             AutoTask::AutoDelay(2200, true, [](void) -> void {
-                 intake->Set_Intake(127);
-                 robot->drive->Set_Point_Drive(100, 90, 4190, 0, 1.5, false, 100);
-            }),
-           
-//strafe a bit 
-            AutoTask::SyncTask(
-                [](void) -> void {
-                    robot->drive->Set_Point_Drive(127, -90, 430, 0, 1.5, false, 100);
-                },
-                [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),       
-
-            Turn45Deg,
-            // AutoTask::AutoDelay(1550, true, [](void) -> void {
-            //     intake->Set_Intake(0);//590
-            //     robot->drive->Set_Point_Drive(127, -90, 850, 0, 1.5, false, 100);
-            // }),
-
-// diagonal strafe
-            AutoTask::SyncTask( //Diagonal 
-                [](void) -> void {
-                    intake->Set_Intake(0);//590
-                    robot->drive->Set_Point_Drive(127, -90, 800, 0, 1.5, false, 100);
-                },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-
-// starting intake
-            AutoTask::AutoDelay(300, true, [](void) -> void {
-                intake->Set_Intake(100);
-                robot->set_drive(0, 30, 0, 0);
-            }),
-
-// reverse intake
-           AutoTask::AutoDelay(800, true, [](void) -> void {
-                robot->set_drive(0, 40, 0, 0);
-                    // robot->drive->Set_Point_Drive(127, 0, 625);
-                 intake->Set_Intake(-15);
-            }),
-            stackTask,
-
-            AutoTask::AutoDelay(500),
-            AutoTask::SyncTask([](void) -> void {
-                    intake->Set_Intake(0);
-                    robot->drive->Set_Point_Drive(50, 180, 1200); 
-                    }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-            AutoTask::AutoDelay(10000000),
-        }
-    );
-}
 
 // AutoSequence *invertedSmallSideAuto = auton1 = AutoSequence::FromTasks(
 //     vector<AutoTask>{
@@ -529,7 +352,8 @@ void resetAuton1(int choice)
 //                     robot->drive->Set_Point_Drive(40, 180, 500); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 //         AutoTask::AutoDelay(10000000),
 //     });
-
+AutoSequence* blue5PointAuton;
+AutoSequence* straightRedAuton = testDriveStraightAuton2;
 AutoSequence *safe6SlowAuton = AutoSequence::FromTasks(
     vector<AutoTask>{
         AutoTask::AutoDelay(100),
@@ -593,6 +417,10 @@ AutoSequence *safe6SlowAuton = AutoSequence::FromTasks(
 
     });
 
+void resetAuton1(int a)
+{
+
+}
 void autonomous()
 {
 

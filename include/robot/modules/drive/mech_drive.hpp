@@ -65,10 +65,13 @@ protected:
   double _right_back_setpoint;
 
 
-  double _master_offset = 0;
-  double lboffset= 0, rboffset= 0, rfoffset = 0, lfoffset = 0;
-  double lbDistance = 0, rbDistance = 0, rfDistance = 0, lfDistance = 0, masterDistance = 0;
-  // double lboffset = 0, rboffset = 0, rfoffset = 0, lfoffset = 0;
+  // double _master_offset = 2550;
+  double _master_offset = 1;
+
+  // double lboffset = 2500, rboffset = 2500, rfoffset = 2600, lfoffset = 2600;
+  // double lbDistance = 42731, rbDistance = 42877, rfDistance = 42731, lfDistance = 42977, masterDistance = 42854;
+  double lboffset = 1, rboffset = 1, rfoffset = 1, lfoffset = 1;
+  double lbDistance = 1, rbDistance = 1, rfDistance = 1, lfDistance = 1, masterDistance = 1;
 
   double _left_back_motor_value, _left_front_motor_value, _right_back_motor_value, _right_front_motor_value;
 

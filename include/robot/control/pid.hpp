@@ -23,6 +23,9 @@ class Pid {
    */
   double Update(double setpoint, double current_value);
 
+  void Set_Error(double error);
+
+
   double* kp_;
   double* ki_;
   double* kd_;
