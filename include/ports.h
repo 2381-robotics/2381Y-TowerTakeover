@@ -25,7 +25,7 @@
 
 
 //vision sensor
-#define VISION_PORT 5
+#define VISION_PORT 11
 //left lift 4
 //legacy
 #define PORT_IN 1

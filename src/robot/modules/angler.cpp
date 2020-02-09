@@ -12,9 +12,10 @@ void Angler::Move_Motor() {
   if(isOverrideMode) {
     _angler_power = override_power;
     _angler_pid->Update(Get_Real_Target(), _angler_height);
+    _angler_pid->Update(_max_height * (pow(Get_Real_Target() / _max_height, 1)), _angler_height);
   }
   else {
-    _angler_power = _angler_pid->Update(Get_Real_Target(), _angler_height);
+    _angler_power = _angler_pid->Update(_max_height* (pow(Get_Real_Target()/_max_height, 1)), _angler_height);
   }
 
   // angler Coefficient is for keeping angler even / not tilted, not sure if it works.

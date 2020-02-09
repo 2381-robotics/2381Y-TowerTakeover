@@ -53,7 +53,7 @@ double lift_speed = 10;
 // Angler Variables:
 
 Motor angler_motor(ANGLER_MOTOR_PORT, ANGLER_MOTOR_ORIENTATION);
-array<double, 3> angler_pid_values = {2, 0.01, 0.0001};
+array<double, 3> angler_pid_values = {1, 0, 0.1};
 
 double angler_speed = 20;
 double angler_min_height = 0;
@@ -93,6 +93,8 @@ Position_Tracker* position_tracker = Position_Tracker::instance();
 ADIEncoder encoder_left(encoder_ports_left[0], encoder_ports_left[1], encoder_ports_left[2]);
 ADIEncoder encoder_right(encoder_ports_right[0], encoder_ports_right[1], encoder_ports_right[2]);
 ADIEncoder encoder_back(encoder_ports_back[0], encoder_ports_back[1], encoder_ports_back[2]);
+pros::Vision vision_indexer(VISION_PORT);
+
 
 void arm_task_fn(void *param)
 {
@@ -152,6 +154,12 @@ void initialize()
   angler->Create();
   arm->Create();
   position_tracker->Create();
+
+  vision_indexer.set_zero_point(pros::E_VISION_ZERO_CENTER);
+  pros::vision_signature_s_t BLACK_SIG =
+      pros::Vision::signature_from_utility(EXAMPLE_SIG, -2147483647, 2147483647, 0, -2147483647, 2147483647, 0, 3.000, 0);
+  vision_indexer.set_signature(EXAMPLE_SIG, &BLACK_SIG);
+
   std::string text("PROS");
   pros::Task angler_task(angler_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
                          TASK_STACK_DEPTH_DEFAULT, "ANGLER_TASK");

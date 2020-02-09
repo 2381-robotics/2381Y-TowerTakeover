@@ -73,5 +73,6 @@ extern std::array<int,3> encoder_ports_left, encoder_ports_right, encoder_ports_
 
 extern std::array<double,3> wheel_diameters, wheel_offsets;
 extern pros::ADIEncoder encoder_left, encoder_right, encoder_back;
+extern pros::Vision vision_indexer;
 
 #endif

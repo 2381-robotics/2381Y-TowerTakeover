@@ -33,4 +33,12 @@ void ultras()
         // pros::lcd::set_text(5, std::to_string(angle) + "<-- value, angle:  " + std::to_string(angle * 90 / 5819));
         // pros::lcd::set_text(6, std::to_string(angle2) + "<-- value, angle:  " + std::to_string(angle2 * 720 / 49033));
     }
+
+    // pros::lcd::set_text(1, std::to_string(vision_indexer.get_object_count()));
+    // pros::lcd::set_text(2, std::to_string(rtn.signature));
+    // pros::lcd::set_text(3, std::to_string(rtn.angle));
+    // pros::lcd::set_text(4, std::to_string(rtn.x_middle_coord));
+    // pros::lcd::set_text(5, std::to_string(rtn.y_middle_coord));
+    // pros::lcd::set_text(6, std::to_string(rtn.width));
+    // pros::lcd::set_text(7, std::to_string(rtn.height));
 }
