@@ -174,9 +174,9 @@ void initialize()
   // auton_control->define_auton(AutonControl::Blue7PointAuton, AT_Blue7);
 
   auton_control->define_auton(AutonControl::SkillsAuton, AT_Skills);
-  // auton_control->define_auton(AutonControl::TestAuton, AT_Test_Ultras);
+  auton_control->define_auton(AutonControl::TestAuton, AT_Test_Ultras);
 
-  auton_control->select_auton(AutonControl::Red5PointAuton);
+  auton_control->select_auton(AutonControl::TestAuton);
 }
 
 /**
