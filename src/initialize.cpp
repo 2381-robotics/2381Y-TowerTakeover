@@ -41,9 +41,6 @@ Motor right_back_motor(RIGHT_BACK_MOTOR_PORT, true);
 
 array<double, 3> lift_pid_values = {0.618, 0, 1.454}; 
 array<double, 3> master_lift_pid_values = {1, 0.001, 0}; 
- 
-Motor left_lift_motor(LEFT_LIFT_MOTOR_PORT, LEFT_LIFT_MOTOR_ORIENTATION); 
-Motor right_lift_motor(RIGHT_LIFT_MOTOR_PORT, RIGHT_LIFT_MOTOR_ORIENTATION);
 
 double cube_height = 280;
 double lift_min_height = 0;
@@ -95,6 +92,8 @@ ADIEncoder encoder_right(encoder_ports_right[0], encoder_ports_right[1], encoder
 ADIEncoder encoder_back(encoder_ports_back[0], encoder_ports_back[1], encoder_ports_back[2]);
 pros::Vision vision_indexer(VISION_PORT);
 
+ADIUltrasonic ultra_left(LEFT_ULTRA_ECHO, LEFT_ULTRA_PING);
+ADIUltrasonic ultra_right(RIGHT_ULTRA_ECHO, RIGHT_ULTRA_PING);
 
 void arm_task_fn(void *param)
 {
@@ -106,11 +105,8 @@ void arm_task_fn(void *param)
 }
 void drive_task_fn(void *param)
 {
-
   while (true)
   {
-    // pros::lcd::set_text(0, to_string(pros::millis()));
-
     robot->drive->Run();
     pros::delay(DELAY_INTERVAL);
   }
@@ -135,12 +131,10 @@ void angler_task_fn(void *param)
 }
 void tracking_task_fn(void *param)
 {
-  // pros::ADIEncoder encoder(encoder_ports_left[0], encoder_ports_left[1], false);
-
   while (true)
   {
     position_tracker->Track_Position();
-    lcd::set_text(2,"left" + to_string((int)encoder_left.get_value()) + "right" + to_string((int)encoder_right.get_value() ));
+    // lcd::set_text(2,"left" + to_string((int)encoder_left.get_value()) + "right" + to_string((int)encoder_right.get_value() ));
     pros::delay(DELAY_INTERVAL);
   }
 }
@@ -157,10 +151,9 @@ void initialize()
 
   vision_indexer.set_zero_point(pros::E_VISION_ZERO_CENTER);
   pros::vision_signature_s_t BLACK_SIG =
-      pros::Vision::signature_from_utility(EXAMPLE_SIG, -2147483647, 2147483647, 0, -2147483647, 2147483647, 0, 3.000, 0);
+      pros::Vision::signature_from_utility(EXAMPLE_SIG, -2147483647, 2147483647, 0, -2147483647, 2147483647, 0, 3.000, 0); //This boi black af
   vision_indexer.set_signature(EXAMPLE_SIG, &BLACK_SIG);
 
-  std::string text("PROS");
   pros::Task angler_task(angler_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
                          TASK_STACK_DEPTH_DEFAULT, "ANGLER_TASK");
   pros::Task arm_task(arm_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
@@ -170,9 +163,6 @@ void initialize()
   pros::Task intake_task(intake_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
                         TASK_STACK_DEPTH_DEFAULT, "INTAKE_TASK");
   pros::Task tracking_task(tracking_task_fn, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "TRACKING_TASK");
-  // resetAuton1();
-  // auton_control->define_auton(AutonControl::RedSmallSideAuton, auton1);
-  // auton_control->define_auton(AutonControl::RedSmallSideAuton, auton1);
 
   auton_control->define_auton(AutonControl::Red5PointAuton, straightRedAuton);
   auton_control->define_auton(AutonControl::Blue5PointAuton, blue5PointAuton);

@@ -25,11 +25,11 @@ extern pros::Controller master;
 extern MasterController* master_control;
 extern std::uint32_t now;
 // Autonomous
+
 extern AutoSequence* auton1;
 extern AutoSequence* blue5PointAuton;
 extern AutoSequence* straightRedAuton;
 extern AutoSequence* invertedSmallSideAuto;
-extern void resetAuton1(int choice = 0);
 
 extern double autonomous_increment;
 
@@ -74,5 +74,8 @@ extern std::array<int,3> encoder_ports_left, encoder_ports_right, encoder_ports_
 extern std::array<double,3> wheel_diameters, wheel_offsets;
 extern pros::ADIEncoder encoder_left, encoder_right, encoder_back;
 extern pros::Vision vision_indexer;
+
+extern pros::ADIUltrasonic ultra_left;
+extern pros::ADIUltrasonic ultra_right;
 
 #endif

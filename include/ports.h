@@ -11,36 +11,21 @@
 #define ANGLER_MOTOR_PORT 19
 #define ANGLER_MOTOR_ORIENTATION false
 
-//liftf
+//intake
 #define LEFT_INTAKE_PORT 18
 #define RIGHT_INTAKE_PORT 17
 #define LEFT_INTAKE_ORIENTATION false
 #define RIGHT_INTAKE_ORIENTATION true
 
-#define LEFT_LIFT_MOTOR_PORT 5
-#define RIGHT_LIFT_MOTOR_PORT 7
-#define LEFT_LIFT_MOTOR_ORIENTATION true
-#define RIGHT_LIFT_MOTOR_ORIENTATION false
-//other
-
-
 //vision sensor
 #define VISION_PORT 11
-//left lift 4
-//legacy
-#define PORT_IN 1
-#define PORT_OUT 2
 
-//const
-#define LIFT_POWER 127
-#define ANGLER_POWER 100
-#define INTAKE_POWER 100
+//Ultrasonics
+#define LEFT_ULTRA_ECHO 5
+#define LEFT_ULTRA_PING 6
 
-//pid
-#define LIFT_POWER 127
-#define ANGLER_POWER 100
-#define LIFTNUMBER 0
-
+#define RIGHT_ULTRA_ECHO 7
+#define RIGHT_ULTRA_PING 8
 //test
 #define EXAMPLE_SIG 1
 
