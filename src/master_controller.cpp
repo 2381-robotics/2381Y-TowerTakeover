@@ -89,16 +89,12 @@ void MasterController::autonomous() {
     if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_A))
     {
         autonomous_increment = _local_increment;
-        resetAuton1();
-        auton_control->define_auton(auton_control->RedSmallSideAuton, auton1);
         // auton_control->select_auton(AutonControl::RedSmallSideAuton);
         set_state(auton_mode);
     }
 
     if ( master.get_digital_new_press(E_CONTROLLER_DIGITAL_L2)){
         autonomous_increment = _local_increment;
-        resetAuton1(1);
-        auton_control->define_auton(auton_control->RedSmallSideAuton, auton1);
         // auton_control->select_auton(AutonControl::RedSmallSideAuton);
         set_state(auton_mode);
     }
@@ -114,8 +110,6 @@ void MasterController::auton_editor() {
     _local_increment += master.get_digital(E_CONTROLLER_DIGITAL_UP) - master.get_digital(E_CONTROLLER_DIGITAL_DOWN) + (master.get_digital_new_press(E_CONTROLLER_DIGITAL_LEFT) - master.get_digital_new_press(E_CONTROLLER_DIGITAL_RIGHT))* 30;
     if(master.get_digital_new_press(E_CONTROLLER_DIGITAL_A)){
         _autonomous_increment = _local_increment;
-        resetAuton1();
-        auton_control->define_auton(AutonControl::RedSmallSideAuton, auton1);
         // auton_control->select_auton(AutonControl::RedSmallSideAuton);
         set_state(auton_mode);
     } else if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_X)){
