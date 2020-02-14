@@ -18,19 +18,19 @@ using namespace std;
 using namespace Auton;
 using namespace pros;
 
-AutoTask Auton::DeployTask = AutoTask::AutoDelay(
-    900, true, [](void) -> void {
-                                arm->Set_Target(300);
-                                robot->drive->Set_Drive(0,-80,0,0);
-                                intake->Set_Intake(-60); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Set_Intake(127); arm->Set_Target(0); });
+// AutoTask Auton::DeployTask = AutoTask::AutoDelay(
+//     900, true, [](void) -> void {
+//                                 arm->Set_Target(300);
+//                                 robot->drive->Set_Drive(0,-80,0,0);
+//                                 intake->Set_Intake(-60); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Set_Intake(127); arm->Set_Target(0); });
 
-AutoTask Auton::StackTask = AutoTask::SyncTask(
-    [](void) -> void {
-        // intake->Set_Intake(0);
-        robot->set_drive(0, 0, 0, 0);
-        angler->Smooth_Angler(3.5);
-    },
-    [](void) -> bool { return ((angler->Get_Height() >= angler->_max_height) && (abs(angler->Get_Speed() < 20))); });
+// AutoTask Auton::StackTask = AutoTask::SyncTask(
+//     [](void) -> void {
+//         // intake->Set_Intake(0);
+//         robot->set_drive(0, 0, 0, 0);
+//         angler->Smooth_Angler(3.5);
+//     },
+//     [](void) -> bool { return ((angler->Get_Height() >= angler->_max_height) && (abs(angler->Get_Speed() < 20))); });
 
 AutoTask stackTask2 = AutoTask::SyncTask(
     [](void) -> void {

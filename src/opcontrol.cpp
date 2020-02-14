@@ -23,11 +23,10 @@ using namespace pros;
 //   Intake * intake = new Intake();
 int anglerGoingDown = 0;
 void driver()  {
-  pros::vision_object_s_t rtn = vision_indexer.get_by_sig(0, EXAMPLE_SIG);
-  intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 90 - master.get_digital(DIGITAL_Y) * 50 * ((vision_indexer.get_object_count() > 0)&&(rtn.height>20))));
+  intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 90 - master.get_digital(DIGITAL_Y) * 50 * vision_indexer->Check_Object()));
   robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
   /*done just upload*/
-  angler->Smooth_Angler(master.get_digital(DIGITAL_X));
+  angler->Smooth_Angler(master.get_digital(DIGITAL_X) + master.get_digital(DIGITAL_B)*0.8);
   angler->Auto_Angler(-2 * master.get_digital_new_press(DIGITAL_A));
   angler->Override_Mode(2* master.get_digital_new_press(DIGITAL_X) - master.get_digital(DIGITAL_X));
   

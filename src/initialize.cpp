@@ -15,6 +15,7 @@
 #include "master_controller.hpp"
 #include "robot/task_factory.hpp"
 #include "robot/modules/drive/position_tracker.hpp"
+#include "robot/sensors/vision_indexer.hpp"
 //Initialize Variables
 using namespace pros;
 using namespace std;
@@ -91,7 +92,9 @@ Position_Tracker* position_tracker = Position_Tracker::instance();
 ADIEncoder encoder_left(encoder_ports_left[0], encoder_ports_left[1], encoder_ports_left[2]);
 ADIEncoder encoder_right(encoder_ports_right[0], encoder_ports_right[1], encoder_ports_right[2]);
 ADIEncoder encoder_back(encoder_ports_back[0], encoder_ports_back[1], encoder_ports_back[2]);
-pros::Vision vision_indexer(VISION_PORT);
+
+pros::Vision vision_sensor(VISION_PORT);
+VisionIndexer* vision_indexer = new VisionIndexer(&vision_sensor);
 
 ADIUltrasonic ultra_left(LEFT_ULTRA_ECHO, LEFT_ULTRA_PING);
 ADIUltrasonic ultra_right(RIGHT_ULTRA_ECHO, RIGHT_ULTRA_PING);
@@ -150,10 +153,10 @@ void initialize()
   arm->Create();
   position_tracker->Create();
 
-  vision_indexer.set_zero_point(pros::E_VISION_ZERO_CENTER);
+  vision_indexer->vision_sensor->set_zero_point(pros::E_VISION_ZERO_CENTER);
   pros::vision_signature_s_t BLACK_SIG =
       pros::Vision::signature_from_utility(EXAMPLE_SIG, -2147483647, 2147483647, 0, -2147483647, 2147483647, 0, 3.000, 0); //This boi black af
-  vision_indexer.set_signature(EXAMPLE_SIG, &BLACK_SIG);
+  vision_indexer->Set_Sig(EXAMPLE_SIG, BLACK_SIG);
 
   pros::Task angler_task(angler_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
                          TASK_STACK_DEPTH_DEFAULT, "ANGLER_TASK");
@@ -176,7 +179,7 @@ void initialize()
   auton_control->define_auton(AutonControl::SkillsAuton, AT_Skills);
   auton_control->define_auton(AutonControl::TestAuton, AT_Test_Ultras);
 
-  auton_control->select_auton(AutonControl::TestAuton);
+  auton_control->select_auton(AutonControl::SkillsAuton);
 }
 
 /**

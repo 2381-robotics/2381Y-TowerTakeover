@@ -13,6 +13,7 @@
 #include "master_controller.hpp"
 #include "autonomous/auto_sequence.hpp"
 #include "robot/modules/drive/position_tracker.hpp"
+#include "robot/sensors/vision_indexer.hpp"
 
 #define DELAY_INTERVAL 20
 
@@ -69,7 +70,9 @@ extern std::array<int,3> encoder_ports_left, encoder_ports_right, encoder_ports_
 
 extern std::array<double,3> wheel_diameters, wheel_offsets;
 extern pros::ADIEncoder encoder_left, encoder_right, encoder_back;
-extern pros::Vision vision_indexer;
+extern pros::Vision vision_sensor;
+extern VisionIndexer* vision_indexer;
+
 
 extern pros::ADIUltrasonic ultra_left;
 extern pros::ADIUltrasonic ultra_right;

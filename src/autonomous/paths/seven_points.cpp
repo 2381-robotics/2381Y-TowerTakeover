@@ -17,6 +17,7 @@
 using namespace std;
 using namespace Auton;
 
+
 AutoSequence *Auton::AT_Red7 = AutoSequence::FromTasks(
     vector<AutoTask>{
         // AutoTask::SyncTask(
