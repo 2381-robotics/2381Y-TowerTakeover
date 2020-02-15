@@ -127,7 +127,8 @@ void Angler::Smooth_Angler(int increment)
       override_power = 100*increment;
     } else if (increment < 0)
     {
-      override_power = -80;
+      // override_power = -80;
+      override_power = 0;
     } else 
     {
       override_power = 0;

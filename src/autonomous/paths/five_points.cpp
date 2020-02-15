@@ -58,7 +58,7 @@ AutoSequence *Auton::AT_Red5 = AutoSequence::FromTasks(
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
-        StackTask,
+        StackTask(),
         AutoTask::AutoDelay(400, true, [](void) -> void {
             robot->set_drive(0, 40, 0, 0);
         }),

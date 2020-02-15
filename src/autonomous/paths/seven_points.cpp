@@ -28,7 +28,8 @@ AutoSequence *Auton::AT_Red7 = AutoSequence::FromTasks(
         //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
         // AutoTask::AutoDelay(10000000),
-        DeployTask,
+        // StackTask(),
+        DeployTask(),
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(200);
@@ -116,7 +117,7 @@ AutoSequence *Auton::AT_Red7 = AutoSequence::FromTasks(
                 robot->drive->Set_Point_Drive(127, 0, 800, 0, 2, 2, false, 400, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-        StackTask,
+        StackTask(),
         AutoTask::AutoDelay(600, true, [](void) -> void {
             robot->set_drive(0, 20, 0, 0);
         }),

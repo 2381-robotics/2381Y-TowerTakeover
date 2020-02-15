@@ -123,7 +123,11 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
 
   // pros::lcd::set_text(0, to_string(this->Get_Speed()) +  "Speed ");
   double tuning_coefficient = _master_pid->Update(0, _master_error_average);
-
+  if(tuning_coefficient<0)
+  {
+    tuning_coefficient = 1;
+    _master_pid->ResetError();
+  }
   _pid_inputs[left_back] =  _left_back_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, lbDistance, lboffset);
   _pid_inputs[left_front] = _left_front_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, lfDistance, lfoffset);
   _pid_inputs[right_back] =  _right_back_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, rbDistance, rboffset);
@@ -187,8 +191,28 @@ array<double,4> Mech_Drive::unstartedArray()
 {
   return {444.4, 444.4, 0,7923};
 }
-void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance, double turnSpeed, double accelSpeed, double deaccelSpeed, bool blocking, double criticalPoint, double criticalMultiplier, std::array<double, 4> endVelo)
+double previousAlign;
+
+
+
+double UltraAlign()
 {
+  double leftDistance = ultra_left.get_value();
+  double rightDistance = ultra_right.get_value();
+  if(leftDistance == rightDistance){
+    return 0;
+  }
+  lcd::set_text(0, to_string(rightDistance) + "DIE" + to_string(leftDistance));
+  double ultra =  1.5 * (abs(rightDistance - leftDistance) / (rightDistance - leftDistance) * 70 * pow(abs(rightDistance - leftDistance) / 70, 0.5));
+  if(ultra != NAN)
+  {
+    previousAlign = ultra;
+  }
+  return previousAlign;
+}
+void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance, double turnSpeed, double accelSpeed, double deaccelSpeed, bool wallAlign, double criticalPoint, double criticalMultiplier, std::array<double, 4> endVelo)
+{
+  bool blocking = false;
 
   bool stopIfOver = false;
   std::array<double, 2> drive_convert = Convert(speed, direction);
@@ -265,9 +289,13 @@ void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance
     {
       rightX = accelCoeff * getSignOf(rightX - previousVelo[2]);
     }
-
-    pros::lcd::set_text(5, "deaccel" + to_string((int)deaccelCoeff) + "speedDiff" + to_string((int)speedDifference) + "accel" + to_string((int)accelCoeff));
-    pros::lcd::set_text(6, "rightX" + to_string((int)rightX) + "endVelo" + to_string((int)endVelo[2]) + "previousVelo" + to_string((int)previousVelo[2]));
+    if(wallAlign)
+    {
+      
+      rightX += UltraAlign();
+    }
+    pros::lcd::set_text(5, "deaccel" + to_string(0) + "speedDiff" + to_string((int)speedDifference) + "accel" + to_string((int)accelCoeff));
+    pros::lcd::set_text(6, "rightY" + to_string((int)leftY) + "endVelo" + to_string((int)endVelo[0]) + "previousVelo" + to_string((int)previousVelo[0]));
     // pros::lcd::set_text(6, "leftY" + to_string((int)leftY) + "endVelo" + to_string((int)endVelo[1]) + "previousVelo" + to_string((int)previousVelo[1]));
 
     Set_Drive(leftX, leftY, rightX, 0);

@@ -25,7 +25,13 @@ AutoSequence *Auton::AT_Test_Ultras = AutoSequence::FromTasks(
                 double leftDistance = ultra_left.get_value();
                 double rightDistance = ultra_right.get_value();
                 lcd::set_text(2, "ultras - left" + to_string((int)leftDistance) + "right " + to_string((int)rightDistance));
-                robot->drive->Set_Drive(0,0,(rightDistance-leftDistance)/(leftDistance + rightDistance), 0);
+                // double turnValue = 300*log(rightDistance/leftDistance);
+                
+                double turnValue = 1.5*(abs(rightDistance-leftDistance)/(rightDistance-leftDistance)*70*pow(abs(rightDistance-leftDistance)/70, 0.5));
+                 lcd::set_text(3, "diff" + to_string(turnValue));
+                 lcd::set_text(4, "ratio" + to_string(rightDistance-leftDistance));
+
+                robot->drive->Set_Drive(0,0, turnValue, 0);
             },
             [](void) -> bool { return (false); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
   

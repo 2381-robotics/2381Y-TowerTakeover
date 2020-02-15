@@ -14,6 +14,7 @@
 #include "autonomous/auto_sequence.hpp"
 #include "robot/modules/drive/position_tracker.hpp"
 #include "robot/sensors/vision_indexer.hpp"
+#include "robot/sensors/ultra_align.hpp"
 
 #define DELAY_INTERVAL 20
 
@@ -76,5 +77,6 @@ extern VisionIndexer* vision_indexer;
 
 extern pros::ADIUltrasonic ultra_left;
 extern pros::ADIUltrasonic ultra_right;
+extern UltraFinder* ultra_finder;
 
 #endif

@@ -16,6 +16,7 @@
 #include "robot/task_factory.hpp"
 #include "robot/modules/drive/position_tracker.hpp"
 #include "robot/sensors/vision_indexer.hpp"
+#include "robot/sensors/ultra_align.hpp"
 //Initialize Variables
 using namespace pros;
 using namespace std;
@@ -98,6 +99,7 @@ VisionIndexer* vision_indexer = new VisionIndexer(&vision_sensor);
 
 ADIUltrasonic ultra_left(LEFT_ULTRA_ECHO, LEFT_ULTRA_PING);
 ADIUltrasonic ultra_right(RIGHT_ULTRA_ECHO, RIGHT_ULTRA_PING);
+UltraFinder* ultra_finder = new UltraFinder(&ultra_left, &ultra_right);
 
 void arm_task_fn(void *param)
 {

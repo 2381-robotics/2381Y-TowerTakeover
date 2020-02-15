@@ -26,7 +26,7 @@ AutoSequence *invertedSmallSideAuto = AutoSequence::FromTasks(
         }, [](void)->void{
             intake->Set_Intake(127);
         }),
-        DeployTask,
+        DeployTask(),
         AutoTask::SyncTask([](void) -> void {
                 intake->Set_Intake(127);
                 arm->Set_Target(0);
@@ -60,7 +60,7 @@ AutoSequence *invertedSmallSideAuto = AutoSequence::FromTasks(
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
         AutoTask::AutoDelay(200, true, [](void) -> void { intake->Set_Intake(127); }),
 
-        InvertTurn90Deg,
+        Auton::InvertTurn90Deg(),
         AutoTask::SyncTask( //Diagonal
             [](void) -> void {
                 intake->Set_Intake(127);
@@ -84,7 +84,7 @@ AutoSequence *invertedSmallSideAuto = AutoSequence::FromTasks(
             robot->set_drive(-30, 50, 0, 0);
         }),
 
-        StackTask,
+        StackTask(),
         AutoTask::AutoDelay(500),
         AutoTask::SyncTask([](void) -> void {
                     intake->Set_Intake(0);

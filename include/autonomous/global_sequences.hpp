@@ -9,9 +9,11 @@ namespace Auton
 
     extern AutoSequence* AT_Test_Ultras;
 
-    extern AutoTask StackTask;
-    extern AutoTask DeployTask;
-    extern AutoTask Turn90Deg, InvertTurn90Deg;
+    extern AutoTask StackTask();
+    extern AutoTask ArmTask();
+    extern AutoTask DeployTask();
+    extern AutoTask Turn90Deg();
+    extern AutoTask InvertTurn90Deg();
 } // namespace Auton
 
 #endif
