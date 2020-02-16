@@ -32,6 +32,7 @@ AutoTask Auton::ArmTask()
     return AutoTask::SyncTask(
 
         [](void) -> void {
+            // robot->drive->Set_Point_Drive(20, 180, 200);
             arm->Increment_Arm(1);
         },
         [](void) -> bool { return ((arm->Get_Height() >= 1000));}
@@ -46,10 +47,10 @@ AutoTask Auton::StackTask()
         [](void) -> void {
             // intake->Set_Intake(0);
             robot->set_drive(0, 0, 0, 0);
-            angler->Smooth_Angler(1.2);
+            angler->Smooth_Angler(1);
             angler->Override_Mode(-1);
         },
-        [](void) -> bool { return ((angler->Get_Height() >= angler->_max_height)); },
+        [](void) -> bool { return ((angler->Get_Height() >= angler->_max_height-100)); },
         [](void) -> void {
             angler->Override_Mode(1);
         },

@@ -31,6 +31,6 @@ double UltraFinder::Ultra_Angle()
   }
 
   lcd::set_text(0, to_string(prevRight) + "DIE" + to_string(prevLeft));
-  double ultra =  1.5 * (abs(prevRight - prevLeft) / (prevRight - prevLeft) * 70 * pow(abs(prevRight - prevLeft) / 70, 0.5));
+  double ultra =  1.5 * (abs(prevRight - prevLeft) / (prevRight - prevLeft) * 60 * pow(abs(prevRight - prevLeft) / 60, 0.5));
     return ultra;
 }

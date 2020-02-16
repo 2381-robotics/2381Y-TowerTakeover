@@ -173,15 +173,15 @@ void initialize()
   using namespace Auton;
 
   auton_control->define_auton(AutonControl::Red5PointAuton, AT_Red5);
-  // auton_control->define_auton(AutonControl::Blue5PointAuton, AT_Blue5);
+  auton_control->define_auton(AutonControl::Blue5PointAuton, AT_Blue5);
 
   auton_control->define_auton(AutonControl::Red7PointAuton, AT_Red7);
-  // auton_control->define_auton(AutonControl::Blue7PointAuton, AT_Blue7);
+  auton_control->define_auton(AutonControl::Blue7PointAuton, AT_Blue7);
 
   auton_control->define_auton(AutonControl::SkillsAuton, AT_Skills);
   auton_control->define_auton(AutonControl::TestAuton, AT_Test_Ultras);
 
-  auton_control->select_auton(AutonControl::SkillsAuton);
+  auton_control->select_auton(AutonControl::Blue7PointAuton);
 }
 
 /**

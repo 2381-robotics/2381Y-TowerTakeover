@@ -65,14 +65,14 @@ AutoSequence *Auton::AT_Skills = AutoSequence::FromTasks(
         // slow downs while picking up cubes
         AutoTask::SyncTask([](void) -> void {
                 intake->Set_Intake(200);
-                robot->drive->Set_Point_Drive(40, 0, 2650, 0, 2, 100, false, 2650, 1, {0, 0, 0, 0}); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
+                robot->drive->Set_Point_Drive(40, 0, 2950, 0, 2, 100, false, 2650, 1, {0, 0, 0, 0}); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
         // extend angler a bit
 
         AutoTask::AutoDelay(200),
 
         AutoTask::SyncTask([](void) -> void {
                 intake->Set_Intake(80);
-                robot->drive->Set_Point_Drive(80, 180, 2650, 0, 1, 0.8, false, 1050, 1, {0, 0, 0, 0}); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }),
+                robot->drive->Set_Point_Drive(80, 180, 2950, 0, 1, 0.8, false, 1050, 1, {0, 0, 0, 0}); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }),
         AutoTask::SyncTask([](void) -> void {
                 intake->Set_Intake(-20*vision_indexer->Check_Object());
                 robot->drive->Set_Point_Drive(0, 0, 2000, 80, 1, 1, false, 1000, 1, {0, 0, 0, 0}); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }),
@@ -80,7 +80,7 @@ AutoSequence *Auton::AT_Skills = AutoSequence::FromTasks(
         AutoTask::SyncTask([](void) -> void {
                 intake->Set_Intake(-20*vision_indexer->Check_Object());
                 // angler->Smooth_Angler(1);
-                robot->drive->Set_Point_Drive(40, 0, 1200, 0, 2, 2, false, 400, 1, {0, 0, 0, 0}); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+                robot->drive->Set_Point_Drive(40, 0, 1000, 0, 2, 2, false, 400, 1, {0, 0, 0, 0}); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
         AutoTask::AutoDelay(500),
 
@@ -95,13 +95,13 @@ AutoSequence *Auton::AT_Skills = AutoSequence::FromTasks(
 
         AutoTask::SyncTask([](void) -> void {
                 // turning like 315 degrees to face tower
-                robot->drive->Set_Point_Drive(60, 180, 900, 0, 1.5, 0.8); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
+                robot->drive->Set_Point_Drive(60, 180, 1100, 0, 1.5, 0.8); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
 
         AutoTask::SyncTask([](void) -> void {
                 angler->Auto_Angler(-2);
-
                 // turning like 315 degrees to face tower
-                robot->drive->Set_Point_Drive(0, 0, 2600, 100, 1.5, 0.8); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
+                // 2600, 100
+                robot->drive->Set_Point_Drive(0, 0, 2350, 90, 1.5, 0.8); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
 
         AutoTask::AutoDelay(1000, true, [](void) -> void {
                 robot->drive->Set_Drive(0,0,ultra_finder->Ultra_Angle(),0);
@@ -112,13 +112,16 @@ AutoSequence *Auton::AT_Skills = AutoSequence::FromTasks(
 
         AutoTask::SyncTask([](void) -> void {
                 // driving to tower
-                robot->drive->Set_Point_Drive(100, 0, 3000); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
+                robot->drive->Set_Point_Drive(100, 0, 2600); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
 
         AutoTask::SyncTask([](void) -> void {
                 // driving close to tower and picking up cube
-                robot->drive->Set_Point_Drive(20, 0, 500);
+                robot->drive->Set_Point_Drive(20, 0, 200);
                 // intaking cube
-                intake->Set_Intake(100); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
+                intake->Set_Intake(100); 
+                robot->drive->Set_Point_Drive(20, 180, 200);
+
+                }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
 
         // arm extends to 1400 height
         ArmTask(),
@@ -129,10 +132,12 @@ AutoSequence *Auton::AT_Skills = AutoSequence::FromTasks(
         }),
 
         // driving back after dropping cube
-        AutoTask::SyncTask([](void) -> void { robot->drive->Set_Point_Drive(60, 180, 1000); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
+        AutoTask::SyncTask([](void) -> void { robot->drive->Set_Point_Drive(60, 180, 1000); 
+        }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
 
         // lowering arm (this isnt acc needed)
-        AutoTask::SyncTask([](void) -> void { arm->Increment_Arm(-1); }, [](void) -> bool { return ((arm->Get_Height() <= 100)); }),
+        AutoTask::SyncTask([](void) -> void { arm->Increment_Arm(-1); 
+        }, [](void) -> bool { return ((arm->Get_Height() <= 100)); }),
 
         AutoTask::AutoDelay(10000000),
     });
