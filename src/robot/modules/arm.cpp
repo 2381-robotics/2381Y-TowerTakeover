@@ -94,10 +94,10 @@ void Arm::Increment_Arm(int increment)
     // max height 2300
     // max height
     //  amgler
-    if (  _target_height <= 1600 && _target_height >= 400)
+    if (  _target_height <= 1200 && _target_height >= 400)
     {
       angler->Auto_Angler(0, true);
-      angler->Set_Target(1.2 *(_target_height - 400));
+      angler->Set_Target(1.1 *(_target_height - 400));
     }
     else {
         // pros::lcd::set_text(6, "moving angler");
