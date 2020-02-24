@@ -36,14 +36,12 @@ AutoSequence *invertedSmallSideAuto = AutoSequence::FromTasks(
             [](void) -> void { // diagonal drive
                 intake->Set_Intake(127);
                 robot->drive->Set_Point_Drive(127, -140, 2800 + autonomous_increment);
-                pros::lcd::set_text(6, "HELLO THERE");
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(127);
                 robot->drive->Set_Point_Drive(50, -90, 250, 0, 0.2);
-                pros::lcd::set_text(6, "HELLO THERE");
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
         AutoTask::SyncTask(

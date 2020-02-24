@@ -90,7 +90,7 @@ AutoTask Turn90Deg = AutoTask::SyncTask(
     [](void) -> void {
         intake->Set_Intake(127);
         robot->drive->Set_Point_Drive(0, 0, 1290, 100, 2.5);
-        // pros::lcd::set_text(0, "wa");s
+  
     },
     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); robot->drive->Stop(); });
 
@@ -100,7 +100,7 @@ AutoTask Turn45Deg = AutoTask::SyncTask(
         intake->Set_Intake(127);
         // 625
         robot->drive->Set_Point_Drive(0, 0, 710 + autonomous_increment, 100, 2.5);
-        // pros::lcd::set_text(0, "wa");s
+  
     },
     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); });
 
@@ -109,7 +109,7 @@ AutoTask InvertTurn45Deg = AutoTask::SyncTask(
         intake->Set_Intake(127);
         // 625
         robot->drive->Set_Point_Drive(0, 0, 700 + autonomous_increment, -75, 2.5);
-        // pros::lcd::set_text(0, "wa");s
+  
     },
     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); });
 
@@ -119,7 +119,7 @@ AutoTask Auton::InvertTurn90Deg() {
         intake->Set_Intake(127);
         robot->drive->Set_Point_Drive(0, 0, 1295 + 650 + autonomous_increment, -90, 2.5);
 
-        // pros::lcd::set_text(0, "wa");s
+  
     },
     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); });
 };

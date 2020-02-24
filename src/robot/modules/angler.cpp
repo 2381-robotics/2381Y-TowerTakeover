@@ -15,7 +15,7 @@ void Angler::Move_Motor() {
     _angler_pid->Update(_max_height * (pow(Get_Real_Target() / _max_height, 1)), _angler_height);
   }
   else {
-    _angler_power = _angler_pid->Update(_max_height* (pow(Get_Real_Target()/_max_height, 1)), _angler_height);
+    _angler_power = _angler_pid->Update(_max_height* (pow(Get_Real_Target()/_max_height,0.9)), _angler_height);
   }
 
   // angler Coefficient is for keeping angler even / not tilted, not sure if it works.
@@ -74,7 +74,7 @@ void Angler::Create() {
   _min_height = angler_min_height;
   _max_height = angler_max_height;
   _angler_speed = angler_speed;
-  _max_angler_speed = 2 * angler_speed;
+  _max_angler_speed =  1.5*angler_speed;
 }
 
 void Angler::Toggle_Extension(int increment)

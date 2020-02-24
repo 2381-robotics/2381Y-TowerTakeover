@@ -53,7 +53,7 @@ double lift_speed = 10;
 // Angler Variables:
 
 Motor angler_motor(ANGLER_MOTOR_PORT, ANGLER_MOTOR_ORIENTATION);
-array<double, 3> angler_pid_values = {1, 0, 0.1};
+array<double, 3> angler_pid_values = {1, 0, 0};
 
 double angler_speed = 20;
 double angler_min_height = 0;
@@ -75,8 +75,8 @@ Arm *arm = new Arm();
 Motor intakeMotorLeft(LEFT_INTAKE_PORT, LEFT_INTAKE_ORIENTATION);
 Motor intakeMotorRight(RIGHT_INTAKE_PORT, RIGHT_INTAKE_ORIENTATION);
 
-array<double, 3> pid_intake_left_values = {0.6, 0, 0};
-array<double, 3> pid_intake_right_values = {0.6, 0, 0};
+array<double, 3> pid_intake_left_values = {0.6, 0.005, 0};
+array<double, 3> pid_intake_right_values = {0.6, 0.005, 0};
 array<double, 3> master_intake_pid_values = {0, 0.005, 0};
 
 Intake *intake = new Intake();
@@ -101,7 +101,7 @@ ADIUltrasonic ultra_left(LEFT_ULTRA_ECHO, LEFT_ULTRA_PING);
 ADIUltrasonic ultra_right(RIGHT_ULTRA_ECHO, RIGHT_ULTRA_PING);
 UltraFinder* ultra_finder = new UltraFinder(&ultra_left, &ultra_right);
 
-void arm_task_fn(void *param)
+void arm_task_fn(void *param) 
 {
   while (true)
   {

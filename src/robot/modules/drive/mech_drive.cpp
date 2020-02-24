@@ -21,6 +21,11 @@ void Mech_Drive::Move_Motor()
   _left_front_motor_value = _left_front_motor_controller->Set_Speed(_pid_inputs[left_front]);
   _right_back_motor_value = _right_back_motor_controller->Set_Speed(_pid_inputs[right_back]);
   _right_front_motor_value = _right_front_motor_controller->Set_Speed(_pid_inputs[right_front]);
+
+  // _left_back_motor_value = left_back_motor.move(_pid_inputs[left_back]);
+  // _left_front_motor_value = left_front_motor.move(_pid_inputs[left_front]);
+  // _right_back_motor_value = right_back_motor.move(_pid_inputs[right_back]);
+  // _right_front_motor_value =right_front_motor.move(_pid_inputs[right_front]);
 }
 
 double Mech_Drive::Get_Speed()
@@ -129,6 +134,11 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
     _master_pid->ResetError();
   }
   _pid_inputs[left_back] =  _left_back_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, lbDistance, lboffset);
+  _pid_inputs[left_front] = _left_front_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, lfDistance, lfoffset);
+  _pid_inputs[right_back] =  _right_back_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, rbDistance, rboffset);
+  _pid_inputs[right_front] = _right_front_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, rfDistance, rfoffset);
+
+    _pid_inputs[left_back] =  _left_back_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, lbDistance, lboffset);
   _pid_inputs[left_front] = _left_front_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, lfDistance, lfoffset);
   _pid_inputs[right_back] =  _right_back_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, rbDistance, rboffset);
   _pid_inputs[right_front] = _right_front_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, rfDistance, rfoffset);
