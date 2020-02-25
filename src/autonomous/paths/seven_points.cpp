@@ -114,7 +114,7 @@ AutoSequence *Auton::AT_Red7 = AutoSequence::FromTasks(
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(-40);
-                angler->Smooth_Angler(2);
+                angler->Smooth_Angler(1);
 
                 robot->drive->Set_Point_Drive(127, 0, 1000, 0, 2, 2, false, 400, 1, {0, 0, 0, 0});
             },
@@ -171,7 +171,7 @@ AutoSequence *Auton::AT_Blue7 = AutoSequence::FromTasks(
             [](void) -> void {
                 intake->Set_Intake(200);
                 // 3050
-                robot->drive->Set_Point_Drive(90, 0, 2900, 0, 2, 0.5, true, 400, 1, {0, 0, 0, 0});
+                robot->drive->Set_Point_Drive(95, 0, 2600, 0, 2, 0.5, true, 400, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
@@ -179,7 +179,7 @@ AutoSequence *Auton::AT_Blue7 = AutoSequence::FromTasks(
             [](void) -> void {
                 intake->Set_Intake(80);
                 // 2150
-                robot->drive->Set_Point_Drive(127, 200, 2100, 0, 1, 1, true, 400, 1, {0, 0, 0, 0});
+                robot->drive->Set_Point_Drive(127, 200, 2100, 0, 1, 1, true, 400, 1, {-100, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
@@ -232,7 +232,7 @@ AutoSequence *Auton::AT_Blue7 = AutoSequence::FromTasks(
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(60);
-                robot->drive->Set_Point_Drive(127, 180, 3600, 0, 2, 1, false, 1050, 1, {0, 0, 0, 0});
+                robot->drive->Set_Point_Drive(127, 180, 3500, 0, 2, 1, false, 1050, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
         AutoTask::SyncTask(
@@ -246,7 +246,7 @@ AutoSequence *Auton::AT_Blue7 = AutoSequence::FromTasks(
                 intake->Set_Intake(-4);
                 angler->Smooth_Angler(1);
 
-                robot->drive->Set_Point_Drive(127, 0, 1500, 0, 2, 2, false, 400, 1, {0, 0, 0, 0});
+                robot->drive->Set_Point_Drive(50, 0, 1000, 0, 2, 2, false, 400, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
         StackTask(),

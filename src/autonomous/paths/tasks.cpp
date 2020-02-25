@@ -48,14 +48,11 @@ AutoTask Auton::StackTask()
             // intake->Set_Intake(0);
             robot->set_drive(0, 0, 0, 0);
             angler->Smooth_Angler(1);
-            angler->Override_Mode(-1);
         },
         [](void) -> bool { return ((angler->Get_Height() >= angler->_max_height-100)); },
         [](void) -> void {
-            angler->Override_Mode(1);
         },
         [](void) -> void {
-            angler->Override_Mode(0);
         });
 };
 AutoTask stackTask2 = AutoTask::SyncTask(
