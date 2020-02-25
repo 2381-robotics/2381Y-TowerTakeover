@@ -58,6 +58,7 @@ double Arm::Get_Real_Target()
     real_target = _previous_target - _max_arm_speed;
   }
   _previous_target = real_target;
+  
   return real_target;
 }
 
