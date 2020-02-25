@@ -141,19 +141,22 @@ AutoSequence *Auton::AT_Red7 = AutoSequence::FromTasks(
 
 AutoSequence *Auton::AT_Blue7 = AutoSequence::FromTasks(
     vector<AutoTask>{
-              AutoTask::SyncTask(
-            [](void) -> void {
-                robot->drive->Set_Point_Drive(80, 180, 3000, 0, 2, 100, false, 2600, 1, {0, 0, 0, 0});
-            },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
+        // AutoTask::SyncTask(
+        //     [](void) -> void {
+        //         intake->Set_Intake(127);
+        //         robot->drive->Set_Point_Drive(127, 0, 3000, 0, 2, 100, false, 2600, 1, {0, 110, 0, 0});
+        //     },
+        //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { }),
 
-                    AutoTask::SyncTask(
-            [](void) -> void {
-                robot->drive->Set_Point_Drive(60, 0, 1000, 0, 2, 100, false, 2600, 1, {0, 0, 0, 0});
-            },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
+        // AutoTask::SyncTask(
+        //     [](void) -> void {
+        //         intake->Set_Intake(127);
 
-            AutoTask::AutoDelay(1000000),
+        //         robot->drive->Set_Point_Drive(110, 0, 1000, 0, 2, 100, false, 2600, 1, {0, 0, 0, 0});
+        //     },
+        //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
+
+        // AutoTask::AutoDelay(1000000),
         // AutoTask::SyncTask(
         //     [](void) -> void {
         //         intake->Set_Intake(200);
@@ -162,12 +165,13 @@ AutoSequence *Auton::AT_Blue7 = AutoSequence::FromTasks(
         //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
         // AutoTask::AutoDelay(10000000),
-        // StackTask(),m 
-        DeployTask(),
+        // StackTask(),m
+        // DeployTask(),
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(200);
-                robot->drive->Set_Point_Drive(127, 0, 3050, 0, 2, 0.5, false, 400, 1, {0, 0, 0, 0});
+                // 3050
+                robot->drive->Set_Point_Drive(127, 0, 3300, 0, 2, 0.5, true, 400, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
         // AutoTask::SyncTask(
@@ -179,10 +183,12 @@ AutoSequence *Auton::AT_Blue7 = AutoSequence::FromTasks(
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(80);
-                robot->drive->Set_Point_Drive(127, 200, 2150, 0, 1, 1, false, 400, 1, {-100, 0, 0, 0});
+                // 2150
+                robot->drive->Set_Point_Drive(127, 180, 300, 0, 1, 1, true, 400, 1, {-100, 0, 0, 0});
+                robot->drive->Set_Point_Drive(127, 200, 2150, 0, 1, 1, true, 400, 1, {-100, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
- 
+
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(0);
@@ -202,8 +208,7 @@ AutoSequence *Auton::AT_Blue7 = AutoSequence::FromTasks(
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(200);
-                
-                robot->drive->Set_Point_Drive(50, 0, 2750, 0, 2, 100, false, 2600, 1, {0, 0, 0, 0});
+                robot->drive->Set_Point_Drive(110, 0, 3000, 0, 2, 100, false, 2600, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
         // extend angler a bit
@@ -264,7 +269,3 @@ AutoSequence *Auton::AT_Blue7 = AutoSequence::FromTasks(
 
         AutoTask::AutoDelay(10000000),
     });
-
-
-
-

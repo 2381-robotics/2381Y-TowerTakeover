@@ -13,6 +13,7 @@
   
 #include <list>  
 #include <map> 
+#include <string>
 #include "globals.hpp"
 
 using namespace pros;
@@ -46,18 +47,20 @@ void driver()  {
     // lcd::set_text(4, "lVel" + to_string((int)intakeMotorLeft.get_actual_velocity()) + " rVel" + to_string((int)intakeMotorRight.get_actual_velocity()));
     // lcd::set_text(5, "lCur" + to_string((int)intakeMotorLeft.get_current_draw()) + " rCur" + to_string((int)intakeMotorRight.get_current_draw()));
 
-    lcd::set_text(1, "lHeat" + to_string((int)angler_motor.get_temperature()) + " rHeat" + to_string((int)intakeMotorRight.get_temperature()) + " refHeat" + to_string((int)left_back_motor.get_temperature()));
-    lcd::set_text(2, "lEff" + to_string((int)angler_motor.get_efficiency()) + " rEff" + to_string((int)intakeMotorRight.get_efficiency()));
-    lcd::set_text(3, "lVolt" + to_string((int)angler_motor.get_voltage()) + " rVolt" + to_string((int)intakeMotorRight.get_voltage()));
-    lcd::set_text(4, "lVel" + to_string((int)angler_motor.get_actual_velocity()) + " rVel" + to_string((int)intakeMotorRight.get_actual_velocity()));
-    lcd::set_text(5, "lCur" + to_string((int)angler_motor.get_current_draw()) + " rCur" + to_string((int)intakeMotorRight.get_current_draw()));
+    lcd::set_text(1, "lHeat" + to_string((int)arm_motor.get_temperature()) + " rHeat" + to_string((int)intakeMotorRight.get_temperature()) + " refHeat" + to_string((int)left_back_motor.get_temperature()));
+    lcd::set_text(2, "lEff" + to_string((int)arm_motor.get_efficiency()) + " rEff" + to_string((int)intakeMotorRight.get_efficiency()));
+    lcd::set_text(3, "lVolt" + to_string((int)arm_motor.get_voltage()) + " rVolt" + to_string((int)intakeMotorRight.get_voltage()));
+    lcd::set_text(4, "lVel" + to_string((int)arm_motor.get_actual_velocity()) + " rVel" + to_string((int)intakeMotorRight.get_actual_velocity()));
+    lcd::set_text(5, "lCur" + to_string((int)arm_motor.get_current_draw()) + " rCur" + to_string((int)intakeMotorRight.get_current_draw()));
   }
-
-
-  arm->Increment_Arm((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
+  ultra_finder->Ultra_Angle();
+  printf("asodf");
   
+  bot_overheating();
 
-      // arm->Set_Target(arm->Get_Target() - 40*master.get_digital(DIGITAL_UP));
+    arm->Increment_Arm((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
+
+  // arm->Set_Target(arm->Get_Target() - 40*master.get_digital(DIGITAL_UP));
 
   //  pros::lcd::set_text(1, "Target height" + to_string(angler->Get_Height()));
 }
@@ -70,3 +73,67 @@ void driver()  {
         pros::delay(DELAY_INTERVAL);
     } 
  }
+
+	
+bool overheating;
+int overheat_temp = 45;
+int last_overheat = -100000000000000;
+string overheating_motors = "";
+ void bot_overheating() {
+      overheating = false;
+      overheating_motors = "High Temp: ";
+      if (left_front_motor.get_temperature() >= overheat_temp)
+      {
+        overheating = true;
+        overheating_motors += "LF drive, ";
+      }
+      if (left_back_motor.get_temperature() >= overheat_temp)
+      {
+        overheating = true;
+        overheating_motors += "LB drive, ";
+      }
+      if (right_front_motor.get_temperature() >= overheat_temp)
+      {
+        overheating = true;
+        overheating_motors += "RF drive, ";
+      }
+      if (right_back_motor.get_temperature() >= overheat_temp)
+      {
+        overheating = true;
+        overheating_motors += "RB drive, ";
+      }
+      if (angler_motor.get_temperature() >= overheat_temp)
+      {
+        overheating = true;
+        overheating_motors += "Angler, ";
+      }
+      if (arm_motor.get_temperature() >= overheat_temp)
+      {
+        overheating = true;
+        overheating_motors += "Arm, ";
+      }
+      if (intakeMotorLeft.get_temperature() >= overheat_temp)
+      {
+        overheating = true;
+        overheating_motors += "L intake, ";
+      }
+      if (intakeMotorRight.get_temperature() >= overheat_temp)
+      {
+        overheating = true;
+        overheating_motors += "R intake, ";
+      }
+      if (overheating)
+      {
+        if (pros::millis() - last_overheat > 60000 && !Competition_Env)
+        {
+          last_overheat = pros::millis(); 
+          master.rumble("- . - . -");
+
+          
+        }
+        char cstr[overheating_motors.size() + 1];
+        strcpy(cstr, overheating_motors.c_str());
+        master.print(0, 0, cstr);
+        lcd::set_text(6,overheating_motors);
+    }
+  }

@@ -10,27 +10,61 @@ UltraFinder::UltraFinder(ADIUltrasonic* left, ADIUltrasonic* right):  left_ultra
 };
 void UltraFinder::Reset_Ultras()
 {
-    prevLeft = left_ultra->get_value();
-    prevRight = right_ultra->get_value();
-    numberTimes = 0;
+    leftDistances.resize(0);
+    rightDistances.resize(0);
 }
-double UltraFinder::Ultra_Angle()
+
+void UltraFinder::Update_Angle()
 {
   double leftDistance = left_ultra->get_value();
   double rightDistance = right_ultra->get_value();
+  leftDistances.insert(leftDistances.begin(), leftDistance);
+  rightDistances.insert(rightDistances.begin(), rightDistance);
+  if(leftDistances.size() >15)
+  {
+    leftDistances.pop_back();
+    rightDistances.pop_back();
+  }
+  double leftAverage = 0, rightAverage = 0;
+  for (int i = 0; i < leftDistances.size(); i++)
+  {
+    leftAverage += leftDistances[i];
+    rightAverage += rightDistances[i];
+  }
+  if (leftDistances.size() != 0)
+  {
+    leftAverage = leftAverage / leftDistances.size();
+    rightAverage = rightAverage / rightDistances.size();
+  }
+  double ultra = 1.5 * (abs(rightAverage - leftAverage) / (rightAverage - leftAverage) * 60 * pow(abs(rightAverage - leftAverage) / 60, 0.5));
+  masterDistances.push_back(ultra);
+  if(masterDistances.size() > 2)
+  {
+    masterDistances.erase(masterDistances.begin());
+  }
+}
+double UltraFinder::Ultra_Angle()
+{
 
-      prevLeft = (prevLeft*2 + leftDistance)/3;
-      prevRight = (prevRight * 2 + rightDistance) / 3;
+  double leftDistance = leftDistances[0], rightDistance = rightDistances[0];
+  
+  
 
     // prevLeft = leftDistance;
     // prevRight = rightDistance;
-  if(prevLeft == prevRight)
-  {
-      return 0;
 
+
+  double masterAverage = 0;
+  for(auto it =  masterDistances.begin(); it != masterDistances.end(); it++)
+  {
+    masterAverage += *it; 
+  }
+  if(masterDistances.size() > 0)
+  {
+    masterAverage = masterAverage / masterDistances.size();
   }
 
-  lcd::set_text(0, to_string(prevRight) + "DIE" + to_string(prevLeft));
-  double ultra =  1.5 * (abs(prevRight - prevLeft) / (prevRight - prevLeft) * 60 * pow(abs(prevRight - prevLeft) / 60, 0.5));
-    return ultra;
+  
+  lcd::set_text(1, to_string(leftDistance) + "DIE" + to_string(rightDistance) + " " + to_string((int)masterAverage));
+    return masterAverage;
 }

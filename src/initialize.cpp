@@ -61,7 +61,7 @@ double angler_max_height = 3600;
 Angler *angler = new Angler();
 
 // arm variables
-pros::Motor arm_motor(20, true);
+pros::Motor arm_motor(3, true);
 std::array<double,3> arm_pid_values = {1, 0, 0};
 double arm_speed = 40;
 double arm_min_height = 0;
@@ -105,8 +105,8 @@ void arm_task_fn(void *param)
 {
   while (true)
   {
-    arm->Run();
-    pros::delay(DELAY_INTERVAL);
+    arm->Run();  
+    pros::delay(DELAY_INTERVAL); 
   }
 }
 void drive_task_fn(void *param)
@@ -145,6 +145,15 @@ void tracking_task_fn(void *param)
   }
 }
 
+void ultra_task_fn(void *param)
+{
+  while (true)
+  {
+    ultra_finder->Update_Angle();
+    // lcd::set_text(2,"left" + to_string((int)encoder_left.get_value()) + "right" + to_string((int)encoder_right.get_value() ));
+    pros::delay(DELAY_INTERVAL);
+  }
+}
 
 void initialize()
 {
@@ -166,10 +175,13 @@ void initialize()
                          TASK_STACK_DEPTH_DEFAULT, "ARM_TASK");
   pros::Task drive_task(drive_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
                          TASK_STACK_DEPTH_DEFAULT, "DRIVE_TASK");
+  pros::Task ultra_task(ultra_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
+                        TASK_STACK_DEPTH_DEFAULT, "ULTRA_TASK");
   pros::Task intake_task(intake_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
                         TASK_STACK_DEPTH_DEFAULT, "INTAKE_TASK");
   pros::Task tracking_task(tracking_task_fn, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "TRACKING_TASK");
-  
+  // master.set_text(0, 0, "oasdijfosdj");
+  // master.rumble(". - . - .");
   using namespace Auton;
 
   auton_control->define_auton(AutonControl::Red5PointAuton, AT_Red5);

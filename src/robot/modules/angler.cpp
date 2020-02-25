@@ -74,7 +74,7 @@ void Angler::Create() {
   _min_height = angler_min_height;
   _max_height = angler_max_height;
   _angler_speed = angler_speed;
-  _max_angler_speed =  1.5*angler_speed;
+  _max_angler_speed =  2*angler_speed;
 }
 
 void Angler::Toggle_Extension(int increment)
@@ -151,7 +151,7 @@ void Angler::Auto_Angler(int increment, bool disable)
   {
      _auto_angler_increment = 0;
   }
-  Set_Target(_target_height + _auto_angler_increment * _angler_speed);
+  Set_Target(_target_height + _auto_angler_increment * _angler_speed*1.2);
 }
 
 

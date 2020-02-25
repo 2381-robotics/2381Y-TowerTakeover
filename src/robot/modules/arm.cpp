@@ -98,6 +98,8 @@ void Arm::Increment_Arm(int increment)
     {
       angler->Auto_Angler(0, true);
       angler->Set_Target(1.1 *(_target_height - 400));
+      angler->_min_height = 1.1 * (_target_height - 400);
+      pros::lcd::set_text(6, to_string(angler->_min_height));
     }
     else {
         // pros::lcd::set_text(6, "moving angler");

@@ -33,7 +33,6 @@ void Intake::Move_Motor() {
     //     char cstr[s.size() + 1];
     //     std::copy(s.begin(), s.end(), cstr);
     //     cstr[s.size()] = '\0';
-    //     master.set_text(0, 0, cstr);
     // }
 }
 
