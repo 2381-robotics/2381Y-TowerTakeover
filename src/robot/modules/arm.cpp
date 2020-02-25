@@ -30,15 +30,16 @@ void Arm::Stop()
 
 void Arm::Move_Motor()
 {
-  if(_target_height== 0 && master.get_digital(pros::E_CONTROLLER_DIGITAL_B))
-  {
-    // _arm_motor->move(-50);
-    _arm_motor->set_zero_position(_arm_motor->get_position()+5);
-    // return;
-  }
-
+ 
   _current_arm_height = (_arm_motor->get_position());
   _arm_power = _arm_pid->Update(Get_Real_Target(), _current_arm_height);
+  if (Get_Target() <= 1200 && Get_Target() >= 400)
+  {
+    angler->Auto_Angler(0, true);
+    angler->Set_Target(1.1 * (Get_Target() - 400));
+    angler->_min_height = 1.1 * (Get_Target() - 400);
+    pros::lcd::set_text(6, to_string(angler->_min_height));
+  }
 
   //allows for clearance
   // pros::lcd::set_text(3, "arm " + to_string((int)_arm_motor->get_position()) + "ang" + to_string((int)angler->Get_Height()) + "power ang" + to_string((int)_arm_power));
@@ -83,6 +84,15 @@ void Arm::Create() {
   _moving_up = false;
   _manual_arm = false;
 }
+void Arm::Arm_Macro(int increment)
+{
+  if(current_macro + increment >= 0 && current_macro + increment < arm_heights.size() )
+  {
+    current_macro += increment;
+    Set_Target(arm_heights[current_macro]);
+  }
+
+}
 void Arm::Reset()
 {
 }
@@ -90,38 +100,6 @@ void Arm::Reset()
 void Arm::Increment_Arm(int increment)
 {
   Set_Target(_target_height + increment * _arm_speed);
-  if (!_manual_arm && _is_moving)
-  {
-    // max height 2300
-    // max height
-    //  amgler
-    if (  _target_height <= 1200 && _target_height >= 400)
-    {
-      angler->Auto_Angler(0, true);
-      angler->Set_Target(1.1 *(_target_height - 400));
-      angler->_min_height = 1.1 * (_target_height - 400);
-      pros::lcd::set_text(6, to_string(angler->_min_height));
-    }
-    else {
-        // pros::lcd::set_text(6, "moving angler");
-    }
-  }
-  // for clearances
-  if (increment == 1)
-  {
-    _is_moving = true;
-    _moving_up = true;
-  }
-  else if (increment == -1)
-  {
-    _is_moving = true;
-    _moving_up = false;
-  }
-  else
-  {
-    _is_moving = false;
-    _moving_up = false;
-  }
 }
 double Arm::Get_Height()
 {

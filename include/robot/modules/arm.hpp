@@ -5,7 +5,7 @@
 #include "robot/modules/drive/drive.hpp"
 #include "robot/control/motor_controller.hpp"
 #include <array>
-
+#include <vector>
 class Arm : public Module {
 public:
   Arm();
@@ -19,6 +19,7 @@ public:
   void Create() override;
   void Stop() override;
   void Reset() override;
+  void Arm_Macro(int increment);
 
 protected:
   double _previous_target = 0, _max_arm_speed;
@@ -35,6 +36,8 @@ protected:
     double _arm_motor_value;
     double _min_height, _max_height, _arm_speed, _target_height = 0;
     bool _is_moving, _moving_up, _manual_arm;
+  std::vector<double> arm_heights {0, 1500, 2200, 3500};
+  int current_macro = 0;
   
 
 };

@@ -33,9 +33,12 @@ void driver()  {
 
   angler->Smooth_Angler(master.get_digital(DIGITAL_X) + master.get_digital(DIGITAL_B)*0.8);
   angler->Auto_Angler(-2 * master.get_digital_new_press(DIGITAL_A));
+  arm->Arm_Macro(master.get_digital_new_press(DIGITAL_UP) - master.get_digital(DIGITAL_DOWN));
+  arm->Increment_Arm((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
+
   // angler->Override_Mode(2* master.get_digital_new_press(DIGITAL_X) - master.get_digital(DIGITAL_X));
 
-  if (master.get_digital_new_press(DIGITAL_UP))
+  if (master.get_digital_new_press(DIGITAL_LEFT))
   { 
     snapshot = !snapshot;
   }
@@ -58,7 +61,6 @@ void driver()  {
   
   bot_overheating();
 
-    arm->Increment_Arm((master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
 
   // arm->Set_Target(arm->Get_Target() - 40*master.get_digital(DIGITAL_UP));
 
