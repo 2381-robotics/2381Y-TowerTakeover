@@ -185,6 +185,7 @@ AutoSequence *Auton::AT_Blue7 = AutoSequence::FromTasks(
                 intake->Set_Intake(80);
                 // 2150
                 robot->drive->Set_Point_Drive(127, 180, 300, 0, 1, 1, true, 400, 1, {-100, 0, 0, 0});
+
                 robot->drive->Set_Point_Drive(127, 200, 2150, 0, 1, 1, true, 400, 1, {-100, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),

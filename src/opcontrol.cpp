@@ -25,7 +25,7 @@ using namespace pros;
 int anglerGoingDown = 0;
 bool snapshot = false;
 void driver()  {
-  intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 90 - master.get_digital(DIGITAL_Y) * 30 ));
+  intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 50 - master.get_digital(DIGITAL_Y) * 30 ));
   robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
   /*done just upload*/
   // intakeMotorLeft.move_voltage(master.get_digital(DIGITAL_L1)* 12000 - master.get_digital(DIGITAL_L2) * 6000);
@@ -70,14 +70,14 @@ void driver()  {
     while (true)
     {
         master_control->run();
-        pros::delay(DELAY_INTERVAL);
+        pros::delay(DELAY_INTERVAL);    
     } 
  }
 
 	
 bool overheating;
 int overheat_temp = 45;
-int last_overheat = -100000000000000;
+int last_overheat = -10000000;
 string overheating_motors = "";
  void bot_overheating() {
       overheating = false;
