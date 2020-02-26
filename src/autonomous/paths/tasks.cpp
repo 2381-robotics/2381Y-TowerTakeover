@@ -19,10 +19,10 @@ using namespace Auton;
 using namespace pros;
 
 AutoTask Auton::DeployTask() { return AutoTask::AutoDelay(
-    900, true, [](void) -> void {
-                                arm->Set_Target(300);
-                                robot->drive->Set_Drive(0,-30,0,0);
-                                intake->Set_Intake(-60); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Set_Intake(127); arm->Set_Target(0); });}
+    400, true, [](void) -> void {
+                                arm->Set_Target(200);
+                                // robot->drive->Set_Drive(0,-30,0,0);
+                                intake->Set_Intake(-40); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Set_Intake(127); arm->Set_Target(0); });}
                                 ;
 
 
@@ -49,7 +49,7 @@ AutoTask Auton::StackTask()
             robot->set_drive(0, 0, 0, 0);
             angler->Smooth_Angler(1);
         },
-        [](void) -> bool { return ((angler->Get_Height() >= angler->_max_height-100)); },
+        [](void) -> bool { return ((angler->Get_Height() >= angler->_max_height-200)); },
         [](void) -> void {
         },
         [](void) -> void {

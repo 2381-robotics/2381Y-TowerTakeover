@@ -36,9 +36,7 @@ protected:
     double _arm_motor_value;
     double _min_height, _max_height, _arm_speed, _target_height = 0;
     bool _is_moving, _moving_up, _manual_arm;
-  std::vector<double> arm_heights {0, 1500, 2200, 3500};
+  std::vector<double> arm_heights {0, 1600, 2300, 0};
   int current_macro = 0;
-  
-
 };
 #endif

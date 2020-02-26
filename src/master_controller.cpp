@@ -19,7 +19,7 @@ void MasterController::run() {
         driver();
         return;
     }
-    if(master.get_digital(E_CONTROLLER_DIGITAL_L1)&&master.get_digital(E_CONTROLLER_DIGITAL_L2)&&master.get_digital(E_CONTROLLER_DIGITAL_R1)&&master.get_digital(E_CONTROLLER_DIGITAL_R2)&&master.get_digital(E_CONTROLLER_DIGITAL_RIGHT)&&master.get_digital(E_CONTROLLER_DIGITAL_Y)) {
+    if(master.get_digital(E_CONTROLLER_DIGITAL_L1)&&master.get_digital(E_CONTROLLER_DIGITAL_L2)&&master.get_digital(E_CONTROLLER_DIGITAL_R1)&&master.get_digital(E_CONTROLLER_DIGITAL_R2)) {
         set_state(auton_mode);
     }
 

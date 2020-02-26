@@ -57,7 +57,8 @@ array<double, 3> angler_pid_values = {1, 0, 0};
 
 double angler_speed = 20;
 double angler_min_height = 0;
-double angler_max_height = 3600;
+// 3600
+double angler_max_height = 3000;
 Angler *angler = new Angler();
 
 // arm variables
@@ -154,7 +155,6 @@ void ultra_task_fn(void *param)
     pros::delay(DELAY_INTERVAL);
   }
 }
-
 void initialize()
 {
   lcd::initialize();

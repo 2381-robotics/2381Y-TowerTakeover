@@ -32,15 +32,18 @@ void Arm::Move_Motor()
 {
  
   _current_arm_height = (_arm_motor->get_position());
-  _arm_power = _arm_pid->Update(Get_Real_Target(), _current_arm_height);
-  if (Get_Target() <= 1200 && Get_Target() >= 400)
+  double real_target = Get_Real_Target();
+
+  _arm_power = _arm_pid->Update(real_target, _current_arm_height);
+ 
+ 
+  if (real_target <= 1400 && real_target >= 600)
   {
     angler->Auto_Angler(0, true);
-    angler->Set_Target(1.1 * (Get_Target() - 400));
-    angler->_min_height = 1.1 * (Get_Target() - 400);
+    angler->Set_Target(1.1 * (real_target - 600));
+    angler->_min_height = 1.1 * (real_target - 600);
     pros::lcd::set_text(6, to_string(angler->_min_height));
   }
-
   //allows for clearance
   // pros::lcd::set_text(3, "arm " + to_string((int)_arm_motor->get_position()) + "ang" + to_string((int)angler->Get_Height()) + "power ang" + to_string((int)_arm_power));
 
@@ -54,9 +57,9 @@ double Arm::Get_Real_Target()
   if(_target_height - _previous_target > _max_arm_speed) {
      real_target = _previous_target + _max_arm_speed;
   }
-  else if (_previous_target - _target_height > _max_arm_speed)
+  else if (_previous_target - _target_height > 0.5* _max_arm_speed)
   {
-    real_target = _previous_target - _max_arm_speed;
+    real_target = _previous_target - 0.5* _max_arm_speed;
   }
   _previous_target = real_target;
   
@@ -86,10 +89,9 @@ void Arm::Create() {
 }
 void Arm::Arm_Macro(int increment)
 {
-  if(current_macro + increment >= 0 && current_macro + increment < arm_heights.size() )
+  if(current_macro + increment >= 0 && current_macro + increment < arm_heights.size() && increment!=0)
   {
-    current_macro += increment;
-    Set_Target(arm_heights[current_macro]);
+    Set_Target(arm_heights[increment]);
   }
 
 }
@@ -99,7 +101,11 @@ void Arm::Reset()
 
 void Arm::Increment_Arm(int increment)
 {
-  Set_Target(_target_height + increment * _arm_speed);
+  if(increment!=0)
+  {
+    Set_Target(_target_height + increment * _arm_speed);
+  }
+
 }
 double Arm::Get_Height()
 {

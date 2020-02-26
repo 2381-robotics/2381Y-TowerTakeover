@@ -8,14 +8,14 @@ using namespace std;
 
 void Angler::Move_Motor() {
   _angler_height = (_angler_motor->get_position());
-
+  double real_target = Get_Real_Target();
   if(isOverrideMode) {
     _angler_power = override_power;
-    _angler_pid->Update(Get_Real_Target(), _angler_height);
-    _angler_pid->Update(_max_height * (pow(Get_Real_Target() / _max_height, 1)), _angler_height);
+    _angler_pid->Update(real_target, _angler_height);
+    _angler_pid->Update(_max_height * (pow(real_target / _max_height, 1)), _angler_height);
   }
   else {
-    _angler_power = _angler_pid->Update(_max_height* (pow(Get_Real_Target()/_max_height,0.9)), _angler_height);
+    _angler_power = _angler_pid->Update(_max_height* (pow(real_target/_max_height,0.9)), _angler_height);
   }
 
   // angler Coefficient is for keeping angler even / not tilted, not sure if it works.
