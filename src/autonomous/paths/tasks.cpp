@@ -22,7 +22,7 @@ AutoTask Auton::DeployTask() { return AutoTask::AutoDelay(
     400, true, [](void) -> void {
                                 arm->Set_Target(200);
                                 // robot->drive->Set_Drive(0,-30,0,0);
-                                intake->Set_Intake(-40); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Set_Intake(127); arm->Set_Target(0); });}
+                                intake->Set_Intake(-70); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Set_Intake(90); arm->Set_Target(0); });}
                                 ;
 
 
