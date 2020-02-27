@@ -155,7 +155,7 @@ AutoSequence *Auton::AT_Blue7 = AutoSequence::FromTasks(
                 intake->Index_Intake(-50, 550);
 
                 robot->drive->Set_Point_Drive(50, -100, 1700, -127, 2, 2, false, 1400, 1, {0, 0, 0, 0});
-                angler->Set_Target(angler->_max_height * 0.45);
+                angler->Set_Target(angler->_max_height * 0.43);
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void {intake->Reset_Point();  robot->drive->Reset_Point(); }, [](void) -> void {}),
 
