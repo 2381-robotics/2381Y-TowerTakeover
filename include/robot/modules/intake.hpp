@@ -14,7 +14,10 @@ public:
     Intake();
     void Set_Intake(double intakeSpeed);
     double Get_Speed();
-
+    void Reset_Point();
+    double intake_distance = 0, start_point = 0;
+    void Index_Intake(double speed, double distance);
+    double Get_Position();
     void Create() override;
     void Stop() override;
     void Reset() override;

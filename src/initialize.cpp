@@ -58,7 +58,7 @@ array<double, 3> angler_pid_values = {1, 0, 0};
 double angler_speed = 20;
 double angler_min_height = 0;
 // 3600
-double angler_max_height = 3000;
+double angler_max_height = 3200;
 Angler *angler = new Angler();
 
 // arm variables
@@ -210,7 +210,7 @@ void initialize()
   auton_control->define_auton(AutonControl::SkillsAuton, AT_Skills);
   auton_control->define_auton(AutonControl::TestAuton, AT_Test_Ultras);
 
-  auton_control->select_auton(AutonControl::Red7PointAuton);
+  auton_control->select_auton(AutonControl::Blue7PointAuton);
 }
 
 /**

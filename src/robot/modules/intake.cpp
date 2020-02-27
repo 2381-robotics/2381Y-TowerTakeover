@@ -79,6 +79,28 @@ Intake::Intake(){};
 void Intake::Reset() {
     Stop();
 }
+
+double Intake::Get_Position()
+{
+    return (intakeMotorLeft.get_position() + intakeMotorRight.get_position()) / 2;
+}
+void Intake::Reset_Point()
+{
+    start_point = (intakeMotorLeft.get_position() + intakeMotorRight.get_position())/2;
+}
+
+void Intake::Index_Intake(double speed, double distance)
+{
+    if(abs(Get_Position()  - start_point)<  distance)
+    {
+        intake->Set_Intake(speed);
+    }
+    else {
+        intake->Set_Intake(0);
+    }
+
+}
+
 void Intake::Stop() {
     intakeMotorLeft.move_voltage(0);
     intakeMotorRight.move_voltage(0);
