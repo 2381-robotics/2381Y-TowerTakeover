@@ -25,12 +25,19 @@ using namespace pros;
 int anglerGoingDown = 0;
 bool snapshot = false;
 void driver()  {
-  intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 50 - 110* (master.get_digital(DIGITAL_L2) && master.get_digital(DIGITAL_L1))));
+  intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 50 - 110* (master.get_digital(DIGITAL_L2) && master.get_digital(DIGITAL_L1)) - 30* master.get_digital(DIGITAL_RIGHT)* vision_indexer->Check_Object() ));
   robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
   /*done just upload*/
   // intakeMotorLeft.move_voltage(master.get_digital(DIGITAL_L1)* 12000 - master.get_digital(DIGITAL_L2) * 6000);
   // intakeMotorRight.move_voltage(master.get_digital(DIGITAL_L1) * 12000 - master.get_digital(DIGITAL_L2) * 6000);
+  vision_object_s_t object_arr[4];
+  vision_sensor.read_by_sig(0, 2, 4, object_arr);
+  lcd::set_text(2, to_string(object_arr[0].width) + "width" + to_string(vision_indexer->Get_Object().width) + " " + to_string(vision_indexer->vision_sensor->get_by_sig(0, 2).width));
 
+  if(vision_indexer->Get_Object().width > 300)
+  {
+    lcd::set_text(3, to_string(vision_indexer->Get_Object().signature) + "width" + to_string(vision_indexer->Get_Object().width) + " " + to_string(vision_indexer->vision_sensor->get_by_sig(0,2).width));
+  }
   angler->Smooth_Angler(master.get_digital(DIGITAL_X) + master.get_digital(DIGITAL_B)*0.8);
   angler->Auto_Angler(-2 * master.get_digital_new_press(DIGITAL_A));
   arm->Arm_Macro(master.get_digital_new_press(DIGITAL_Y)*2 + master.get_digital_new_press(DIGITAL_B));

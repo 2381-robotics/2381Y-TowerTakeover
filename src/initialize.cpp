@@ -67,7 +67,7 @@ std::array<double,3> arm_pid_values = {1, 0, 0};
 double arm_speed = 40;
 double arm_min_height = 0;
 double arm_max_height = 5000;
-bool _is_moving = false;
+bool _is_moving = false; 
 bool _moving_up = false;
 bool _manual_arm = false; 
 
@@ -167,7 +167,24 @@ void initialize()
   vision_indexer->vision_sensor->set_zero_point(pros::E_VISION_ZERO_CENTER);
   pros::vision_signature_s_t BLACK_SIG =
       pros::Vision::signature_from_utility(EXAMPLE_SIG, -2147483647, 2147483647, 0, -2147483647, 2147483647, 0, 3.000, 0); //This boi black af
+
+  pros::vision_signature_s_t ORANGE_SIG = 
+    Vision::signature_from_utility(2, 14273, 15937, 15106, -2977, -1761, -2370, 3.000, 0);
+  pros::vision_signature_s_t WHITE_SIG = 
+    Vision::signature_from_utility(3, -669, 669, 0, -1, 1, 0, 11.000, 0);
+  
   vision_indexer->Set_Sig(EXAMPLE_SIG, BLACK_SIG);
+  vision_indexer->Set_Sig(2, ORANGE_SIG);
+  vision_indexer->Set_Sig(3, WHITE_SIG);
+  vision_indexer->vision_sensor->set_exposure(30);
+  // vision::signature SIG_1(1, 14273, 15937, 15106, -2977, -1761, -2370, 7.900, 0);
+  // vision::signature SIG_2(2, -669, 669, 0, -1, 1, 0, 11.000, 0);
+  // vision::signature SIG_3(3, 0, 0, 0, 0, 0, 0, 3.000, 0);
+  // vision::signature SIG_4(4, 0, 0, 0, 0, 0, 0, 3.000, 0);
+  // vision::signature SIG_5(5, 0, 0, 0, 0, 0, 0, 3.000, 0);
+  // vision::signature SIG_6(6, 0, 0, 0, 0, 0, 0, 3.000, 0);
+  // vision::signature SIG_7(7, 0, 0, 0, 0, 0, 0, 3.000, 0);
+  // vex::vision vision1(vex::PORT1, 50, SIG_1, SIG_2, SIG_3, SIG_4, SIG_5, SIG_6, SIG_7);
 
   pros::Task angler_task(angler_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
                          TASK_STACK_DEPTH_DEFAULT, "ANGLER_TASK");
@@ -193,7 +210,7 @@ void initialize()
   auton_control->define_auton(AutonControl::SkillsAuton, AT_Skills);
   auton_control->define_auton(AutonControl::TestAuton, AT_Test_Ultras);
 
-  auton_control->select_auton(AutonControl::Blue7PointAuton);
+  auton_control->select_auton(AutonControl::Red7PointAuton);
 }
 
 /**

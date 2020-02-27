@@ -18,28 +18,35 @@ using namespace std;
 using namespace Auton;
 using namespace pros;
 
-AutoTask Auton::DeployTask() { return AutoTask::AutoDelay(
-    400, true, [](void) -> void {
-                                arm->Set_Target(200);
-                                // robot->drive->Set_Drive(0,-30,0,0);
-                                intake->Set_Intake(-70); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Set_Intake(90); arm->Set_Target(0); });}
-                                ;
-
-
-
-AutoTask Auton::ArmTask()
+AutoTask Auton::DeployTask()
 {
-    return AutoTask::SyncTask(
-
+    // Sets the deploy for the robot - spins outtake and sets the arm to 200 for 400 ms
+    return AutoTask::AutoDelay(400, true, 
         [](void) -> void {
-            // robot->drive->Set_Point_Drive(20, 180, 200);
-            arm->Increment_Arm(1);
+            arm->Set_Target(200);
+            intake->Set_Intake(-100); 
         },
-        [](void) -> bool { return ((arm->Get_Height() >= 1000));}
+        [](void) -> void {
+            // Empty initialize function.
+        }, [](void) -> void { 
+            // After function ends, resumes intake and lower the arms to reset the robot and not spit out preload cube.
+            intake->Set_Intake(90);
+            arm->Set_Target(0);
+        }
     );
 };
 
-
+// Task to raise the 
+AutoTask Auton::ArmTask() {
+    return AutoTask::SyncTask(
+        [](void) -> void {
+            arm->Arm_Macro(1);
+        },
+        [](void) -> bool {
+            return (arm->Get_Height() >= 1000);
+        }
+    );
+};
 
 AutoTask Auton::StackTask()
 {
@@ -49,8 +56,9 @@ AutoTask Auton::StackTask()
             robot->set_drive(0, 0, 0, 0);
             angler->Smooth_Angler(1);
         },
-        [](void) -> bool { return ((angler->Get_Height() >= angler->_max_height-200)); },
+        [](void) -> bool { return ((angler->Get_Height() >= angler->_max_height - 200)); },
         [](void) -> void {
+
         },
         [](void) -> void {
         });
@@ -87,7 +95,6 @@ AutoTask Turn90Deg = AutoTask::SyncTask(
     [](void) -> void {
         intake->Set_Intake(127);
         robot->drive->Set_Point_Drive(0, 0, 1290, 100, 2.5);
-  
     },
     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); robot->drive->Stop(); });
 
@@ -97,7 +104,6 @@ AutoTask Turn45Deg = AutoTask::SyncTask(
         intake->Set_Intake(127);
         // 625
         robot->drive->Set_Point_Drive(0, 0, 710 + autonomous_increment, 100, 2.5);
-  
     },
     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); });
 
@@ -106,17 +112,15 @@ AutoTask InvertTurn45Deg = AutoTask::SyncTask(
         intake->Set_Intake(127);
         // 625
         robot->drive->Set_Point_Drive(0, 0, 700 + autonomous_increment, -75, 2.5);
-  
     },
     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); });
 
-AutoTask Auton::InvertTurn90Deg() {
+AutoTask Auton::InvertTurn90Deg()
+{
     return AutoTask::SyncTask(
-    [](void) -> void {
-        intake->Set_Intake(127);
-        robot->drive->Set_Point_Drive(0, 0, 1295 + 650 + autonomous_increment, -90, 2.5);
-
-  
-    },
-    [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); });
+        [](void) -> void {
+            intake->Set_Intake(127);
+            robot->drive->Set_Point_Drive(0, 0, 1295 + 650 + autonomous_increment, -90, 2.5);
+        },
+        [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); });
 };

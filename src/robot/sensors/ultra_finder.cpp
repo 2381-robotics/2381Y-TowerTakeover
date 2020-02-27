@@ -36,9 +36,9 @@ void UltraFinder::Update_Angle()
     leftAverage = leftAverage / leftDistances.size();
     rightAverage = rightAverage / rightDistances.size();
   }
-  double ultra = 1.5 * (abs(rightAverage - leftAverage) / (rightAverage - leftAverage) * 60 * pow(abs(rightAverage - leftAverage) / 60, 0.5));
+  double ultra = 1.4 * (abs(rightAverage - leftAverage) / (rightAverage - leftAverage) * 60 * pow(abs(rightAverage - leftAverage) / 60, 0.5));
   masterDistances.push_back(ultra);
-  if(masterDistances.size() > 2)
+  if(masterDistances.size() >2)
   {
     masterDistances.erase(masterDistances.begin());
   }
