@@ -23,6 +23,8 @@ AutoTask Auton::DeployTask()
     // Sets the deploy for the robot - spins outtake and sets the arm to 200 for 400 ms
     return AutoTask::AutoDelay(400, true, 
         [](void) -> void {
+  angler->Multiply_Max_Speed(1);
+
             arm->Set_Target(200);
             intake->Set_Intake(-100); 
         },

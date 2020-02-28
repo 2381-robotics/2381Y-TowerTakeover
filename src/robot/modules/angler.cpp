@@ -41,7 +41,10 @@ void Angler::Stop() {
   _angler_motor->move(0);
   return;
 }
-
+void Angler::Multiply_Max_Speed(double multiplier)
+{
+  _max_angler_speed = angler_speed* multiplier;
+}
 
 void Angler::Set_Target(double target_height)
 {

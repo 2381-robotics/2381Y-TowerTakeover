@@ -20,6 +20,8 @@ public:
   void Stop() override;
   void Create() override;
 
+  void Multiply_Max_Speed(double multiplier);
+
   void Auto_Angler(int increment, bool disable = false);
   void Reset() override;
 
