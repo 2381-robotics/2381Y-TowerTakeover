@@ -210,9 +210,8 @@ void initialize()
   auton_control->define_auton(AutonControl::SkillsAuton, AT_Skills);
   auton_control->define_auton(AutonControl::TestAuton, AT_Test_Ultras);
 
-  auton_control->select_auton(AutonControl::Blue7PointAuton);
+  auton_control->select_auton(AutonControl::Red7PointAuton);
 }
-
 /**
  * Runs while the robot is in the disabled state of Field Management System or
  * the VEX Competition Switch, following either autonomous or opcontrol. When

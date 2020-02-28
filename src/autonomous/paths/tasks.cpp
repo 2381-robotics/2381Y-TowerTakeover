@@ -68,7 +68,7 @@ AutoTask stackTask2 = AutoTask::SyncTask(
         // intake->Set_Intake(0);
         // robot->set_drive(-30, 40, 0, 0);
         // angler->Smooth_Angler_Auton(1);
-        robot->drive->Set_Point_Drive(35, 0, 625);
+        robot->drive->Set_Point_Drive(35, 0, 625); 
         intake->Set_Intake(-10);
         // intake->Set_Intake(45);
         // robot->drive->Move_Wheel(30);
