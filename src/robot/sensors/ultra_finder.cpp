@@ -43,28 +43,20 @@ void UltraFinder::Update_Angle()
     masterDistances.erase(masterDistances.begin());
   }
 }
+double previousAlign1;
 double UltraFinder::Ultra_Angle()
 {
 
-  double leftDistance = leftDistances[0], rightDistance = rightDistances[0];
-  
-  
-
-    // prevLeft = leftDistance;
-    // prevRight = rightDistance;
-
-
-  double masterAverage = 0;
-  for(auto it =  masterDistances.begin(); it != masterDistances.end(); it++)
-  {
-    masterAverage += *it; 
+   double leftDistance = left_ultra->get_value();
+  double rightDistance = right_ultra->get_value();
+  if(leftDistance == rightDistance){
+    return 0;
   }
-  if(masterDistances.size() > 0)
+  lcd::set_text(0, to_string(rightDistance) + "DIE" + to_string(leftDistance));
+  double ultra =  1.5 * (abs(rightDistance - leftDistance) / (rightDistance - leftDistance) * 70 * pow(abs(rightDistance - leftDistance) / 70, 0.5));
+  if(ultra != NAN && abs(ultra) < 500)
   {
-    masterAverage = masterAverage / masterDistances.size();
+    previousAlign1 = (ultra * 2 + previousAlign1)/3;
   }
-
-  
-  lcd::set_text(1, to_string(leftDistance) + "DIE" + to_string(rightDistance) + " " + to_string((int)masterAverage));
-    return masterAverage;
+  return previousAlign1;
 }

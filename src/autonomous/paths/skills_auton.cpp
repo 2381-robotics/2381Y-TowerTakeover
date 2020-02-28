@@ -25,98 +25,127 @@ using namespace Auton;
 // }
 AutoSequence *Auton::AT_Skills = AutoSequence::FromTasks(
     vector<AutoTask>{
-       // deplay task called to run outake and flip out tray
-        DeployTask(),
-        // driving forward and intaking cubes in the second row from goal zone
-         AutoTask::SyncTask(
-            [](void) -> void {
-                intake->Set_Intake(200);
-                robot->drive->Set_Point_Drive(127, 0, 2300, 0, 2, 0.7, true, 400, 1, {0, 0, 0, 0});
-            },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-        // driving backwards diagonally to the left and alligning against the wall
+     DeployTask(),              // Outtakes and raises arm to deploy
+        AutoTimer::AutoDelay(500), // Wait 500 milliseconds to let tray settle
+
         AutoTask::SyncTask(
             [](void) -> void {
-                intake->Set_Intake(80);
-                robot->drive->Set_Point_Drive(127, 200, 1600, 0, 1, 1, false, 400, 1, {-100, 0, 0, 0});
+                intake->Set_Intake(200); // Set Intake to max speed
+                // 2350
+                robot->drive->Set_Point_Drive(127, 0, 2350, 0, 2, 0.8, true, 400, 1, {0, 0, 0, 0}); // At the same time, drive forward towards the first row of cubes
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-        // strafing to the left and alligning with 1st row for 4 cubes beside the goal zone
+
+        AutoTask::SyncTask(
+            [](void) -> void {
+                intake->Set_Intake(80); // slow down intake
+                robot->drive->Set_Point_Drive(127, 200, 1600, 0, 1, 1, false, 400, 1, {-100, 0, 0, 0}); // Drive diagonally 200 deg backwards
+            },
+            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(0);
-                robot->drive->Set_Point_Drive(80, -90, 700, 0, 20, 4, true, 500, 1, {0, 60, 0, 0});
+                // 750
+                robot->drive->Set_Point_Drive(127, -90, 800, 0, 20, 4, true, 00, 1, {0, 60, 0, 0}); // Diagonal strafe turns into a horizontal strafe with deacceleration
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-        // picking up cubes in the 1st row
+
+        // Drive forward again to pick up 4 cubes at max speed
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(200);
-                robot->drive->Set_Point_Drive(80, 0, 3200, 0, 2, 100, true, 2600, 1, {0, 0, 0, 0});
+                robot->drive->Set_Point_Drive(60, 0, 3000, 0, 2, 100, true, 2600, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
-        AutoTask::AutoDelay(200), //not sure if this is efficent or not!
-        // driving backwards towards the wall 
+
+        // Wait a bit for last cube to be intaked
+        AutoTask::AutoDelay(100),
+
+        //Drive backwards at max speed
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(60);
-                robot->drive->Set_Point_Drive(127, 180, 3500, 0, 2, 0.8, true, 2100, 1, {0, 0, 0, 0});
+                robot->drive->Set_Point_Drive(100, 180, 3400, 0, 2, 0.8, true, 2100, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
-        // outtaking slightly and turning left into the goal zone
+
+        // Turn towards goal zone, extend angler during the turn
         AutoTask::SyncTask(
             [](void) -> void {
-                intake->Set_Intake(-10);
-                robot->drive->Set_Point_Drive(40, -100, 1600, -127, 2, 2, false, 1400, 1, {0, 0, 0, 0});
-                angler->Set_Target(angler->_max_height/3);
+                intake->Index_Intake(-50, 550);
+
+                robot->drive->Set_Point_Drive(50, -100, 1700, -127, 2, 2, false, 1400, 1, {0, 0, 0, 0});
+                angler->Set_Target(angler->_max_height * 0.43);
             },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-        // pre-extending tray to save time for stacking, and moving close into the zone
+            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void {intake->Reset_Point();  robot->drive->Reset_Point(); }, [](void) -> void {}),
+
+        // Drive into the goal zone, continue angler slow down the stack
         AutoTask::SyncTask(
             [](void) -> void {
+                intake->Index_Intake(-50, 550);
+
                 angler->Smooth_Angler(0.7);
-                intake->Set_Intake(-10);
-                robot->drive->Set_Point_Drive(65, 0, 350, 0, 2, 2, false, 175, 1, {0, 0, 0, 0});
+                // Outtake at a slow speed
+                intake->Set_Intake(-15);
+                robot->drive->Set_Point_Drive(80, 0, 475, 0, 2, 2, false, 250, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-        // calling stackTask to stack all the cubes in the goalzone
+
+        // Calls Stack Task - increments angler until max is reached
         StackTask(),
+        // Slowly drive into the goal zone to complete the stack for 400 ms
         AutoTask::AutoDelay(400, true, [](void) -> void {
-            robot->set_drive(0, 25, 0, 0);
+            robot->set_drive(0, 30, 0, 0);
         }),
-        AutoTask::AutoDelay(100),
-        // outtaking cubes and driving backwards away from the stack
+        // Pause 100 milliseconds
+        AutoTask::AutoDelay(200),
+
+        // Drive backwards and outtake to complete the stack
         AutoTask::SyncTask([](void) -> void {
                 intake->Set_Intake(-40);
-                // change 800 so that we are in line w the small tower
+                // 800
+                angler->Set_Target(0);
                 robot->drive->Set_Point_Drive(60, 180, 800); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
-        // adding a delay so that the bot does not move after finishing the stack if there is extra time remaining 
-        
+
         // paralel to the wall where we started and facing goalzone
 
 
 
+
+
+
+
+
+
 // bruh 
-
-
-
-
-        // 1. Strafe towards tower (right)
-         AutoTask::SyncTask([](void) -> void {
-                robot->drive->Set_Point_Drive(60, 90, 800); }, 
-        [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
-        // 2. 90 degree right turn
-        AutoTask::SyncTask(
+    AutoTask::SyncTask(
             [](void) -> void {
-                robot->drive->Set_Point_Drive(0, 0, 1700, 127, 1.5, 0.8);
+                // 1000
+                robot->drive->Set_Point_Drive(100, 180, 850);
+                intake->Set_Intake(0);
             },
         [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
-        // 3. wall align using ultras while driving forward to tower
+        
+
+        AutoTask::SyncTask(
+            [](void) -> void {
+                robot->drive->Set_Point_Drive(0, 0, 1500, 127, 1.5, 1.5);
+            },
+        [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
+        
+      AutoTimer::AutoDelay(1000, true, 
+      [](void) -> void {
+          robot->drive->Set_Drive(0,0,ultra_finder->Ultra_Angle(), 0);
+      }),
+        // 1. Strafe towards tower (right)
+       
+      // 3. wall align using ultras while driving forward to tower
         // 4. intake cube
          AutoTask::SyncTask(
             [](void) -> void {
-                intake->Set_Intake(100);
-                robot->drive->Set_Point_Drive(127, 0, 2350, 0, 2, 0.7, true, 400, 1, {0, 0, 0, 0});
+                intake->Set_Intake(127);
+                robot->drive->Set_Point_Drive(127, 0, 3300, 0, 2, 0.7, false, 400, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
         
@@ -131,19 +160,27 @@ AutoSequence *Auton::AT_Skills = AutoSequence::FromTasks(
 
         AutoTask::SyncTask(
             [](void) -> void {
-                intake->Set_Intake(100);
-            robot->drive->Set_Point_Drive(100, 180, 400);
+            intake->Set_Intake(100);
+            robot->drive->Set_Point_Drive(100, 180, 400, 0, 10, 10);
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+                    
+      AutoTimer::AutoDelay(1000, true, 
+      [](void) -> void {
+          intake->Index_Intake(-50,400);
+      }, [](void) -> void {
+          intake->Reset_Point();
+      }),
          AutoTask::SyncTask(
             [](void) -> void {
+            intake->Set_Intake(-15);
             arm->Arm_Macro(1); //low tower
             },
             [](void) -> bool {return ((arm->Get_Height() >= 1550));}),
         AutoTask::SyncTask(
             [](void) -> void {
-            robot->drive->Set_Point_Drive(100, 0, 200);
-            intake->Set_Intake(-100);
+            robot->drive->Set_Point_Drive(100, 0, 400, 0, 100, 100);
+            intake->Set_Intake(-50);
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
          AutoTask::SyncTask(
@@ -171,7 +208,7 @@ AutoSequence *Auton::AT_Skills = AutoSequence::FromTasks(
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(100);
-                robot->drive->Set_Point_Drive(127, 0, 1000, 0, 2, 0.7, true, 400, 1, {0, 0, 0, 0});
+                robot->drive->Set_Point_Drive(127, 0, 1000, 0, 2, 0.7, false, 400, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
         // 10. tower
@@ -181,7 +218,7 @@ AutoSequence *Auton::AT_Skills = AutoSequence::FromTasks(
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(100);
-            robot->drive->Set_Point_Drive(100, 180, 400);
+            robot->drive->Set_Point_Drive(100, 180, 400, 0, 10000, 1000000, false,200);
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
          AutoTask::SyncTask(

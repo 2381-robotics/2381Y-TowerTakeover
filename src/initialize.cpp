@@ -64,7 +64,7 @@ Angler *angler = new Angler();
 // arm variables
 pros::Motor arm_motor(3, true);
 std::array<double,3> arm_pid_values = {1, 0, 0};
-double arm_speed = 40;
+double arm_speed = 60;
 double arm_min_height = 0;
 double arm_max_height = 5000;
 bool _is_moving = false; 

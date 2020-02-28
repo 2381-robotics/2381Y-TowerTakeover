@@ -19,7 +19,7 @@ using namespace Auton;
 
 AutoSequence *Auton::AT_Red7 = AutoSequence::FromTasks(
     vector<AutoTask>{
-    DeployTask(),              // Outtakes and raises arm to deploy
+     DeployTask(),              // Outtakes and raises arm to deploy
         AutoTimer::AutoDelay(500), // Wait 500 milliseconds to let tray settle
 
         AutoTask::SyncTask(
@@ -57,8 +57,8 @@ AutoSequence *Auton::AT_Red7 = AutoSequence::FromTasks(
         //Drive backwards at max speed
         AutoTask::SyncTask(
             [](void) -> void {
-                intake->Set_Intake(60);
-                robot->drive->Set_Point_Drive(127, 180, 3700, 0, 2, 0.5, true, 2100, 1, {0, 0, 0, 0});
+                intake->Set_Intake(127);
+                robot->drive->Set_Point_Drive(127, 180, 3600, 0, 2, 0.6, true, 2100, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
 
@@ -66,7 +66,7 @@ AutoSequence *Auton::AT_Red7 = AutoSequence::FromTasks(
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Index_Intake(-50, 550);
-                // deaccell 2
+
                 robot->drive->Set_Point_Drive(50, 100, 1700, 127, 2, 2, false, 1400, 1, {0, 0, 0, 0});
                 angler->Set_Target(angler->_max_height * 0.43);
             },
@@ -80,7 +80,7 @@ AutoSequence *Auton::AT_Red7 = AutoSequence::FromTasks(
                 angler->Smooth_Angler(0.7);
                 // Outtake at a slow speed
                 intake->Set_Intake(-15);
-                robot->drive->Set_Point_Drive(80, 0, 475, 0, 2, 2, false, 250, 1, {0, 0, 0, 0});
+                robot->drive->Set_Point_Drive(80, 0, 525, 0, 2, 2, false, 250, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
@@ -146,7 +146,7 @@ AutoSequence *Auton::AT_Blue7 = AutoSequence::FromTasks(
         //Drive backwards at max speed
         AutoTask::SyncTask(
             [](void) -> void {
-                intake->Set_Intake(60);
+                intake->Set_Intake(127);
                 robot->drive->Set_Point_Drive(127, 180, 3600, 0, 2, 0.8, true, 2100, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
@@ -185,6 +185,7 @@ AutoSequence *Auton::AT_Blue7 = AutoSequence::FromTasks(
         // Drive backwards and outtake to complete the stack
         AutoTask::SyncTask([](void) -> void {
                 intake->Set_Intake(-40);
+                angler->Set_Target(0);
                 robot->drive->Set_Point_Drive(60, 180, 800); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
 
         AutoTask::AutoDelay(10000000),
