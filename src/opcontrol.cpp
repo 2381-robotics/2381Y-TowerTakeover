@@ -88,55 +88,55 @@ bool overheating;
 int overheat_temp = 45;
 int last_overheat = -10000000;
 string overheating_motors = "";
- void bot_overheating() {
+  void bot_overheating() {
       overheating = false;
       overheating_motors = "High Temp: ";
       if (left_front_motor.get_temperature() >= overheat_temp)
       {
         overheating = true;
-        overheating_motors += "LF drive, ";
+        overheating_motors += "LFD" + to_string((int)left_front_motor.get_temperature())+ ", ";
       }
       if (left_back_motor.get_temperature() >= overheat_temp)
       {
         overheating = true;
-        overheating_motors += "LB drive, ";
+        overheating_motors += "LBD" + to_string((int)left_back_motor.get_temperature()) + ", ";
       }
       if (right_front_motor.get_temperature() >= overheat_temp)
       {
         overheating = true;
-        overheating_motors += "RF drive, ";
+        overheating_motors += "RFD" + to_string((int)right_front_motor.get_temperature()) + ", ";
       }
       if (right_back_motor.get_temperature() >= overheat_temp)
       {
         overheating = true;
-        overheating_motors += "RB drive, ";
+        overheating_motors += "RBD" + to_string((int)right_back_motor.get_temperature()) + ", ";
       }
       if (angler_motor.get_temperature() >= overheat_temp)
       {
         overheating = true;
-        overheating_motors += "Angler, ";
+        overheating_motors += "Ang" + to_string((int)angler_motor.get_temperature()) + ", ";
       }
       if (arm_motor.get_temperature() >= overheat_temp)
       {
         overheating = true;
-        overheating_motors += "Arm, ";
+        overheating_motors += "Arm" + to_string((int)arm_motor.get_temperature()) + ", ";
       }
       if (intakeMotorLeft.get_temperature() >= overheat_temp)
       {
         overheating = true;
-        overheating_motors += "L intake, ";
+        overheating_motors += "L In" + to_string((int)intakeMotorLeft.get_temperature()) + ", ";
       }
       if (intakeMotorRight.get_temperature() >= overheat_temp)
       {
         overheating = true;
-        overheating_motors += "R intake, ";
+        overheating_motors += "R In" + to_string((int)intakeMotorRight.get_temperature()) + ", ";
       }
       if (overheating)
       {
         if (pros::millis() - last_overheat > 60000 && !Competition_Env)
         {
           last_overheat = pros::millis(); 
-          master.rumble("- . - . -");
+          master.rumble("- . .");
 
           
         }

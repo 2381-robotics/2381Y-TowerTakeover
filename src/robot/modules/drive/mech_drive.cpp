@@ -214,9 +214,9 @@ double UltraAlign()
   }
   lcd::set_text(0, to_string(rightDistance) + "DIE" + to_string(leftDistance));
   double ultra =  1.5 * (abs(rightDistance - leftDistance) / (rightDistance - leftDistance) * 70 * pow(abs(rightDistance - leftDistance) / 70, 0.5));
-  if(ultra != NAN && ultra - previousAlign < 127)
+  if(ultra != NAN && abs(ultra) < 500)
   {
-    previousAlign = ultra;
+    previousAlign = (ultra * 2 + previousAlign)/3;
   }
   return previousAlign;
 }
