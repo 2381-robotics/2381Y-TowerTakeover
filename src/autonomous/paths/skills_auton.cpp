@@ -156,7 +156,8 @@ AutoSequence *Auton::AT_Skills = AutoSequence::FromTasks(
                 // 4. outake 
         // ArmTaskSmall(),
 
-// arm task small
+
+// driving forward and intaking cube
 
         AutoTask::SyncTask(
             [](void) -> void {
@@ -164,28 +165,38 @@ AutoSequence *Auton::AT_Skills = AutoSequence::FromTasks(
             robot->drive->Set_Point_Drive(100, 180, 400, 0, 10, 10);
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-                    
+
+// indexing bottom cube  
       AutoTimer::AutoDelay(1000, true, 
       [](void) -> void {
           intake->Index_Intake(-50,400);
       }, [](void) -> void {
           intake->Reset_Point();
       }),
+    //   raising arm for low tower
          AutoTask::SyncTask(
             [](void) -> void {
-            intake->Set_Intake(-15);
+            intake->Set_Intake(-18);
             arm->Arm_Macro(1); //low tower
             },
-            [](void) -> bool {return ((arm->Get_Height() >= 1550));}),
-        AutoTask::SyncTask(
-            [](void) -> void {
-            robot->drive->Set_Point_Drive(100, 0, 400, 0, 100, 100);
+            [](void) -> bool {return ((arm->Get_Height() >= 1575));}),
+
+        // AutoTask::SyncTask(
+        //     [](void) -> void {
+        //     robot->drive->Set_Point_Drive(100, 0, 400, 0, 100, 100);
+        //     intake->Set_Intake(-50);
+        //     },
+        //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+         
+        //  auto delay for tower outake
+         AutoTask::AutoDelay(1000, true, [](void) -> void {
             intake->Set_Intake(-50);
-            },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+        }),
+         
+         
          AutoTask::SyncTask(
             [](void) -> void {
-            arm->Arm_Macro(0); //low tower
+            arm->Set_Target(0); //reset positon 
             },
             [](void) -> bool {return ((arm->Get_Height() <= 100));}),
         
@@ -193,16 +204,23 @@ AutoSequence *Auton::AT_Skills = AutoSequence::FromTasks(
         // 6. move back like 2000
         AutoTask::SyncTask(
             [](void) -> void {
-                robot->drive->Set_Point_Drive(100, 180, 1500);
+                intake->Set_Intake(0);
+                robot->drive->Set_Point_Drive(127, 180, 2700, 0, 2, 0.7, false, 400, 1, {0, 0, 0, 0});
             },
         [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
         
         // 7. turn rught 90 
          AutoTask::SyncTask(
             [](void) -> void {
-                robot->drive->Set_Point_Drive(0, 0, 1700, 127, 1.5, 0.8);
+                robot->drive->Set_Point_Drive(0, 0, 1500, 127, 1.5, 1.5);
             },
         [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
+        
+         AutoTimer::AutoDelay(1000, true, 
+      [](void) -> void {
+          robot->drive->Set_Drive(0,0,ultra_finder->Ultra_Angle(), 0);
+      }),
+        
         // 8. move into mid tower
         // 9. intake cube
         AutoTask::SyncTask(
@@ -213,89 +231,56 @@ AutoSequence *Auton::AT_Skills = AutoSequence::FromTasks(
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
         // 10. tower
         // ArmTaskMid(),
-
-
         AutoTask::SyncTask(
             [](void) -> void {
-                intake->Set_Intake(100);
-            robot->drive->Set_Point_Drive(100, 180, 400, 0, 10000, 1000000, false,200);
+            intake->Set_Intake(100);
+            robot->drive->Set_Point_Drive(100, 180, 400, 0, 10, 10);
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+
+// indexing bottom cube  
+      AutoTimer::AutoDelay(1000, true, 
+      [](void) -> void {
+          intake->Index_Intake(-50,400);
+      }, [](void) -> void {
+          intake->Reset_Point();
+      }),
+    //   raising arm for low tower
          AutoTask::SyncTask(
             [](void) -> void {
+            intake->Set_Intake(-18);
             arm->Arm_Macro(2); //low tower
             },
-            [](void) -> bool {return ((arm->Get_Height() >= 2250));}),
-        AutoTask::SyncTask(
-            [](void) -> void {
-            robot->drive->Set_Point_Drive(100, 0, 200);
-            intake->Set_Intake(-100);
-            },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+            [](void) -> bool {return ((arm->Get_Height() >= 2275));}),
+
+        // AutoTask::SyncTask(
+        //     [](void) -> void {
+        //     robot->drive->Set_Point_Drive(100, 0, 400, 0, 100, 100);
+        //     intake->Set_Intake(-50);
+        //     },
+        //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+         
+        //  auto delay for tower outake
+         AutoTask::AutoDelay(1000, true, [](void) -> void {
+            intake->Set_Intake(-50);
+        }),
+         
+         
          AutoTask::SyncTask(
             [](void) -> void {
-            arm->Arm_Macro(0); //low tower
+            arm->Set_Target(0); //reset positon 
             },
             [](void) -> bool {return ((arm->Get_Height() <= 100));}),
+        
 
-
-
-
-        // 11. move back and finish 
+        // 6. move back like 2000
         AutoTask::SyncTask(
             [](void) -> void {
-                robot->drive->Set_Point_Drive(127, 180, 1000, 0, 2, 0.7, true, 400, 1, {0, 0, 0, 0});//increase if needed
+                intake->Set_Intake(0);
+                robot->drive->Set_Point_Drive(127, 180, 500, 0, 2, 0.7, false, 400, 1, {0, 0, 0, 0});
             },
         [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
         
-        
-        // 1st sequence done (1 stack (7-8 cubes) 2 towers (21 - 24 points))
-        // 2nd sequence (2nd stack (3 cubes) (9 points))
-        
-        //1. turn left 
-        AutoTask::SyncTask(
-            [](void) -> void {
-                robot->drive->Set_Point_Drive(0, 0, 1700, -127, 1.5, 0.8);
-            },
-        [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
-        //2. drive forard and intake all the way almost to the wall
-        AutoTask::SyncTask(
-            [](void) -> void {
-                intake->Set_Intake(100);
-                robot->drive->Set_Point_Drive(127, 0, 5200, 0, 2, 0.7, true, 400, 1, {0, 0, 0, 0});
-            },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
-        //3. do a 90 to the left and strafe right into wall 
-         AutoTask::SyncTask(
-            [](void) -> void {
-                robot->drive->Set_Point_Drive(0, 0, 1700, -127, 1.5, 0.8);
-            },
-        [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
-        // strafe into wall
-        AutoTask::SyncTask(
-            [](void) -> void {
-                robot->drive->Set_Point_Drive(100, 90, 500);
-            },
-        [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
-        //4.  drive forward to stack 
-        AutoTask::SyncTask(
-            [](void) -> void {
-                robot->drive->Set_Point_Drive(100, 0, 1000);
-            },
-        [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
-
-        // 5. stack and pull back 
-        StackTask(),
-        AutoTask::AutoDelay(400, true, [](void) -> void {
-            robot->set_drive(0, 25, 0, 0);
-        }),
-        AutoTask::AutoDelay(100),
-        // outtaking cubes and driving backwards away from the stack
-        AutoTask::SyncTask([](void) -> void {
-                intake->Set_Intake(-40);
-                // change 800 so that we are in line w the small tower
-                robot->drive->Set_Point_Drive(60, 180, 800); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),        
-
 
         AutoTask::AutoDelay(10000000),
 
