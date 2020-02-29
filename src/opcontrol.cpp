@@ -36,6 +36,9 @@ void driver()  {
   vision_object_s_t object_arr[4];
   vision_sensor.read_by_sig(0, 2, 4, object_arr);
   lcd::set_text(2, to_string(object_arr[0].width) + "width" + to_string(vision_indexer->Get_Object().width) + " " + to_string(vision_indexer->vision_sensor->get_by_sig(0, 2).width));
+    
+    
+    pros::lcd::set_text(4, "arm mode" + to_string(arm_mode));
 
 
 

@@ -11,6 +11,17 @@ using namespace pros;
 
 void Arm::Set_Target(double target_height)
 {
+  if (Get_Height() < 200 && angler->Get_Height() < 200){
+    arm_mode = 0;
+  }
+  else if (Get_Height() < 200 && angler->Get_Height() >= 200){
+    arm_mode = 2;
+  }
+  else if (Get_Height() >= 200 && angler->Get_Height() < 200){
+    arm_mode = 1;
+  }
+
+  if (arm_mode != 2) {
   _target_height = target_height;
 
   if (target_height >= _max_height)
@@ -20,6 +31,7 @@ void Arm::Set_Target(double target_height)
   else if (target_height <= _min_height)
   {
     _target_height = _min_height;
+  }
   }
 }
 
@@ -43,6 +55,7 @@ void Arm::Move_Motor()
     angler->Set_Target(1.1 * (real_target - 600));
     angler->_min_height = 1.1 * (real_target - 600);
     pros::lcd::set_text(6, to_string(angler->_min_height));
+
   }
   //allows for clearance
   // pros::lcd::set_text(3, "arm " + to_string((int)_arm_motor->get_position()) + "ang" + to_string((int)angler->Get_Height()) + "power ang" + to_string((int)_arm_power));
@@ -101,6 +114,7 @@ void Arm::Reset()
 
 void Arm::Increment_Arm(int increment)
 {
+
   if(increment!=0)
   {
     Set_Target(_target_height + increment * _arm_speed);
