@@ -39,7 +39,7 @@ AutoSequence *Auton::AT_Skills = AutoSequence::FromTasks(
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(80); // slow down intake
-                robot->drive->Set_Point_Drive(127, 200, 1600, 0, 1, 1, false, 400, 1, {-100, 0, 0, 0}); // Drive diagonally 200 deg backwards
+                robot->drive->Set_Point_Drive(127, 200, 1650, 0, 1, 1, false, 400, 1, {-100, 0, 0, 0}); // Drive diagonally 200 deg backwards
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
@@ -47,7 +47,7 @@ AutoSequence *Auton::AT_Skills = AutoSequence::FromTasks(
             [](void) -> void {
                 intake->Set_Intake(0);
                 // 750
-                robot->drive->Set_Point_Drive(127, -90, 800, 0, 20, 4, true, 00, 1, {0, 60, 0, 0}); // Diagonal strafe turns into a horizontal strafe with deacceleration
+                robot->drive->Set_Point_Drive(127, -90, 850, 0, 20, 4, true, 0, 1, {0, 60, 0, 0}); // Diagonal strafe turns into a horizontal strafe with deacceleration
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
@@ -145,7 +145,8 @@ AutoSequence *Auton::AT_Skills = AutoSequence::FromTasks(
          AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(127);
-                robot->drive->Set_Point_Drive(127, 0, 3300, 0, 2, 0.7, false, 400, 1, {0, 0, 0, 0});
+                // 3300
+                robot->drive->Set_Point_Drive(127, 0, 3150, 0, 2, 0.7, false, 400, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
         
@@ -179,7 +180,7 @@ AutoSequence *Auton::AT_Skills = AutoSequence::FromTasks(
             intake->Set_Intake(-18);
             arm->Arm_Macro(1); //low tower
             },
-            [](void) -> bool {return ((arm->Get_Height() >= 1575));}),
+            [](void) -> bool {return ((arm->Get_Height() >= 1599));}),
 
 // jank MAKE THIS SHIT WORK
         AutoTask::SyncTask(
@@ -228,7 +229,7 @@ AutoSequence *Auton::AT_Skills = AutoSequence::FromTasks(
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(127);
-                robot->drive->Set_Point_Drive(127, 0, 1300, 0, 2, 0.7, false, 400, 1, {0, 0, 0, 0});
+                robot->drive->Set_Point_Drive(127, 0, 1500, 0, 2, 0.7, false, 400, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
         // 10. tower

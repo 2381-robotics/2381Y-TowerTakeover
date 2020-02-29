@@ -32,14 +32,14 @@ AutoSequence *Auton::AT_Red7 = AutoSequence::FromTasks(
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(80); // slow down intake
-                robot->drive->Set_Point_Drive(127, -200, 1600, 0, 1, 1, false, 400, 1, {100, 0, 0, 0}); // Drive diagonally 200 deg backwards
+                robot->drive->Set_Point_Drive(127, -200, 1650, 0, 1, 1, false, 400, 1, {100, 0, 0, 0}); // Drive diagonally 200 deg backwards
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(0);
-                robot->drive->Set_Point_Drive(127, 90, 700, 0, 20, 4, true, 500, 1, {0, 60, 0, 0}); // Diagonal strafe turns into a horizontal strafe with deacceleration
+                robot->drive->Set_Point_Drive(127, 90, 850, 0, 20, 4, true, 600, 1, {0, 60, 0, 0}); // Diagonal strafe turns into a horizontal strafe with deacceleration
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
@@ -58,7 +58,7 @@ AutoSequence *Auton::AT_Red7 = AutoSequence::FromTasks(
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(127);
-                robot->drive->Set_Point_Drive(127, 180, 3600, 0, 2, 0.6, true, 2100, 1, {0, 0, 0, 0});
+                robot->drive->Set_Point_Drive(127, 180, 3650, 0, 2, 0.4, true, 2100, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
 
@@ -67,7 +67,7 @@ AutoSequence *Auton::AT_Red7 = AutoSequence::FromTasks(
             [](void) -> void {
                 intake->Index_Intake(-50, 550);
 
-                robot->drive->Set_Point_Drive(50, 100, 1700, 127, 2, 2, false, 1400, 1, {0, 0, 0, 0});
+                robot->drive->Set_Point_Drive(50, 100, 1700, 127, 2, 1, false, 1400, 1, {0, 0, 0, 0});
                 angler->Set_Target(angler->_max_height * 0.43);
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void {intake->Reset_Point();  robot->drive->Reset_Point(); }, [](void) -> void {}),
@@ -80,7 +80,7 @@ AutoSequence *Auton::AT_Red7 = AutoSequence::FromTasks(
                 angler->Smooth_Angler(0.7);
                 // Outtake at a slow speed
                 intake->Set_Intake(-15);
-                robot->drive->Set_Point_Drive(80, 0, 525, 0, 2, 2, false, 250, 1, {0, 0, 0, 0});
+                robot->drive->Set_Point_Drive(80, 0, 600, 0, 2, 2, false, 250, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
@@ -97,7 +97,7 @@ AutoSequence *Auton::AT_Red7 = AutoSequence::FromTasks(
         AutoTask::SyncTask([](void) -> void {
                 intake->Set_Intake(-40);
                 angler->Set_Target(0);
-                robot->drive->Set_Point_Drive(60, 180, 800); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
+                robot->drive->Set_Point_Drive(70, 180, 800); }, [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { robot->drive->Stop(); }),
 
         AutoTask::AutoDelay(10000000),
 
@@ -130,15 +130,14 @@ AutoSequence *Auton::AT_Blue7 = AutoSequence::FromTasks(
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(80); // slow down intake
-                robot->drive->Set_Point_Drive(127, 200, 1600, 0, 1, 1, false, 400, 1, {-100, 0, 0, 0}); // Drive diagonally 200 deg backwards
+                robot->drive->Set_Point_Drive(127, 200, 1750, 0, 1, 1, true, 400, 1, {-100, 0, 0, 0}); // Drive diagonally 200 deg backwards
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(0);
-                robot->drive->Set_Point_Drive(127, -90, 700, 0, 20, 4, true, 500, 1, {0, 60, 0, 0}); 
-                // Diagonal strafe turns into a horizontal strafe with deacceleration
+                robot->drive->Set_Point_Drive(127, -90, 625, 0, 20, 4, true, 600, 1, {0, 60, 0, 0}); // Diagonal strafe turns into a horizontal strafe with deacceleration
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
@@ -157,16 +156,16 @@ AutoSequence *Auton::AT_Blue7 = AutoSequence::FromTasks(
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(127);
-                robot->drive->Set_Point_Drive(127, 180, 3600, 0, 2, 0.8, true, 2100, 1, {0, 0, 0, 0});
+                robot->drive->Set_Point_Drive(127, 180, 3480, 0, 2, 0.7, true, 2500, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
 
         // Turn towards goal zone, extend angler during the turn
         AutoTask::SyncTask(
             [](void) -> void {
-                intake->Index_Intake(-50, 550);
+                intake->Index_Intake(-40, 425);
 
-                robot->drive->Set_Point_Drive(50, -100, 1700, -127, 2, 2, false, 1400, 1, {0, 0, 0, 0});
+                robot->drive->Set_Point_Drive(50, -100, 1700, -127, 2, 2, false, 100, 1, {0, 0, 0, 0});
                 angler->Set_Target(angler->_max_height * 0.43);
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void {intake->Reset_Point();  robot->drive->Reset_Point(); }, [](void) -> void {}),
@@ -174,12 +173,13 @@ AutoSequence *Auton::AT_Blue7 = AutoSequence::FromTasks(
         // Drive into the goal zone, continue angler slow down the stack
         AutoTask::SyncTask(
             [](void) -> void {
-                intake->Index_Intake(-50, 550);
+                intake->Index_Intake(-40, 425);
 
                 angler->Smooth_Angler(0.7);
                 // Outtake at a slow speed
                 intake->Set_Intake(-15);
-                robot->drive->Set_Point_Drive(80, 0, 475, 0, 2, 2, false, 250, 1, {0, 0, 0, 0});
+                // 475
+                robot->drive->Set_Point_Drive(80, 0, 350, 0, 2, 2, false, 250, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 
