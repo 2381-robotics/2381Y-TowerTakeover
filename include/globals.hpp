@@ -53,6 +53,7 @@ extern std::array<double,3> arm_pid_values;
 extern pros::Motor arm_motor;
 extern double arm_min_height, arm_max_height, arm_speed;
 extern Arm* arm;
+extern int arm_mode;
 // Lift
 extern std::array<double,3> lift_pid_values, master_lift_pid_values;
 extern pros::Motor left_lift_motor, right_lift_motor;

@@ -118,6 +118,7 @@ void Angler::Override_Mode(int toggle)
 
 void Angler::Smooth_Angler(int increment)
 { 
+    
   if( increment != 0)
   {
     _auto_angler_increment = 0;

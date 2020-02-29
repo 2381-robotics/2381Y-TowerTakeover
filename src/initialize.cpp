@@ -67,6 +67,8 @@ std::array<double,3> arm_pid_values = {1, 0, 0};
 double arm_speed = 60;
 double arm_min_height = 0;
 double arm_max_height = 5000;
+int arm_mode = 0;
+
 bool _is_moving = false; 
 bool _moving_up = false;
 bool _manual_arm = false; 
