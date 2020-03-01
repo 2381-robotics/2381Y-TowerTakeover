@@ -156,11 +156,12 @@ AutoSequence *Auton::AT_Blue7 = AutoSequence::FromTasks(
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(127);
-                robot->drive->Set_Point_Drive(127, 180, 3480, 0, 2, 0.7, true, 2500, 1, {0, 0, 0, 0});
+                robot->drive->Set_Point_Drive(127, 180, 3400, 0, 2, 0.7, true, 2500, 1, {0, 0, 0, 0});
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
 
         // Turn towards goal zone, extend angler during the turn
+        
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Index_Intake(-40, 425);
