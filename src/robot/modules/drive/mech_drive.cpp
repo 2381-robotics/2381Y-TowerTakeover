@@ -61,7 +61,7 @@ void Mech_Drive::Move_Wheel(double speed)
   _pid_inputs[left_back] = speed;
 }
 //
-double trollCalc(double masterDis, double masterOS, double specDis, double specOS)
+double ratioCalc(double masterDis, double masterOS, double specDis, double specOS)
 {
   if (masterOS == 0 || specDis == 0 || masterDis == 0 || specOS == 0)
   {
@@ -97,9 +97,10 @@ void Mech_Drive::Follow_Path()
 void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double right_y)
 {
   _motor_value_average = (abs(_left_back_motor_value) + abs(_left_front_motor_value) + abs(_right_back_motor_value) + abs(_right_front_motor_value)) / 4;
-  if (_master_setpoint >= 0)
+  //motor_value_average is what the actual motors are currently set at
+  if (_master_setpoint >= 0) //setpoint is what we as controllers want the code to actually output
   {
-    _master_error_average = _motor_value_average - _master_setpoint;
+    _master_error_average = _motor_value_average - _master_setpoint; //master error is used in the pid values to tune the motor values
   }
   else
   {
@@ -111,7 +112,6 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
   _right_front_setpoint = (left_y - left_x - std::abs(right_x) * (right_x) / 127);
 
   _master_setpoint = (abs(_left_back_setpoint) + abs(_left_front_setpoint) + abs(_right_back_setpoint) + abs(_right_front_setpoint)) / 4;
-
   _master_offset += (_master_setpoint);
   lfoffset += (abs(_left_front_setpoint));
   rboffset += (abs(_right_back_setpoint));
@@ -133,17 +133,13 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
     tuning_coefficient = 1;
     _master_pid->ResetError();
   }
-  _pid_inputs[left_back] =  _left_back_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, lbDistance, lboffset);
-  _pid_inputs[left_front] = _left_front_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, lfDistance, lfoffset);
-  _pid_inputs[right_back] =  _right_back_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, rbDistance, rboffset);
-  _pid_inputs[right_front] = _right_front_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, rfDistance, rfoffset);
+  _pid_inputs[left_back] =  _left_back_setpoint * tuning_coefficient * ratioCalc(masterDistance, _master_offset, lbDistance, lboffset);
+  _pid_inputs[left_front] = _left_front_setpoint * tuning_coefficient * ratioCalc(masterDistance, _master_offset, lfDistance, lfoffset);
+  _pid_inputs[right_back] =  _right_back_setpoint * tuning_coefficient * ratioCalc(masterDistance, _master_offset, rbDistance, rboffset);
+  _pid_inputs[right_front] = _right_front_setpoint * tuning_coefficient * ratioCalc(masterDistance, _master_offset, rfDistance, rfoffset);
 
-    _pid_inputs[left_back] =  _left_back_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, lbDistance, lboffset);
-  _pid_inputs[left_front] = _left_front_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, lfDistance, lfoffset);
-  _pid_inputs[right_back] =  _right_back_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, rbDistance, rboffset);
-  _pid_inputs[right_front] = _right_front_setpoint * tuning_coefficient * trollCalc(masterDistance, _master_offset, rfDistance, rfoffset);
   // lcd::set_text(3, "front" + to_string((int)_pid_inputs[left_front]) + "back" + (to_string((int)_pid_inputs[left_back])));
-  // lcd::set_text(4, "front" + to_string(trollCalc(masterDistance, _master_offset, lfDistance, lfoffset)) + "back" + (to_string(trollCalc(masterDistance, _master_offset, lbDistance, lboffset))));
+  // lcd::set_text(4, "front" + to_string(ratioCalc(masterDistance, _master_offset, lfDistance, lfoffset)) + "back" + (to_string(ratioCalc(masterDistance, _master_offset, lbDistance, lboffset))));
   // lcd::set_text(5, "front" + to_string(_left_front_motor_value) + "back" + (to_string(_left_back_motor_value)));
 
   // lcd::set_text(3, "rf" + to_string((int)rfDistance) +  "rb" + to_string((int)rbDistance) + "lf" + to_string((int)lfDistance) + "lb" + to_string((int)lbDistance) + "master" + to_string((int)masterDistance));
@@ -157,11 +153,11 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
     //   lcd::set_text(3, to_string(rfoffset) + "r front");
 
     //   // lcd::set_text(4, to_string(_master_offset) + "master");
-    // lcd::set_text(6, to_string((float)trollCalc(masterDistance, _master_offset, rbDistance, rboffset)) + " bk:" + to_string((float)trollCalc(masterDistance, _master_offset, rfDistance, rfoffset)));
+    // lcd::set_text(6, to_string((float)ratioCalc(masterDistance, _master_offset, rbDistance, rboffset)) + " bk:" + to_string((float)ratioCalc(masterDistance, _master_offset, rfDistance, rfoffset)));
     // }
 
-    // // _master_offset = pow((trollCalc(_left_back_motor_controller->Get_Speed(), _left_back_setpoint) * trollCalc(_right_back_motor_controller->Get_Speed(), _right_back_setpoint) * trollCalc(_left_front_motor_controller->Get_Speed(), _left_front_setpoint) * trollCalc(_right_front_motor_controller->Get_Speed(), _right_front_setpoint)), 0.25);
-    // _master_offset = ((trollCalc(_left_back_motor_controller->Get_Speed(), _left_back_setpoint) + trollCalc(_right_back_motor_controller->Get_Speed(), _right_back_setpoint) + trollCalc(_left_front_motor_controller->Get_Speed(), _left_front_setpoint) + trollCalc(_right_front_motor_controller->Get_Speed(), _right_front_setpoint))* 0.25);
+    // // _master_offset = pow((ratioCalc(_left_back_motor_controller->Get_Speed(), _left_back_setpoint) * ratioCalc(_right_back_motor_controller->Get_Speed(), _right_back_setpoint) * ratioCalc(_left_front_motor_controller->Get_Speed(), _left_front_setpoint) * ratioCalc(_right_front_motor_controller->Get_Speed(), _right_front_setpoint)), 0.25);
+    // _master_offset = ((ratioCalc(_left_back_motor_controller->Get_Speed(), _left_back_setpoint) + ratioCalc(_right_back_motor_controller->Get_Speed(), _right_back_setpoint) + ratioCalc(_left_front_motor_controller->Get_Speed(), _left_front_setpoint) + ratioCalc(_right_front_motor_controller->Get_Speed(), _right_front_setpoint))* 0.25);
 }
 
 std::array<double, 2> Mech_Drive::Convert(double speed, double direction)

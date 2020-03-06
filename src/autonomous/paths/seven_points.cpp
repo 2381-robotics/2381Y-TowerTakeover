@@ -110,13 +110,22 @@ AutoSequence *Auton::AT_Blue7 = AutoSequence::FromTasks(
     vector<AutoTask>{
         DeployTask(),              // Outtakes and raises arm to deploy
         AutoTimer::AutoDelay(500), // Wait 500 milliseconds to let tray settle
-
         AutoTask::SyncTask(
             [](void) -> void {
+                // This is the run() function - runs every 20 ms the task is active.
                 intake->Set_Intake(200); // Set Intake to max speed
-                robot->drive->Set_Point_Drive(127, 0, 2350, 0, 2, 0.8, true, 400, 1, {0, 0, 0, 0}); // At the same time, drive forward towards the first row of cubes
+                robot->drive->Set_Point_Drive(127, 0, 2350, 0, 2, 0.8, true, 400, 1, {0, 0, 0, 0}); 
+                // At the same time, drive forward towards the first row of cubes
             },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+            [](void) -> bool {
+                // This is the done() function - the function drive->get_running() will return true once the drive has stopped.
+                 return (!robot->drive->get_running());
+            }, [](void) -> void { 
+                // Init function - marks the current position as the starting position for the drive function.
+                robot->drive->Reset_Point();
+            }, [](void) -> void {
+                intake->Stop(); // Kill function - stop the intake after the task is complete
+            }),
 
         AutoTask::SyncTask(
             [](void) -> void {
@@ -128,7 +137,8 @@ AutoSequence *Auton::AT_Blue7 = AutoSequence::FromTasks(
         AutoTask::SyncTask(
             [](void) -> void {
                 intake->Set_Intake(0);
-                robot->drive->Set_Point_Drive(127, -90, 700, 0, 20, 4, true, 500, 1, {0, 60, 0, 0}); // Diagonal strafe turns into a horizontal strafe with deacceleration
+                robot->drive->Set_Point_Drive(127, -90, 700, 0, 20, 4, true, 500, 1, {0, 60, 0, 0}); 
+                // Diagonal strafe turns into a horizontal strafe with deacceleration
             },
             [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
 

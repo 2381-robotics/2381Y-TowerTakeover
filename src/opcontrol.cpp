@@ -25,7 +25,7 @@ using namespace pros;
 int anglerGoingDown = 0;
 bool snapshot = false;
 void driver()  {
-  angler->Multiply_Max_Speed(1.2);
+  angler->Multiply_Max_Speed(2);
 
 
   intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 50 - 110* (master.get_digital(DIGITAL_L2) && master.get_digital(DIGITAL_L1)) - 30* master.get_digital(DIGITAL_RIGHT)* vision_indexer->Check_Object() ));
