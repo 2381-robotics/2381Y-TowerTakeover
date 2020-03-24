@@ -17,40 +17,12 @@ void Intake::Move_Motor() {
     {
         _left_intake_value = leftIntakeController->Set_Speed(_pid_inputs[Left]);
         _right_intake_value = rightIntakeController->Set_Speed(_pid_inputs[Right]);
-        pros::lcd::set_text(0, "hi");
     }
     else {
         intakeMotorLeft.move_voltage(_pid_inputs[Left] / 127 * 12000);
         intakeMotorRight.move_voltage(_pid_inputs[Right] / 127 * 12000);
     }
-
-    // _intake_value_average = (_left_intake_value + _right_intake_value) / 2;
-
-    
-    // if (master.get_digital(pros::E_CONTROLLER_DIGITAL_Y))
-    // {
-    //     string s = to_string(intakeMotorLeft.get_temperature());
-    //     char cstr[s.size() + 1];
-    //     std::copy(s.begin(), s.end(), cstr);
-    //     cstr[s.size()] = '\0';
-    // }
 }
-
-// double Intake::Get_Real_Target()
-// {
-//   double real_target = _target_height;
-//   if(_target_height - _previous_target > _max_intake_speed) {
-//      real_target = _previous_target + _max_intake_speed;
-//   }
-//   else if (_previous_target - _target_height > _max_intake_speed)
-//   {
-//     real_target = _previous_target - _max_intake_speed;
-//   }
-//   _previous_target = real_target;
-//   return real_target;
-// }
-
-
 void Intake::Set_Intake(double intakeSpeed)
 {
 
@@ -63,12 +35,8 @@ void Intake::Set_Intake(double intakeSpeed)
     {
         _master_intake_error_average = _intake_setpoint - _intake_value_average;
     }
-
-    // _outtake_setpoint = (downL * 80);
-    // pros::lcd::set_text(1, "new master setpoint:" + std::to_string((_master_intake_setpoint)));
-
     double intake_tuning_coefficient = _master_intake_pid->Update(0, _master_intake_error_average);
-    // pros::lcd::set_text(2, "tuning coeff:" + std::to_string(intake_tuning_coefficient));
+    
     _pid_inputs[Left] = _intake_setpoint;
     _pid_inputs[Right] = _intake_setpoint;
 

@@ -46,7 +46,6 @@ void Mech_Drive::Reset_Point()
 {
   started = pros::c::millis();
   Set_Init_Point();
-  // Drive_Distance_Controller->ResetError();
   _is_running = true;
 }
 
@@ -60,7 +59,7 @@ void Mech_Drive::Move_Wheel(double speed)
   _pid_inputs[left_front] = speed;
   _pid_inputs[left_back] = speed;
 }
-//
+
 double ratioCalc(double masterDis, double masterOS, double specDis, double specOS)
 {
   if (masterOS == 0 || specDis == 0 || masterDis == 0 || specOS == 0)
@@ -118,7 +117,6 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
   lboffset += (abs(_left_back_setpoint));
   rfoffset += (abs(_right_front_setpoint));
 
-  // pros::lcd::set_text(1, "right front offset - " + to_string(rfoffset));
   rfDistance += abs(_right_front_motor_controller->Get_Speed()) / DELAY_INTERVAL;
   lfDistance += abs(_left_front_motor_controller->Get_Speed()) / DELAY_INTERVAL;
   rbDistance += abs(_right_back_motor_controller->Get_Speed()) / DELAY_INTERVAL;
@@ -126,7 +124,6 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
 
   masterDistance += (abs(_right_front_motor_controller->Get_Speed()) + abs(_left_back_motor_controller->Get_Speed()) + abs(_right_back_motor_controller->Get_Speed()) + abs(_left_front_motor_controller->Get_Speed())) / (4 * DELAY_INTERVAL);
 
-  // pros::lcd::set_text(0, to_string(this->Get_Speed()) +  "Speed ");
   double tuning_coefficient = _master_pid->Update(0, _master_error_average);
   if(tuning_coefficient<0)
   {
@@ -138,26 +135,6 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
   _pid_inputs[right_back] =  _right_back_setpoint * tuning_coefficient * ratioCalc(masterDistance, _master_offset, rbDistance, rboffset);
   _pid_inputs[right_front] = _right_front_setpoint * tuning_coefficient * ratioCalc(masterDistance, _master_offset, rfDistance, rfoffset);
 
-  // lcd::set_text(3, "front" + to_string((int)_pid_inputs[left_front]) + "back" + (to_string((int)_pid_inputs[left_back])));
-  // lcd::set_text(4, "front" + to_string(ratioCalc(masterDistance, _master_offset, lfDistance, lfoffset)) + "back" + (to_string(ratioCalc(masterDistance, _master_offset, lbDistance, lboffset))));
-  // lcd::set_text(5, "front" + to_string(_left_front_motor_value) + "back" + (to_string(_left_back_motor_value)));
-
-  // lcd::set_text(3, "rf" + to_string((int)rfDistance) +  "rb" + to_string((int)rbDistance) + "lf" + to_string((int)lfDistance) + "lb" + to_string((int)lbDistance) + "master" + to_string((int)masterDistance));
-  // lcd::set_text(4, "rf" + to_string((int)rfoffset) + "rb" + to_string((int)rboffset) + "lf" + to_string((int)lfoffset) + "lb" + to_string((int)lboffset) + "master" + to_string((int)_master_offset));
-  // lcd::set_text(5, "pid_error" + to_string(_master_pid->error_sum_) + "master_error" + to_string(_master_error_average));
-    // if (master.get_digital(E_CONTROLLER_DIGITAL_X))
-    // { 
-    //   lcd::set_text(0, to_string(lboffset) + "leftback");
-    //   lcd::set_text(1, to_string(rboffset) + "right back");
-    //   lcd::set_text(2, to_string(lfoffset)  + "l front");
-    //   lcd::set_text(3, to_string(rfoffset) + "r front");
-
-    //   // lcd::set_text(4, to_string(_master_offset) + "master");
-    // lcd::set_text(6, to_string((float)ratioCalc(masterDistance, _master_offset, rbDistance, rboffset)) + " bk:" + to_string((float)ratioCalc(masterDistance, _master_offset, rfDistance, rfoffset)));
-    // }
-
-    // // _master_offset = pow((ratioCalc(_left_back_motor_controller->Get_Speed(), _left_back_setpoint) * ratioCalc(_right_back_motor_controller->Get_Speed(), _right_back_setpoint) * ratioCalc(_left_front_motor_controller->Get_Speed(), _left_front_setpoint) * ratioCalc(_right_front_motor_controller->Get_Speed(), _right_front_setpoint)), 0.25);
-    // _master_offset = ((ratioCalc(_left_back_motor_controller->Get_Speed(), _left_back_setpoint) + ratioCalc(_right_back_motor_controller->Get_Speed(), _right_back_setpoint) + ratioCalc(_left_front_motor_controller->Get_Speed(), _left_front_setpoint) + ratioCalc(_right_front_motor_controller->Get_Speed(), _right_front_setpoint))* 0.25);
 }
 
 std::array<double, 2> Mech_Drive::Convert(double speed, double direction)
@@ -238,9 +215,6 @@ void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance
 
   double speedDifference = sqrt((leftX - endVelo[0]) * (leftX - endVelo[0]) + (leftY - endVelo[1]) * (leftY - endVelo[1]));
 
-
-
-
   if (abs(this->Get_Speed()) < 30 && abs(travelledDistance) > criticalPoint && !blocking)
   {
     pros::lcd::set_text(4, "Stopped" + to_string((int)Get_Speed()) + "Distance" + to_string((int)travelledDistance));
@@ -253,7 +227,6 @@ void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance
 
   if (std::abs(travelledDistance) > distance + criticalPoint && stopIfOver)
   {
-    // this->Reset_Point
 
     Stop();
     pros::lcd::set_text(4, "drive exceed" + to_string((int)travelledDistance) + ">" + to_string((int)distance));
@@ -308,10 +281,6 @@ void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance
   }
   else
   {
-    // if(endVelo == array<double,4> {0,0,0,0}){
-    // Set_Drive(0, 0, 0, 0);
-    // Stop();
-    // }
     Set_Drive(endVelo[0], endVelo[1], endVelo[2] , 0);
     previousVelo = endVelo;
     // pros::lcd::set_text(4, "Drive Stopped" + to_string(distance));

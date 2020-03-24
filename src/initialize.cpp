@@ -187,7 +187,6 @@ void initialize()
   // vision::signature SIG_6(6, 0, 0, 0, 0, 0, 0, 3.000, 0);
   // vision::signature SIG_7(7, 0, 0, 0, 0, 0, 0, 3.000, 0);
   // vex::vision vision1(vex::PORT1, 50, SIG_1, SIG_2, SIG_3, SIG_4, SIG_5, SIG_6, SIG_7);
-
   pros::Task angler_task(angler_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
                          TASK_STACK_DEPTH_DEFAULT, "ANGLER_TASK");
   pros::Task arm_task(arm_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
@@ -199,8 +198,6 @@ void initialize()
   pros::Task intake_task(intake_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
                         TASK_STACK_DEPTH_DEFAULT, "INTAKE_TASK");
   pros::Task tracking_task(tracking_task_fn, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "TRACKING_TASK");
-  // master.set_text(0, 0, "oasdijfosdj");
-  // master.rumble(". - . - .");
   using namespace Auton;
 
   auton_control->define_auton(AutonControl::Red5PointAuton, AT_Red5);
