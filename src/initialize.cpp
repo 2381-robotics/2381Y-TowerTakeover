@@ -17,6 +17,7 @@
 #include "robot/modules/drive/position_tracker.hpp"
 #include "robot/sensors/vision_indexer.hpp"
 #include "robot/sensors/ultra_align.hpp"
+#include "gui.h"
 //Initialize Variables
 using namespace pros;
 using namespace std;
@@ -157,9 +158,37 @@ void ultra_task_fn(void *param)
     pros::delay(DELAY_INTERVAL);
   }
 }
+
+lv_obj_t * myButton;
+lv_obj_t * myButtonLabel;
+lv_obj_t * myLabel;
+
+lv_style_t myButtonStyleREL; //relesed style
+lv_style_t myButtonStylePR; //pressed style
+
+static lv_res_t btn_click_action(lv_obj_t * btn)
+{
+    uint8_t id = lv_obj_get_free_num(btn); //id usefull when there are multiple buttons
+
+    if(id == 0)
+    {
+      char buffer[100];
+		  sprintf(buffer, "button was clicked %i milliseconds from start", pros::millis());
+		  lv_label_set_text(myLabel, buffer);
+    }
+
+    return LV_RES_OK;
+}
+
+
 void initialize()
 {
-  lcd::initialize();
+
+  
+  gui();
+
+
+
   robot->drive->Create();
   intake->Create();
   angler->Create();
