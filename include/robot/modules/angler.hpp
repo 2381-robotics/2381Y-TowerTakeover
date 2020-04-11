@@ -7,6 +7,7 @@
 #include <array>
 
 class Angler : public Module{
+  
 public:
   Angler();
   void Set_Target(double target_height);
@@ -25,7 +26,6 @@ public:
   void Auto_Angler(int increment, bool disable = false);
   void Reset() override;
 
-
   double _angler_motor_value, _angler_height, _angler_power,  _angler_speed, _auton_target_height, _target_height = 0;
   double _min_height, _max_height;
 
@@ -42,7 +42,7 @@ protected:
 
   bool isOverrideMode = false;
   float override_power = 0;
-    void Move_Motor() override;
+  void Move_Motor() override;
     Motor_Controller* _angler_motor_controller;
     pros::Motor* _angler_motor;
     Pid* _angler_pid;

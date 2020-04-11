@@ -17,7 +17,7 @@
 #include "robot/modules/drive/position_tracker.hpp"
 #include "robot/sensors/vision_indexer.hpp"
 #include "robot/sensors/ultra_align.hpp"
-#include "gui.h"
+#include "screen/app.hpp"
 //Initialize Variables
 using namespace pros;
 using namespace std;
@@ -185,10 +185,8 @@ void initialize()
 {
 
   
-  gui();
-
-
-
+  screen();
+  
   robot->drive->Create();
   intake->Create();
   angler->Create();

@@ -350,7 +350,6 @@ class Component_Base
   virtual lv_obj_t* createComponent(lv_obj_t* context) = 0;
 
   protected :
-
   Component_Base()  {
     $state = this->$initialState();
   }
