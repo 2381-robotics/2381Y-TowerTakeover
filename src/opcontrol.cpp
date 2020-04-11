@@ -71,9 +71,8 @@ void driver()  {
     // lcd::set_text(5, "lCur" + to_string((int)arm_motor.get_current_draw()) + " rCur" + to_string((int)intakeMotorRight.get_current_draw()));
   }
   ultra_finder->Ultra_Angle();
-  printf("asodf");
   
-  bot_overheating();
+  // bot_overheating();
 
 
   // arm->Set_Target(arm->Get_Target() - 40*master.get_digital(DIGITAL_UP));
