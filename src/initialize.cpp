@@ -187,11 +187,11 @@ void initialize()
   
   screen();
   
-  robot->drive->Create();
-  intake->Create();
-  angler->Create();
-  arm->Create();
-  position_tracker->Create();
+  // robot->drive->Create();
+  // angler->Create();
+  // intake->Create();
+  // arm->Create();
+  // position_tracker->Create();
 
   vision_indexer->vision_sensor->set_zero_point(pros::E_VISION_ZERO_CENTER);
   pros::vision_signature_s_t BLACK_SIG =
@@ -214,29 +214,29 @@ void initialize()
   // vision::signature SIG_6(6, 0, 0, 0, 0, 0, 0, 3.000, 0);
   // vision::signature SIG_7(7, 0, 0, 0, 0, 0, 0, 3.000, 0);
   // vex::vision vision1(vex::PORT1, 50, SIG_1, SIG_2, SIG_3, SIG_4, SIG_5, SIG_6, SIG_7);
-  pros::Task angler_task(angler_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
-                         TASK_STACK_DEPTH_DEFAULT, "ANGLER_TASK");
-  pros::Task arm_task(arm_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
-                         TASK_STACK_DEPTH_DEFAULT, "ARM_TASK");
-  pros::Task drive_task(drive_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
-                         TASK_STACK_DEPTH_DEFAULT, "DRIVE_TASK");
-  pros::Task ultra_task(ultra_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
-                        TASK_STACK_DEPTH_DEFAULT, "ULTRA_TASK");
-  pros::Task intake_task(intake_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
-                        TASK_STACK_DEPTH_DEFAULT, "INTAKE_TASK");
-  pros::Task tracking_task(tracking_task_fn, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "TRACKING_TASK");
-  using namespace Auton;
+  // pros::Task angler_task(angler_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
+  //                        TASK_STACK_DEPTH_DEFAULT, "ANGLER_TASK");
+  // pros::Task arm_task(arm_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
+  //                        TASK_STACK_DEPTH_DEFAULT, "ARM_TASK");
+  // pros::Task drive_task(drive_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
+  //                        TASK_STACK_DEPTH_DEFAULT, "DRIVE_TASK");
+  // pros::Task ultra_task(ultra_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
+  //                       TASK_STACK_DEPTH_DEFAULT, "ULTRA_TASK");
+  // pros::Task intake_task(intake_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
+  //                       TASK_STACK_DEPTH_DEFAULT, "INTAKE_TASK");
+  // pros::Task tracking_task(tracking_task_fn, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "TRACKING_TASK");
+  // using namespace Auton;
 
-  auton_control->define_auton(AutonControl::Red5PointAuton, AT_Red5);
-  auton_control->define_auton(AutonControl::Blue5PointAuton, AT_Blue5);
+  // auton_control->define_auton(AutonControl::Red5PointAuton, AT_Red5);
+  // auton_control->define_auton(AutonControl::Blue5PointAuton, AT_Blue5);
 
-  auton_control->define_auton(AutonControl::Red7PointAuton, AT_Red7);
-  auton_control->define_auton(AutonControl::Blue7PointAuton, AT_Blue7);
+  // auton_control->define_auton(AutonControl::Red7PointAuton, AT_Red7);
+  // auton_control->define_auton(AutonControl::Blue7PointAuton, AT_Blue7);
 
-  auton_control->define_auton(AutonControl::SkillsAuton, AT_Skills);
-  auton_control->define_auton(AutonControl::TestAuton, AT_Test_Ultras);
+  // auton_control->define_auton(AutonControl::SkillsAuton, AT_Skills);
+  // auton_control->define_auton(AutonControl::TestAuton, AT_Test_Ultras);
 
-  auton_control->select_auton(AutonControl::Blue7PointAuton);
+  // auton_control->select_auton(AutonControl::Blue7PointAuton);
 }
 /**
  * Runs while the robot is in the disabled state of Field Management System or

@@ -21,7 +21,7 @@ using namespace std;
     return label;
   }
 
-  Label::Label( unordered_map<string, string>::iterator textRef, vector<Component_Base*> children) : Component_Base(children), textProp(textRef)
+  Label::Label(unordered_map<string, string>::iterator textRef, vector<Component_Base*> children) : Component_Base(children), textProp(textRef)
   {
 
   }
