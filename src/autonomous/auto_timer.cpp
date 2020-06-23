@@ -2,7 +2,7 @@
 #include "autonomous/auto_timer.hpp"
 #include "globals.hpp"
 
-AutoTimer::AutoTimer(int duration, bool sync, std::function<void(void)> task, std::function<void(void)> init, std::function<void(void)> kill)
+AutoTimer::AutoTimer(AutoTimerArgs args)
     : AutoTask{
           [&](void) -> void {
             _run_action();
@@ -10,8 +10,8 @@ AutoTimer::AutoTimer(int duration, bool sync, std::function<void(void)> task, st
           },
           [&](void) -> bool {
             //pros::lcd::set_text(5, "time +" + std::to_string(_time) + "duartion" + std::to_string(_duration)); 
-            return (_time >= _duration); }, init, kill, sync},
-      _duration(duration), _run_action(task)
+            return (_time >= _duration); }, args.init, args.kill, args.sync},
+      _duration(args.interval), _run_action(args.task)
 {}
 void AutoTimer::_run_increment() {
   _time += DELAY_INTERVAL;

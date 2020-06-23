@@ -43,7 +43,7 @@ protected:
   bool isOverrideMode = false;
   float override_power = 0;
   void Move_Motor() override;
-    Motor_Controller* _angler_motor_controller;
+  Motor_Controller* _angler_motor_controller;
     pros::Motor* _angler_motor;
     Pid* _angler_pid;
     Pid* _master_pid;
