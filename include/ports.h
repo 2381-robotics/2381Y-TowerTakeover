@@ -26,7 +26,11 @@
 
 #define RIGHT_ULTRA_ECHO 7
 #define RIGHT_ULTRA_PING 8
+
+#define INERTIAL_PORT 10
+
 //test
+
 #define EXAMPLE_SIG 1
 
 #endif

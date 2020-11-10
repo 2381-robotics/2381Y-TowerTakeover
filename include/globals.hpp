@@ -68,10 +68,12 @@ extern Intake* intake;
 // Tracking Wheels
 extern Position_Tracker* position_tracker;
 
-extern std::array<int,3> encoder_ports_left, encoder_ports_right, encoder_ports_back;
+extern std::array<int,3> h_enc_ports, v_enc_ports;
 
 extern std::array<double,3> wheel_diameters, wheel_offsets;
-extern pros::ADIEncoder encoder_left, encoder_right, encoder_back;
+extern pros::ADIEncoder h_enc, v_enc;
+extern pros::Imu imu;
+
 extern pros::Vision vision_sensor;
 extern VisionIndexer* vision_indexer;
 

@@ -25,9 +25,6 @@ Motor IntakeMotor2 (16,true);
 Motor InternalIntakeMotor (13, false);
 Motor FlywheelMotor(14, false);
 
-ADIEncoder HorEncoder(5,6, false);
-ADIEncoder VerEncoder(7,8,false);
-
 array<double, 3> yeet = {0.3,0,0};      
 // Motor_Controller* FlywheelController = new Motor_Controller( &yeet[0], &yeet[1], &yeet[2], &FlywheelMotor);
 // Motor_Controller* IntakeController = new Motor_Controller( &yeet[0], &yeet[1], &yeet[2], &IntakeMotor);
@@ -50,7 +47,6 @@ void driver()  {
   FlywheelMotor.move(127 * (master.get_digital(DIGITAL_A) - master.get_digital(DIGITAL_B)));
 
     // angler->Multiply_Max_Speed(2);
-  lcd::set_text(2, "VERT: " + to_string(VerEncoder.get_value()) + " Horz: " + to_string(HorEncoder.get_value()));
   // intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 50 - 110* (master.get_digital(DIGITAL_L2) && master.get_digital(DIGITAL_L1)) - 30* master.get_digital(DIGITAL_RIGHT)* vision_indexer->Check_Object() ));
   robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
   /*done just upload*/

@@ -103,7 +103,7 @@ void MasterController::autonomous() {
 
 void MasterController::auton_editor() {
     lcd::set_text(1, "Current Increment Value: " + to_string(_autonomous_increment));
-    lcd::set_text(2, "Set To " + to_string(_local_increment));
+    // lcd::set_text(2, "Set To " + to_string(_local_increment));
     lcd::set_text(3, "A : SAVE");
     lcd::set_text(4, "X : RESET");
 

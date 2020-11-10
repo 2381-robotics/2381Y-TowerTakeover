@@ -86,27 +86,26 @@ array<double, 3> master_intake_pid_values = {0, 0.005, 0};
 Intake *intake = new Intake();
 
 //  Encoder Variables
-array<int, 3> encoder_ports_left = {3,4,0}; //Top Port, Bottom Port, Inverted (0 or 1)
-array<int, 3> encoder_ports_right = {1,2,0}; //Top Port, Bottom Port, Inverted (0 or 1)
-array<int, 3> encoder_ports_back = {5,6,0}; //Top Port, Bottom Port, Inverted (0 or 1)
+array<int, 3> v_enc_ports = {7,8,1}; //Top Port, Bottom Port, Inverted (0 or 1)
+array<int, 3> h_enc_ports = {5,6,1}; //Top Port, Bottom Port, Inverted (0 or 1)
 
 array<double, 3> wheel_diameters = {2.8, 2.8, 2.8}; // Wheel Diameters in Inches, (Left - Right - Back)
-array<double, 3> wheel_offsets = {1.77, 1.77, 1.97};   //Perpindicular Wheel Offsets from Center in Inches, (Left - Right - Back)
+array<double, 3> wheel_offsets = {2.25, 2.25, 0.5};   //Perpindicular Wheel Offsets from Center in Inches, (Left - Right - Back)
+
+Imu imu(INERTIAL_PORT);
+
 Position_Tracker* position_tracker = Position_Tracker::instance();
 
-ADIEncoder encoder_left(encoder_ports_left[0], encoder_ports_left[1], encoder_ports_left[2]);
-ADIEncoder encoder_right(encoder_ports_right[0], encoder_ports_right[1], encoder_ports_right[2]);
-ADIEncoder encoder_back(encoder_ports_back[0], encoder_ports_back[1], encoder_ports_back[2]);
-
-
-
+ADIEncoder h_enc(h_enc_ports[0], h_enc_ports[1], h_enc_ports[2]);
+ADIEncoder v_enc(v_enc_ports[0], v_enc_ports[1], v_enc_ports[2]);
 
 pros::Vision vision_sensor(VISION_PORT);
 VisionIndexer* vision_indexer = new VisionIndexer(&vision_sensor);
 
-ADIUltrasonic ultra_left(LEFT_ULTRA_ECHO, LEFT_ULTRA_PING);
-ADIUltrasonic ultra_right(RIGHT_ULTRA_ECHO, RIGHT_ULTRA_PING);
-UltraFinder* ultra_finder = new UltraFinder(&ultra_left, &ultra_right);
+ADIUltrasonic ultra_left(1, 2);
+ADIUltrasonic ultra_right(3, 4);
+// UltraFinder* ultra_finder = new UltraFinder(&ultra_left, &ultra_right);
+UltraFinder* ultra_finder = nullptr;
 
 void arm_task_fn(void *param) 
 {
@@ -188,14 +187,14 @@ void initialize()
 {
 
   
+  pros::lcd::initialize();
   // screen();
   
   robot->drive->Create();
   // angler->Create();
   // intake->Create();
   // arm->Create();
-  // position_tracker->Create();
-  pros::lcd::initialize();
+  position_tracker->Create();
 
   vision_indexer->vision_sensor->set_zero_point(pros::E_VISION_ZERO_CENTER);
   pros::vision_signature_s_t BLACK_SIG =
@@ -228,8 +227,8 @@ void initialize()
   //                       TASK_STACK_DEPTH_DEFAULT, "ULTRA_TASK");
   // pros::Task intake_task(intake_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
   //                       TASK_STACK_DEPTH_DEFAULT, "INTAKE_TASK");
-  // pros::Task tracking_task(tracking_task_fn, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "TRACKING_TASK");
-  // using namespace Auton;
+  pros::Task tracking_task(tracking_task_fn, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "TRACKING_TASK");
+  using namespace Auton;
 
   // auton_control->define_auton(AutonControl::Red5PointAuton, AT_Red5);
   // auton_control->define_auton(AutonControl::Blue5PointAuton, AT_Blue5);
@@ -238,9 +237,9 @@ void initialize()
   // auton_control->define_auton(AutonControl::Blue7PointAuton, AT_Blue7);
 
   // auton_control->define_auton(AutonControl::SkillsAuton, AT_Skills);
-  // auton_control->define_auton(AutonControl::TestAuton, AT_Test_Ultras);
+  auton_control->define_auton(AutonControl::TestAuton, AT_Test_Ultras);
 
-  // auton_control->select_auton(AutonControl::Blue7PointAuton);
+  auton_control->select_auton(AutonControl::TestAuton);
 }
 /**
  * Runs while the robot is in the disabled state of Field Management System or
