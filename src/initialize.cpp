@@ -98,6 +98,9 @@ ADIEncoder encoder_left(encoder_ports_left[0], encoder_ports_left[1], encoder_po
 ADIEncoder encoder_right(encoder_ports_right[0], encoder_ports_right[1], encoder_ports_right[2]);
 ADIEncoder encoder_back(encoder_ports_back[0], encoder_ports_back[1], encoder_ports_back[2]);
 
+
+
+
 pros::Vision vision_sensor(VISION_PORT);
 VisionIndexer* vision_indexer = new VisionIndexer(&vision_sensor);
 
@@ -185,13 +188,14 @@ void initialize()
 {
 
   
-  screen();
+  // screen();
   
-  // robot->drive->Create();
+  robot->drive->Create();
   // angler->Create();
   // intake->Create();
   // arm->Create();
   // position_tracker->Create();
+  pros::lcd::initialize();
 
   vision_indexer->vision_sensor->set_zero_point(pros::E_VISION_ZERO_CENTER);
   pros::vision_signature_s_t BLACK_SIG =
@@ -218,8 +222,8 @@ void initialize()
   //                        TASK_STACK_DEPTH_DEFAULT, "ANGLER_TASK");
   // pros::Task arm_task(arm_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
   //                        TASK_STACK_DEPTH_DEFAULT, "ARM_TASK");
-  // pros::Task drive_task(drive_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
-  //                        TASK_STACK_DEPTH_DEFAULT, "DRIVE_TASK");
+  pros::Task drive_task(drive_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
+                         TASK_STACK_DEPTH_DEFAULT, "DRIVE_TASK");
   // pros::Task ultra_task(ultra_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
   //                       TASK_STACK_DEPTH_DEFAULT, "ULTRA_TASK");
   // pros::Task intake_task(intake_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,

@@ -3,6 +3,8 @@
 #include "components/button.hpp"
 #include "components/label.hpp"
 #include "utils.hpp"
+#include "components/tab.hpp"
+#include "components/tabview.hpp"
 
 #include <unordered_map>
 using namespace std;
@@ -25,13 +27,7 @@ using namespace std;
   App::App()  {
     $state = $initialState();
     assignChildren({
-      new Button({
-        new Label($state.find("labelText"))
-      },
-      [&](void) -> void {
-        this->$setState("labelText", "YEEEEEEEE");
-        print("Lambda Capture" + $state["labelText"] + " " + $getState("labelText"));
-      })
+      new TabView()
     });
   }
 

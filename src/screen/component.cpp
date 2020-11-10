@@ -25,8 +25,6 @@ void Component_Base::$setState(string key, string value)
     {
       // $state.insert(make_pair("key", "value"));
       print("Key Not Found");
-
-
     } else{
       this->$state[key] = value;
       print("Key Found" + $state[key]);
@@ -43,15 +41,15 @@ unordered_map<string, string> Component_Base::$initialState()
     return {};
 }
 
-  void Component_Base::render(lv_obj_t* newContext) {
-    // print("rerendering something");
-    parentContext = newContext;
-    screen = createComponent(parentContext);
-    screen->free_ptr = this;
-    for(auto i : children){
-      i->render(screen);
-    };
-  }
+void Component_Base::render(lv_obj_t* newContext) {
+  // print("rerendering something");
+  parentContext = newContext;
+  screen = createComponent(parentContext);
+  screen->free_ptr = this;
+  for(auto i : children){
+    i->render(screen);
+  };
+}
 
   void Component_Base::assignChildren(vector<Component_Base*> children) {
     this->children = children;

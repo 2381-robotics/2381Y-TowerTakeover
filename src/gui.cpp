@@ -154,7 +154,7 @@ void set_switch_style (lv_obj_t * sw) {
   lv_style_copy(&knob_off_style, &lv_style_pretty);
   knob_off_style.body.radius = LV_RADIUS_CIRCLE;
   knob_off_style.body.main_color = LV_COLOR_RED;
-  knob_off_style.body.grad_color = LV_COLOR_MARRON; //misspelled should be MAROON
+  knob_off_style.body.grad_color = LV_COLOR_MAROON; //misspelled should be MAROON
   knob_off_style.body.shadow.width = 4;
   knob_off_style.body.shadow.type = LV_SHADOW_BOTTOM;
 

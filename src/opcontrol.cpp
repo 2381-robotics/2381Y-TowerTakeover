@@ -18,11 +18,19 @@
 
 using namespace pros;
 
-Motor FlywheelMotor (15, false);
-Motor IntakeMotor (16,false);
-array<double, 3> yeet = {0.3,0,0};
-Motor_Controller* FlywheelController = new Motor_Controller( &yeet[0], &yeet[1], &yeet[2], &FlywheelMotor);
-Motor_Controller* IntakeController = new Motor_Controller( &yeet[0], &yeet[1], &yeet[2], &IntakeMotor);
+// Motor FlywheelMotor (15, false);
+Motor IntakeMotor (15,false);
+Motor IntakeMotor2 (16,true);
+
+Motor InternalIntakeMotor (13, false);
+Motor FlywheelMotor(14, false);
+
+ADIEncoder HorEncoder(5,6, false);
+ADIEncoder VerEncoder(7,8,false);
+
+array<double, 3> yeet = {0.3,0,0};      
+// Motor_Controller* FlywheelController = new Motor_Controller( &yeet[0], &yeet[1], &yeet[2], &FlywheelMotor);
+// Motor_Controller* IntakeController = new Motor_Controller( &yeet[0], &yeet[1], &yeet[2], &IntakeMotor);
 
 bool spinFly = false;
 //   Intake * intake = new Intake();
@@ -31,16 +39,20 @@ bool snapshot = false;
 void driver()  {
     if(master.get_digital_new_press(DIGITAL_L2));
     {
-      spinFly = !spinFly;
+      spinFly = !spinFly; 
     }
     // FlywheelController->Set_Speed(spinFly *300);
     // IntakeController->Set_Speed(master.get_digital(DIGITAL_L1) * 300);
-  FlywheelMotor.move_velocity(200* spinFly);
-  IntakeMotor.move(master.get_digital(DIGITAL_L1) * 127);
-    // angler->Multiply_Max_Speed(2);
+  // FlywheelMotor.move_velocity(200* spinFly);
+  IntakeMotor.move(127 *(master.get_digital(DIGITAL_L1) -master.get_digital(DIGITAL_L2)));
+  IntakeMotor2.move( 127 * (master.get_digital(DIGITAL_L1) -master.get_digital(DIGITAL_L2)));
+  InternalIntakeMotor.move(100 * (master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
+  FlywheelMotor.move(127 * (master.get_digital(DIGITAL_A) - master.get_digital(DIGITAL_B)));
 
+    // angler->Multiply_Max_Speed(2);
+  lcd::set_text(2, "VERT: " + to_string(VerEncoder.get_value()) + " Horz: " + to_string(HorEncoder.get_value()));
   // intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 50 - 110* (master.get_digital(DIGITAL_L2) && master.get_digital(DIGITAL_L1)) - 30* master.get_digital(DIGITAL_RIGHT)* vision_indexer->Check_Object() ));
-  // robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
+  robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
   /*done just upload*/
   // intakeMotorLeft.move_voltage(master.get_digital(DIGITAL_L1)* 12000 - master.get_digital(DIGITAL_L2) * 6000);
   // intakeMotorRight.move_voltage(master.get_digital(DIGITAL_L1) * 12000 - master.get_digital(DIGITAL_L2) * 6000);
