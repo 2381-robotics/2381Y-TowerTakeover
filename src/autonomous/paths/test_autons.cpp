@@ -12,6 +12,7 @@
 #include "autonomous/auto_sequence.hpp"
 #include <vector>
 #include <functional>
+#include "autonomous/auto_drive.hpp"
 #include "autonomous/global_sequences.hpp"
 
 using namespace std;
@@ -20,22 +21,34 @@ using namespace pros;
 AutoSequence *Auton::AT_Test_Ultras = AutoSequence::FromTasks(
     vector<AutoTask>{
         AutoTask::SyncTask(
-            [](void) -> void {
-                // robot->drive->Set_Point_Drive(60, 0, 3000, ultra_finder->Ultra_Angle(), 2, 0.5, false, 400, 1, {0, 0, 0, 0});
-                // intake->Index_Intake(-50, 600);
-                robot->drive->Set_Point_Drive(100, 0, 3000);
+        [&](void) -> void {                         // Set Intake to max speed
+            robot->drive->Set_Curve_Drive({-30,30}, M_PI/2); // At the same time, drive forward towards the first row of cubes
+        },
+        [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
 
-                // robot->drive->Set_Point_Drive(0,0, turnValue, 0);
-            },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
         AutoTask::AutoDelay(1000),
         AutoTask::SyncTask(
-            [](void) -> void {
-                robot->drive->Set_Point_Drive(100, 180, 3000);
+        [&](void) -> void {                         // Set Intake to max speed
+            robot->drive->Set_Curve_Drive({0,0}, 0); // At the same time, drive forward towards the first row of cubes
+        },
+        [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
 
-                // robot->drive->Set_Point_Drive(0,0, turnValue, 0);
-            },
-            [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
+        // AutoTask::SyncTask(
+        //     [](void) -> void {
+        //         // robot->drive->Set_Point_Drive(60, 0, 3000, ultra_finder->Ultra_Angle(), 2, 0.5, false, 400, 1, {0, 0, 0, 0});
+        //         // intake->Index_Intake(-50, 600);
+        //         robot->drive->Set_Point_Drive(100, 0, 3000);
+
+        //         // robot->drive->Set_Point_Drive(0,0, turnValue, 0);
+        //     },
+        //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
+        // AutoTask::SyncTask(
+        //     [](void) -> void {
+        //         robot->drive->Set_Point_Drive(100, 180, 3000);
+
+        //         // robot->drive->Set_Point_Drive(0,0, turnValue, 0);
+        //     },
+        //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
 
         AutoTask::AutoDelay(10000000),
     });

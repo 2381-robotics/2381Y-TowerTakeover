@@ -83,14 +83,14 @@ vector<double[]> Path_Inject(vector<double[]> path, double interval)
 
 void Mech_Drive::Follow_Path()
 {
-  array<double, 3> currentPosition = position_tracker->Get_Position();
-  double parDistance = sqrt(pow((currentPosition[0] - lookaheadPoint[0]), 2) + pow(currentPosition[1] - lookaheadPoint[1], 2));
-  float lookaheadAngle = atan2(lookaheadPoint[1], lookaheadPoint[0]);
-  float currentAngle = currentPosition[2];
-  float angleDifference = lookaheadAngle - currentAngle;
-  double perpendicularDistance = parDistance * sin(angleDifference) / sin(PI - 2 * parDistance);
-  double curvature = perpendicularDistance == 0 ? 256 : 1 / perpendicularDistance;
-  Set_Drive(0, 60, curvature * turningCoefficient, 0);
+  // array<double, 3> currentPosition = position_tracker->Get_Position();
+  // double parDistance = sqrt(pow((currentPosition[0] - lookaheadPoint[0]), 2) + pow(currentPosition[1] - lookaheadPoint[1], 2));
+  // float lookaheadAngle = atan2(lookaheadPoint[1], lookaheadPoint[0]);
+  // float currentAngle = currentPosition[2];
+  // float angleDifference = lookaheadAngle - currentAngle;
+  // double perpendicularDistance = parDistance * sin(angleDifference) / sin(PI - 2 * parDistance);
+  // double curvature = perpendicularDistance == 0 ? 256 : 1 / perpendicularDistance;
+  // Set_Drive(0, 60, curvature * turningCoefficient, 0);
 }
 
 void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double right_y)
@@ -193,6 +193,75 @@ double UltraAlign()
   }
   return previousAlign;
 }
+
+
+void Mech_Drive::Set_Path_Drive(complex<double> EndPoint, double accelSpeed, double deaccelSpeed, double criticalPoint, double criticalMultiplier, std::array<double, 4> endVelo)
+{
+
+  auto CurrentPos = position_tracker->Get_Position();
+  auto Displacement = EndPoint - CurrentPos;
+
+  lcd::set_text(3, "DISTANCE: " + to_string(abs(Displacement)));
+  // lcd::set_text(4, "Current: " + to_string(CurrentPos.real()) + ", " + to_string(CurrentPos.imag()));
+  // lcd::set_text(5, "End Point: " + to_string(EndPoint.real()) + ", " + to_string(EndPoint.imag()));
+  lcd::set_text(4, "Disp: " + to_string(Displacement.real()) + ", " + to_string(Displacement.imag()));
+
+  if(abs(Displacement) < 4)
+  {
+    Stop();
+    _is_running = false;
+    return;
+  }
+
+  auto AngleDisplacement = arg(Displacement);
+  auto AngleRobot = (position_tracker->Get_Angle() + M_PI/2);
+  auto AngleDiff = AngleRobot-AngleDisplacement;
+  
+  auto Forwards = 80 * cos(AngleDiff);
+  auto Turn = 80 * sin(AngleDiff)*0.8;
+  lcd::set_text(5, "AngleDiff: " + to_string(AngleDiff*180/M_PI));
+  lcd::set_text(6, "Input: " + to_string(Forwards) + " / " + to_string(Turn));
+  Set_Drive(Turn, Forwards, Turn, 0);
+}
+
+void Mech_Drive::Set_Curve_Drive(complex<double> EndPoint, double EndAngle, double accelSpeed, double deaccelSpeed, double criticalPoint, double criticalMultiplier, std::array<double, 4> endVelo)
+{
+
+  auto CurrentPos = position_tracker->Get_Position();
+  auto Displacement = EndPoint - CurrentPos;
+
+  lcd::set_text(3, "DISTANCE: " + to_string(abs(Displacement)));
+  // lcd::set_text(4, "Current: " + to_string(CurrentPos.real()) + ", " + to_string(CurrentPos.imag()));
+  // lcd::set_text(5, "End Point: " + to_string(EndPoint.real()) + ", " + to_string(EndPoint.imag()));
+  lcd::set_text(4, "Disp: " + to_string(Displacement.real()) + ", " + to_string(Displacement.imag()));
+
+  auto AngleDisplacement = arg(Displacement);
+  auto AngleRobot = (position_tracker->Get_Angle());
+  auto AngleDiff = AngleRobot-AngleDisplacement  + M_PI/2;
+  
+  auto EndAngleDiff = (AngleRobot-EndAngle)/2;
+
+  if(abs(Displacement) < 4 && abs(EndAngleDiff)<0.09)
+  {
+    Stop();
+    _is_running = false;
+    return;
+  }
+
+
+  
+
+  auto Forwards = 80 * cos(AngleDiff);
+  auto Turn = 80 * sin(EndAngleDiff) / pow(pow(sin(EndAngleDiff),2.0),0.25);
+  auto Strafe = 80 * sin(AngleDiff)* cos(EndAngleDiff) * cos(EndAngleDiff);
+
+  lcd::set_text(5, "AngleDiff: " + to_string((int)(AngleDiff*180/M_PI)) + "EndDiff: " + to_string((int)(EndAngleDiff*180/M_PI)));
+  lcd::set_text(6, "Input: " + to_string((int)Strafe) + " / " + to_string((int)Forwards) + " / " + to_string((int)Turn));
+  Set_Drive(Strafe, Forwards, Turn, 0);
+}
+
+
+
 void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance, double turnSpeed, double accelSpeed, double deaccelSpeed, bool wallAlign, double criticalPoint, double criticalMultiplier, std::array<double, 4> endVelo)
 {
   bool blocking = false;
@@ -287,6 +356,7 @@ void Mech_Drive::Set_Point_Drive(double speed, double direction, double distance
     _is_running = false;
   }
 }
+
 void Mech_Drive::Stop()
 {
   left_front_motor.move(0);

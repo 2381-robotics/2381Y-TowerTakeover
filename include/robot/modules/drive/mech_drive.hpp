@@ -5,6 +5,7 @@
 #include "robot/control/motor_controller.hpp"
 #include "robot/control/distance_controller.hpp"
 #include <array>
+#include <complex>
 
 class Mech_Drive : public Drive {
 public:
@@ -14,6 +15,9 @@ public:
   void Set_Drive(double left_x, double left_y, double right_x, double right_y, bool wallAlign);
 
   void Set_Point_Drive(double speed, double direction, double distance, double turnSpeed = 0, double accelSpeed =  1, double deaccelSpeed = 1,  bool wallAlign = false, double criticalPoint = 400, double criticalMultiplier = 1, std::array<double, 4> endVelo = {0, 0, 0, 0});
+  void Set_Path_Drive(std::complex<double> EndPoint, double accelSpeed =  1, double deaccelSpeed = 1, double criticalPoint = 400, double criticalMultiplier = 1, std::array<double, 4> endVelo = {0, 0, 0, 0});
+  void Set_Curve_Drive(std::complex<double> EndPoint, double EndAngle, double accelSpeed =  1, double deaccelSpeed = 1, double criticalPoint = 400, double criticalMultiplier = 1, std::array<double, 4> endVelo = {0, 0, 0, 0});
+
 
   std::array<double,4> previousVelo;
 

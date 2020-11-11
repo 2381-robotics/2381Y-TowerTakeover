@@ -24,7 +24,7 @@ class Position_Tracker {
     static Position_Tracker* instance();
     void Track_Position();
 
-    std::array<double,3> Get_Position();
+    std::complex<double> Get_Position();
     std::array<double,3> Get_Velocity();
 
     double Get_Angle();
