@@ -248,12 +248,12 @@ void Mech_Drive::Set_Curve_Drive(complex<double> EndPoint, double EndAngle, doub
     return;
   }
 
-
+  double deaccellCoeff = abs(Displacement) < 6 ? ((abs(Displacement)+ 6)/ 12) : 1;
   
 
-  auto Forwards = 80 * cos(AngleDiff);
+  auto Forwards = 80 * cos(AngleDiff) * deaccellCoeff;
   auto Turn = 80 * sin(EndAngleDiff) / pow(pow(sin(EndAngleDiff),2.0),0.25);
-  auto Strafe = 80 * sin(AngleDiff)* cos(EndAngleDiff) * cos(EndAngleDiff);
+  auto Strafe = 80 * sin(AngleDiff)* pow(cos(EndAngleDiff),2)  * deaccellCoeff;
 
   lcd::set_text(5, "AngleDiff: " + to_string((int)(AngleDiff*180/M_PI)) + "EndDiff: " + to_string((int)(EndAngleDiff*180/M_PI)));
   lcd::set_text(6, "Input: " + to_string((int)Strafe) + " / " + to_string((int)Forwards) + " / " + to_string((int)Turn));
