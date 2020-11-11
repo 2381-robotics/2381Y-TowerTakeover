@@ -19,13 +19,25 @@ void Position_Tracker::Create() {
     inertial_ = &imu;
     v_enc_ = &v_enc;
     h_enc_ = &h_enc;
-    
+
     inertial_->reset();
+    // Maybe take an input or global on initial position;
+    Set_Position(0, M_PI/2);
 }
-// Position_Tracker::Position_Tracker() {}
-void Position_Tracker::Set_Position(double XPos, double YPos, double Angle) 
+
+void Position_Tracker::Reset()
 {
-    current_position = {XPos, YPos, Angle};
+    v_enc_->reset();
+    h_enc_->reset();
+    ang_disp = ang_last = ang_vel = ang_origin = 0;
+    h_disp = v_disp = h_vel = v_vel = origin = 0;
+}
+
+void Position_Tracker::Set_Position(complex<double> position_, double angle_) 
+{
+    Reset();
+    origin = position_;
+    ang_origin = angle_;
 }
 
 
@@ -38,9 +50,12 @@ double Position_Tracker::Get_Angle()
 
     auto angle = inertial_->get_yaw();
     auto corrected = angle;
+    // Corrected is adjusted for drift?
+
     auto radians = -corrected * M_PI / 180;
-    return radians;
+    return fmod(radians + ang_origin, 2 * M_PI);
 }
+
 void Position_Tracker::Track_Position() 
 {
     if(inertial_->is_calibrating()) 
@@ -50,12 +65,11 @@ void Position_Tracker::Track_Position()
     }
     auto quat = inertial_->get_euler();
 
-//     return;
-    angular_ori = { - quat.pitch * M_PI / 180, - quat.roll * M_PI/180, this->Get_Angle()};
-    angular_vel = {angular_ori[0] - angular_last[0], angular_ori[1] - angular_last[1], fmod(angular_ori[2] - angular_last[2], 2*M_1_PI)};
+    ang_disp = this->Get_Angle();
+    ang_vel = fmod(ang_disp - ang_last, 2*M_1_PI);
     
-    auto quatText = " X " + to_string(angular_ori[0]) + " Y " + to_string(angular_ori[1]);
-    auto quatText2 = " z " + to_string(angular_ori[2]);
+    auto quatText = " X " + to_string(ang_disp) + " Y " + to_string(ang_disp);
+    auto quatText2 = " z " + to_string(ang_disp);
 
 
     // lcd::set_text(3, quatText);
@@ -72,33 +86,37 @@ void Position_Tracker::Track_Position()
     position_change[back_] = (current_encoder_values[back_] - last_encoder_values[back_]) * PI * wheel_diameters[back_] / 360;
 
     // Current Orientation - Angular Change/2 to get average between current and last angle measured.
-    vert_velocity = (position_change[right_] - wheel_offsets[right_] * angular_vel[2]) * exp<double>(1i * (angular_ori[2] + M_PI/2 - angular_vel[2]/2));
-    horz_velocity = (position_change[back_] - wheel_offsets[back_] * angular_vel[2]) * exp<double>(1i * (angular_ori[2] - angular_vel[2]/2));
+    v_vel = (position_change[right_] - wheel_offsets[right_] * ang_vel) * exp<double>(1i * (ang_disp + M_PI/2 - ang_vel/2));
+    h_vel = (position_change[back_] - wheel_offsets[back_] * ang_vel) * exp<double>(1i * (ang_disp - ang_vel/2));
 
     
 
-    h_pos += horz_velocity;
-    v_pos += vert_velocity;
+    h_disp += h_vel;
+    v_disp += v_vel;
 
-    velocity = vert_velocity + horz_velocity;
-    position += velocity;
     // lcd::set_text(5, "V POS " + to_string(current_encoder_values[right_]));
     // lcd::set_text(6, "H POS " + to_string(current_encoder_values[back_]));
 
     // lcd::set_text(5, "V POS : (" + to_string(v_pos.real()) + ", " + to_string(v_pos.imag()) + ")");
     // lcd::set_text(6, "H POS : (" + to_string(h_pos.real()) + ", " + to_string(h_pos.imag()) + ")");
-    lcd::set_text(2, "POSITION : ("  + to_string((int)round( 100* position.real())) + ", " + to_string((int)round( 100* position.imag())) + "), " + to_string(round(angular_ori[2] * 180 / M_PI)) +" deg");
-    angular_last = angular_ori;
+    lcd::set_text(2, "POSITION : ("  + to_string((int)round( 100* Get_Position().real())) + ", " + to_string((int)round( 100* Get_Position().imag())) + "), " + to_string(round(ang_disp * 180 / M_PI)) +" deg");
+    ang_last = ang_disp;
     last_encoder_values = current_encoder_values;
         
 }  
 
 complex<double> Position_Tracker::Get_Position()
 {
-    return position;
+    return Get_Displacement() + origin;
 }
-array<double,3> Position_Tracker::Get_Velocity() 
+
+complex<double> Position_Tracker::Get_Displacement()
 {
-    return current_velocity;
+    return v_disp + h_disp;
+}
+
+complex<double> Position_Tracker::Get_Velocity() 
+{
+    return v_vel + h_vel;
 }
 // Position_Tracker::Poistion_Tra  

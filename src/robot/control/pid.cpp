@@ -9,8 +9,6 @@ Pid::Pid(double* kp, double* ki, double* kd) {
   ki_ = ki;
   kd_ = kd;
   ResetError();
-
-
 }
 
 /**

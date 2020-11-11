@@ -5,10 +5,15 @@
 
 using namespace std;
 AutoTask AutoPath(complex<double> EndPoint, double angle)
-{ 
+{
     return AutoTask::SyncTask(
-        [&](void) -> void {                         // Set Intake to max speed
-            robot->drive->Set_Path_Drive({-30,30}); // At the same time, drive forward towards the first row of cubes
+        [EndPoint](void) -> void {                         
+        // Lambda Capture By VALUE -> =, Lambda Capture by REFERENCE -> &
+        // Default will capture here by Value because EndPoint is value not pointer.
+        // If wanted to capture pointer of EndPoint, use &Endpoint.
+        // Before, was trolling because [&] captures the pointer to EndPoint, but EndPoint is a function argument so probably
+        // A temporary memory address that was deleted or overridden after, so it was capturing a pointer to garbage.
+            robot->drive->Set_Path_Drive(EndPoint);
         },
         [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {});
 }

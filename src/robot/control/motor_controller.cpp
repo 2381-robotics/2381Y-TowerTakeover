@@ -10,8 +10,7 @@ Motor_Controller::Motor_Controller(double* kp, double* ki, double* kd, pros::Mot
   pid = new Pid(kp, ki, kd);
 }
 
-
-double Motor_Controller::Get_Speed () {
+double Motor_Controller::Get_Speed() {
   return this->motor->get_actual_velocity();
 }
 

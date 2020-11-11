@@ -25,11 +25,14 @@ class Position_Tracker {
     void Track_Position();
 
     std::complex<double> Get_Position();
-    std::array<double,3> Get_Velocity();
+    std::complex<double> Get_Displacement();
+
+    std::complex<double> Get_Velocity();
 
     double Get_Angle();
 
-    void Set_Position(double XPos, double YPos, double Angle);
+    void Set_Position(std::complex<double> position = 0, double Angle = 0);
+    void Reset();
 
     void Create();
 
@@ -42,18 +45,13 @@ class Position_Tracker {
     pros::Imu* inertial_ = nullptr;
 
 
-    std::array<double, 3> angular_ori = {0,0,0}, angular_vel = {0,0,0}, angular_last = {0,0,0};
+    double ang_disp = 0, ang_vel = 0, ang_last = 0, ang_origin = 0;
 
-    std::complex<double> position = 0;
-    std::complex<double> h_pos = 0;
-    std::complex<double> v_pos = 0;
+    std::complex<double> origin = 0;
 
+    std::complex<double> h_disp = 0, v_disp = 0;
 
-
-    std::complex<double> vert_velocity = 0;
-    std::complex<double> horz_velocity = 0;
-    std::complex<double> velocity = 0; 
-
+    std::complex<double> v_vel = 0, h_vel = 0;
 
     std::array<double, 3> current_position = {0,0,0}, current_velocity = {0,0,0}, last_position = {0,0,0};
     std::array<double,3> current_encoder_values = {0,0,0}, last_encoder_values = {0,0,0}, position_change = {0,0,0};
