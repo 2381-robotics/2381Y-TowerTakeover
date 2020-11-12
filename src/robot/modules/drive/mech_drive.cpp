@@ -105,10 +105,10 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
   {
     _master_error_average = _master_setpoint - _motor_value_average;
   }
-  _left_back_setpoint = (left_y - left_x + std::abs(right_x) * (right_x) / 127);
-  _left_front_setpoint = (left_y + left_x + std::abs(right_x) * (right_x) / 127);
-  _right_back_setpoint = (left_y + left_x - std::abs(right_x) * (right_x) / 127);
-  _right_front_setpoint = (left_y - left_x - std::abs(right_x) * (right_x) / 127);
+  _left_back_setpoint = (left_y - left_x + pow((std::abs(right_x)/127), 0.8) * (right_x));
+  _left_front_setpoint = (left_y + left_x + pow((std::abs(right_x)/127), 0.8) * (right_x));
+  _right_back_setpoint = (left_y + left_x - pow((std::abs(right_x)/127), 0.8) * (right_x));
+  _right_front_setpoint = (left_y - left_x - pow((std::abs(right_x)/127), 0.8) * (right_x));
 
   _master_setpoint = (abs(_left_back_setpoint) + abs(_left_front_setpoint) + abs(_right_back_setpoint) + abs(_right_front_setpoint)) / 4;
   _master_offset += (_master_setpoint);
@@ -219,12 +219,12 @@ void Mech_Drive::Set_Path_Drive(complex<double> EndPoint, double accelSpeed, dou
   
   auto Forwards = 80 * cos(AngleDiff);
   auto Turn = 80 * sin(AngleDiff)*0.8;
-  lcd::set_text(5, "AngleDiff: " + to_string(AngleDiff*180/M_PI));
-  lcd::set_text(6, "Input: " + to_string(Forwards) + " / " + to_string(Turn));
+  // lcd::set_text(5, "AngleDiff: " + to_string(AngleDiff*180/M_PI));
+  // lcd::set_text(6, "Input: " + to_string(Forwards) + " / " + to_string(Turn));
   Set_Drive(Turn, Forwards, Turn, 0);
 }
 
-void Mech_Drive::Set_Curve_Drive(complex<double> EndPoint, double EndAngle, double accelSpeed, double deaccelSpeed, double criticalPoint, double criticalMultiplier, std::array<double, 4> endVelo)
+void Mech_Drive::Set_Curve_Drive(complex<double> EndPoint, double EndAngle, double speed, double accelSpeed, double deaccelSpeed, double criticalPoint, double criticalMultiplier, std::array<double, 4> endVelo)
 {
 
   auto CurrentPos = position_tracker->Get_Position();
@@ -237,26 +237,27 @@ void Mech_Drive::Set_Curve_Drive(complex<double> EndPoint, double EndAngle, doub
 
   auto AngleDisplacement = arg(Displacement);
   auto AngleRobot = (position_tracker->Get_Angle());
-  auto AngleDiff = AngleRobot-AngleDisplacement  + M_PI/2;
+
+  auto AngleDiff = fmod(AngleRobot-AngleDisplacement + M_PI, 2* M_PI) - M_PI; 
+  //Normalize turn angle to between (-pi and pi) so sin(x/2) works properly
   
   auto EndAngleDiff = (AngleRobot-EndAngle)/2;
 
-  if(abs(Displacement) < 4 && abs(EndAngleDiff)<0.09)
+  if(abs(Displacement) < 1 && abs(EndAngleDiff)<0.01)
   {
     Stop();
     _is_running = false;
     return;
   }
 
-  double deaccellCoeff = abs(Displacement) < 6 ? ((abs(Displacement)+ 6)/ 12) : 1;
+  double deaccellCoeff = abs(Displacement) * 127 / ( 6 * speed)  < 1 ? abs(Displacement) * 127 / ( 6 * speed) : 1;
   
+  auto Forwards = speed * cos(AngleDiff) * deaccellCoeff;
+  auto Turn = speed * (0.8 * sin(EndAngleDiff) / pow(pow(sin(EndAngleDiff),2.0),0.25) + 0.2 * abs(sin(EndAngleDiff))/sin(EndAngleDiff));
+  auto Strafe = speed * sin(AngleDiff)* pow(cos(EndAngleDiff),2)  * deaccellCoeff;
 
-  auto Forwards = 80 * cos(AngleDiff) * deaccellCoeff;
-  auto Turn = 80 * sin(EndAngleDiff) / pow(pow(sin(EndAngleDiff),2.0),0.25);
-  auto Strafe = 80 * sin(AngleDiff)* pow(cos(EndAngleDiff),2)  * deaccellCoeff;
-
-  lcd::set_text(5, "AngleDiff: " + to_string((int)(AngleDiff*180/M_PI)) + "EndDiff: " + to_string((int)(EndAngleDiff*180/M_PI)));
-  lcd::set_text(6, "Input: " + to_string((int)Strafe) + " / " + to_string((int)Forwards) + " / " + to_string((int)Turn));
+  // lcd::set_text(5, "AngleDiff: " + to_string((int)(AngleDiff*180/M_PI)) + "EndDiff: " + to_string((int)(EndAngleDiff*180/M_PI)));
+  // lcd::set_text(6, "Input: " + to_string((int)Strafe) + " / " + to_string((int)Forwards) + " / " + to_string((int)Turn));
   Set_Drive(Strafe, Forwards, Turn, 0);
 }
 

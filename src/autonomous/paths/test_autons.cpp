@@ -16,22 +16,32 @@
 #include "autonomous/global_sequences.hpp"
 
 using namespace std;
-using namespace Auton;
+using namespace Auton;  
 using namespace pros;
 AutoSequence *Auton::AT_Test_Ultras = AutoSequence::FromTasks(
     vector<AutoTask>{
-        AutoTask::SyncTask(
-        [&](void) -> void {                         // Set Intake to max speed
-            robot->drive->Set_Curve_Drive({-30,30}, M_PI/2); // At the same time, drive forward towards the first row of cubes
-        },
-        [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
-
+AutoPath({30, 30}, 0),
         AutoTask::AutoDelay(1000),
-        AutoTask::SyncTask(
-        [&](void) -> void {                         // Set Intake to max speed
-            robot->drive->Set_Curve_Drive({0,0}, 0); // At the same time, drive forward towards the first row of cubes
-        },
-        [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
+AutoPath({0, 0}, M_PI/2),
+        AutoTask::AutoDelay(1000),
+        AutoPath({30, 30}, 0),
+        AutoTask::AutoDelay(1000),
+AutoPath({0, 0}, M_PI/2),
+        AutoTask::AutoDelay(1000),
+        AutoPath({30, 30}, 0),
+        AutoTask::AutoDelay(1000),
+AutoPath({0, 0}, M_PI/2),
+        AutoTask::AutoDelay(1000),
+        AutoPath({30, 30}, 0),
+        AutoTask::AutoDelay(1000),
+AutoPath({0, 0}, M_PI/2),
+        AutoTask::AutoDelay(1000),
+
+        // AutoTask::SyncTask(
+        // [&](void) -> void {                         // Set Intake to max speed
+        //     robot->drive->Set_Curve_Drive({0,0}, 0); // At the same time, drive forward towards the first row of cubes
+        // },
+        // [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
 
         // AutoTask::SyncTask(
         //     [](void) -> void {

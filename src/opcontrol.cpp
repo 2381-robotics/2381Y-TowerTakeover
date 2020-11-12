@@ -41,10 +41,11 @@ void driver()  {
     // FlywheelController->Set_Speed(spinFly *300);
     // IntakeController->Set_Speed(master.get_digital(DIGITAL_L1) * 300);
   // FlywheelMotor.move_velocity(200* spinFly);
-  IntakeMotor.move(127 *(master.get_digital(DIGITAL_L1) -master.get_digital(DIGITAL_L2)));
-  IntakeMotor2.move( 127 * (master.get_digital(DIGITAL_L1) -master.get_digital(DIGITAL_L2)));
-  InternalIntakeMotor.move(100 * (master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
-  FlywheelMotor.move(127 * (master.get_digital(DIGITAL_A) - master.get_digital(DIGITAL_B)));
+  
+  // IntakeMotor.move(127 *(master.get_digital(DIGITAL_L1) -master.get_digital(DIGITAL_L2)));
+  // IntakeMotor2.move( 127 * (master.get_digital(DIGITAL_L1) -master.get_digital(DIGITAL_L2)));
+  // InternalIntakeMotor.move(100 * (master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
+  // FlywheelMotor.move(127 * (master.get_digital(DIGITAL_A) - master.get_digital(DIGITAL_B)));
 
     // angler->Multiply_Max_Speed(2);
   // intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 50 - 110* (master.get_digital(DIGITAL_L2) && master.get_digital(DIGITAL_L1)) - 30* master.get_digital(DIGITAL_RIGHT)* vision_indexer->Check_Object() ));
