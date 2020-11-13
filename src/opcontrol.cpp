@@ -33,6 +33,7 @@ bool spinFly = false;
 //   Intake * intake = new Intake();
 int anglerGoingDown = 0;
 bool snapshot = false;
+
 void driver()  {
     if(master.get_digital_new_press(DIGITAL_L2));
     {
@@ -51,6 +52,7 @@ void driver()  {
   // intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 50 - 110* (master.get_digital(DIGITAL_L2) && master.get_digital(DIGITAL_L1)) - 30* master.get_digital(DIGITAL_RIGHT)* vision_indexer->Check_Object() ));
   robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
   /*done just upload*/
+
   // intakeMotorLeft.move_voltage(master.get_digital(DIGITAL_L1)* 12000 - master.get_digital(DIGITAL_L2) * 6000);
   // intakeMotorRight.move_voltage(master.get_digital(DIGITAL_L1) * 12000 - master.get_digital(DIGITAL_L2) * 6000);
   // vision_object_s_t object_arr[4];
@@ -101,14 +103,14 @@ void driver()  {
   //  pros::lcd::set_text(1, "Target height" + to_string(angler->Get_Height()));
 }
 
- void opcontrol() {
+void opcontrol() {
 
     while (true)
     {
-        master_control->run();
-        pros::delay(DELAY_INTERVAL);    
+      master_control->run();
+      pros::delay(DELAY_INTERVAL);  
     } 
- }
+}
 
 	
 // bool overheating;

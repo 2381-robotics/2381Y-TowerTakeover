@@ -20,22 +20,24 @@ using namespace Auton;
 using namespace pros;
 AutoSequence *Auton::AT_Test_Ultras = AutoSequence::FromTasks(
     vector<AutoTask>{
-AutoPath({30, 30}, 0),
-        AutoTask::AutoDelay(1000),
-AutoPath({0, 0}, M_PI/2),
-        AutoTask::AutoDelay(1000),
-        AutoPath({30, 30}, 0),
-        AutoTask::AutoDelay(1000),
-AutoPath({0, 0}, M_PI/2),
-        AutoTask::AutoDelay(1000),
-        AutoPath({30, 30}, 0),
-        AutoTask::AutoDelay(1000),
-AutoPath({0, 0}, M_PI/2),
-        AutoTask::AutoDelay(1000),
-        AutoPath({30, 30}, 0),
-        AutoTask::AutoDelay(1000),
-AutoPath({0, 0}, M_PI/2),
-        AutoTask::AutoDelay(1000),
+AutoPath({0, 24}, M_PI/2, 100),
+
+// AutoPath({30, 30}, 0, 100),
+//         AutoTask::AutoDelay(1000),
+// AutoPath({0, 0}, M_PI/2, 100),
+//         AutoTask::AutoDelay(1000),
+//         AutoPath({30, 30}, 0, 100),
+//         AutoTask::AutoDelay(1000),
+// AutoPath({0, 0}, M_PI/2, 100),
+//         AutoTask::AutoDelay(1000),
+//         AutoPath({30, 30}, 0, 100),
+//         AutoTask::AutoDelay(1000),
+// AutoPath({0, 0}, M_PI/2, 100),
+//         AutoTask::AutoDelay(1000),
+//         AutoPath({30, 30}, 0, 100),
+//         AutoTask::AutoDelay(1000),
+// AutoPath({0, 0}, M_PI/2, 100),
+//         AutoTask::AutoDelay(1000),
 
         // AutoTask::SyncTask(
         // [&](void) -> void {                         // Set Intake to max speed
@@ -54,7 +56,7 @@ AutoPath({0, 0}, M_PI/2),
         //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
         // AutoTask::SyncTask(
         //     [](void) -> void {
-        //         robot->drive->Set_Point_Drive(100, 180, 3000);
+        //         robot->drive->Set_Point_Drive(100, 1100, 3000);
 
         //         // robot->drive->Set_Point_Drive(0,0, turnValue, 0);
         //     },

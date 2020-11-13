@@ -53,6 +53,7 @@ double lift_speed = 10;
 
 // Angler Variables:
 
+
 Motor angler_motor(ANGLER_MOTOR_PORT, ANGLER_MOTOR_ORIENTATION);
 array<double, 3> angler_pid_values = {1, 0, 0};
 
@@ -181,6 +182,7 @@ static lv_res_t btn_click_action(lv_obj_t * btn)
 
     return LV_RES_OK;
 }
+
 
 
 void initialize()

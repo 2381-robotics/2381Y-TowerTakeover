@@ -127,14 +127,13 @@ void Mech_Drive::Set_Drive(double left_x, double left_y, double right_x, double 
   double tuning_coefficient = _master_pid->Update(0, _master_error_average);
   if(tuning_coefficient<0)
   {
-    tuning_coefficient = 1;
     _master_pid->ResetError();
+    tuning_coefficient = 1;
   }
   _pid_inputs[left_back] =  _left_back_setpoint * tuning_coefficient * ratioCalc(masterDistance, _master_offset, lbDistance, lboffset);
   _pid_inputs[left_front] = _left_front_setpoint * tuning_coefficient * ratioCalc(masterDistance, _master_offset, lfDistance, lfoffset);
   _pid_inputs[right_back] =  _right_back_setpoint * tuning_coefficient * ratioCalc(masterDistance, _master_offset, rbDistance, rboffset);
   _pid_inputs[right_front] = _right_front_setpoint * tuning_coefficient * ratioCalc(masterDistance, _master_offset, rfDistance, rfoffset);
-
 }
 
 std::array<double, 2> Mech_Drive::Convert(double speed, double direction)
@@ -243,14 +242,14 @@ void Mech_Drive::Set_Curve_Drive(complex<double> EndPoint, double EndAngle, doub
   
   auto EndAngleDiff = (AngleRobot-EndAngle)/2;
 
-  if(abs(Displacement) < 1 && abs(EndAngleDiff)<0.01)
+  if(abs(Displacement) < 0.2 && abs(EndAngleDiff)<0.01)
   {
     Stop();
     _is_running = false;
     return;
   }
 
-  double deaccellCoeff = abs(Displacement) * 127 / ( 6 * speed)  < 1 ? abs(Displacement) * 127 / ( 6 * speed) : 1;
+  double deaccellCoeff = abs(Displacement) * 127 / ( 10 * speed)  < 1 ? abs(Displacement) * 127 / ( 10 * speed) : 1;
   
   auto Forwards = speed * cos(AngleDiff) * deaccellCoeff;
   auto Turn = speed * (0.8 * sin(EndAngleDiff) / pow(pow(sin(EndAngleDiff),2.0),0.25) + 0.2 * abs(sin(EndAngleDiff))/sin(EndAngleDiff));
@@ -383,7 +382,7 @@ void Mech_Drive::Create()
   _right_back_motor_controller = new Motor_Controller(&left_front_pid_values[0], &left_front_pid_values[1], &left_front_pid_values[2], &right_back_motor);
   _master_pid = new Pid(&(master_drive_pid_values)[0], &(master_drive_pid_values)[1], &(master_drive_pid_values)[2]);
   _master_error_average = 0;
-  _master_setpoint = 1;
+  _master_setpoint = 0;
   // _master_pid->Set_Error(2600); 
   previousVelo = unstartedArray();
 } 

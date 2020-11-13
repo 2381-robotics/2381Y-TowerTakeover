@@ -84,16 +84,17 @@ void Position_Tracker::Track_Position()
 
     // Current Orientation - Angular Change/2 to get average between current and last angle measured.
     v_vel = (position_change[right_] - wheel_offsets[right_] * ang_vel) * exp<double>(1i * (ang_disp - ang_vel/2));
+    // h_vel = 0;
     h_vel = ( 1.75 * position_change[back_] - wheel_offsets[back_] * ang_vel) * exp<double>(1i * (ang_disp - + M_PI/2 - ang_vel/2));    
 
     h_disp += h_vel;
     v_disp += v_vel;
 
-    // lcd::set_text(5, "V POS " + to_string(current_encoder_values[right_]));
-    // lcd::set_text(6, "H POS " + to_string(current_encoder_values[back_]));
+    lcd::set_text(5, "V POS " + to_string(current_encoder_values[right_]));
+    lcd::set_text(6, "H POS " + to_string(current_encoder_values[back_]));
 
-    lcd::set_text(5, "V POS : (" + to_string(v_disp.real()) + ", " + to_string(v_disp.imag()) + ")");
-    lcd::set_text(6, "H POS : (" + to_string(h_disp.real()) + ", " + to_string(h_disp.imag()) + ")");
+    // lcd::set_text(5, "V POS : (" + to_string(v_disp.real()) + ", " + to_string(v_disp.imag()) + ")");
+    // lcd::set_text(6, "H POS : (" + to_string(h_disp.real()) + ", " + to_string(h_disp.imag()) + ")");
     
     lcd::set_text(2, "POSITION : ("  + to_string((int)round( 100* Get_Position().real())) + ", " + to_string((int)round( 100* Get_Position().imag())) + "), " + to_string(round(ang_disp * 180 / M_PI)) +" deg");
     ang_last = ang_disp;
@@ -107,7 +108,7 @@ complex<double> Position_Tracker::Get_Position()
 
 complex<double> Position_Tracker::Get_Displacement()
 {
-    return v_disp + h_disp;
+    return v_disp;
 }
 
 complex<double> Position_Tracker::Get_Velocity() 
