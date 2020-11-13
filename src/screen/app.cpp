@@ -34,8 +34,11 @@ using namespace std;
   unordered_map<string,string> App::$initialState() {
     return {{"labelText", "HELLO THERE"}};
   };
+
+
   void screen()
   {
-    auto app = new App();
-    app->render(nullptr);
+  
+    // auto app = new App();
+    // app->render(nullptr);
   }

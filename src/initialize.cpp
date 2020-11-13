@@ -17,7 +17,8 @@
 #include "robot/modules/drive/position_tracker.hpp"
 #include "robot/sensors/vision_indexer.hpp"
 #include "robot/sensors/ultra_align.hpp"
-#include "screen/app.hpp"
+// #include "screen/app.hpp"
+#include "gui.h"
 //Initialize Variables
 using namespace pros;
 using namespace std;
@@ -25,6 +26,7 @@ using namespace std;
 bool Competition_Env = false;
 double autonomous_increment = 0;
 Controller master(CONTROLLER_MASTER);
+
 MasterController *master_control = MasterController::instance();
 AutonControl *auton_control = AutonControl::instance();
 bool STOP = false;
@@ -189,8 +191,8 @@ void initialize()
 {
 
   
-  pros::lcd::initialize();
-  // screen();
+  // pros::lcd::initialize();
+  GUI::Set_Screen(GUI::Screens::Home);
   
   robot->drive->Create();
   // angler->Create();

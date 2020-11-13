@@ -13,14 +13,12 @@
 using namespace std;
 static lv_style_t style_box;
 
-
-
 lv_obj_t* TabView::createComponent(lv_obj_t* context)
 {
  auto tabview = lv_tabview_create(lv_scr_act(), NULL);
  auto tab1 = lv_tabview_add_tab(tabview, "REE");
  auto label =  lv_label_create(tabview, NULL);
-lv_label_set_text(label, "hei");
+    lv_label_set_text(label, "hei");
 //  return lv_scr_act();
  return tabview;
 }
