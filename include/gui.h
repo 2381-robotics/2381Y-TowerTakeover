@@ -52,7 +52,8 @@ namespace GUI
     static Screens ActiveScreen;
     static std::vector<Log_Message> Message_Log;
     static bool PauseLog = false;
-    static GUI::Log_Message ActiveLog = Log_Message("");
+    
+    extern GUI::Log_Message ActiveLog;
 
     extern void Set_Screen(Screens screen);
     extern void Render_Home(lv_obj_t *screen);

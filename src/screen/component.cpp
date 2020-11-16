@@ -5,7 +5,7 @@
 using namespace std;
 
 Component_Base::Component_Base(vector<Component_Base*> children) : $state($initialState()) {
-    assignChildren(children);
+  assignChildren(children);
 }
   
 Component_Base* Component_Base::create() {};

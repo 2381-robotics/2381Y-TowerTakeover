@@ -6,6 +6,8 @@
 using namespace std;
 using namespace GUI;
 
+Log_Message GUI::ActiveLog = Log_Message("");
+
 void GUI::Render_Log_Details(lv_obj_t* screen)
 {
     auto log = GUI::ActiveLog;
