@@ -192,6 +192,8 @@ void initialize()
 
   
   // pros::lcd::initialize();
+  GUI::Initialize_Log();
+  GUI::Log(GUI::Log_Message("System Initialize", GUI::Module::SYSTEM));
   GUI::Set_Screen(GUI::Screens::Home);
   
   robot->drive->Create();

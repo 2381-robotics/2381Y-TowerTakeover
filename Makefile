@@ -38,4 +38,4 @@ TEMPLATE_FILES=$(INCDIR)/**/*.h $(INCDIR)/**/*.hpp
 ################################################################################
 ################################################################################
 ########## Nothing below this line should be edited by typical users ###########
--include ./common.mk
+-include ./common.mk 

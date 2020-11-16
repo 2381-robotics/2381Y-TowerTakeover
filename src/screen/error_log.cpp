@@ -1,10 +1,11 @@
-#include "gui.h"
-#include "main.h"
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <vector>
+#include "main.h"
+#include "gui.h"
 #include "utils.hpp"
+#include "api.h"
 
 static lv_obj_t *g_btn_region; //tab view region of the screen
 static lv_obj_t *g_sb_region;  //status bar region of the screen
@@ -12,9 +13,9 @@ static lv_obj_t *g_sb_button;
 static lv_obj_t *g_sb_label; // sb text label
 
 using namespace GUI;
-using Run_F = std::function<void(void)>;
+using namespace std;
 
-lv_res_t Button_Click(lv_obj_t *btn)
+lv_res_t GUI::Button_Click(lv_obj_t *btn)
 {
     print("BUTTON CLICK");
     Run_F *run_f = static_cast<Run_F *>(btn->free_ptr);
@@ -22,7 +23,7 @@ lv_res_t Button_Click(lv_obj_t *btn)
     return LV_RES_OK;
 }
 
-lv_obj_t *Assign_Button(lv_obj_t *par, const lv_obj_t *copy, Run_F* run_fn)
+lv_obj_t *GUI::Assign_Button(lv_obj_t *par, const lv_obj_t *copy, Run_F *run_fn)
 {
     lv_obj_t *btn = lv_btn_create(par, copy);
     lv_obj_set_free_ptr(btn, run_fn);
@@ -30,62 +31,136 @@ lv_obj_t *Assign_Button(lv_obj_t *par, const lv_obj_t *copy, Run_F* run_fn)
     return btn;
 }
 
-
+Screens ActiveScreen = Home;
+vector<Log_Message> Message_Log = {};
 
 void GUI::Set_Screen(Screens screen)
 {
     auto blank = Render_Default();
-    switch(screen)
+    switch (screen)
     {
-        case Home:
-            Render_Home(blank);
-            break;
-        case Logs:
-            Render_Logs(blank);
-            break;
-        default:
-            Render_Home(blank);
-            break;
+    case Home:
+        Render_Home(blank);
+        break;
+    case Logs:
+        Render_Logs(blank);
+        break;
+    case LogDetails:
+        Render_Log_Details(blank);
+        break;
+    default:
+        Render_Home(blank);
+        break;
     };
+    ActiveScreen = screen;
 }
 
-lv_obj_t* GUI::Render_Default(void)
+void GUI::Initialize_Log()
 {
-    g_btn_region = lv_obj_create(lv_scr_act(), NULL);
-    lv_obj_set_size(g_btn_region, lv_obj_get_width(lv_scr_act()),
-                    lv_obj_get_height(lv_scr_act()) * 0.8);
-    lv_obj_align(g_btn_region, NULL, LV_ALIGN_IN_TOP_MID, 0, 0);
-    lv_obj_set_style(g_btn_region, &lv_style_pretty_color);
+    Message_Log = {};
+}
 
-    //
-    g_sb_region = lv_obj_create(lv_scr_act(), NULL);
-    lv_obj_set_size(g_sb_region, lv_obj_get_width(lv_scr_act()),
-                    lv_obj_get_height(lv_scr_act()) * 0.2);
-    lv_obj_align(g_sb_region, NULL, LV_ALIGN_IN_BOTTOM_MID, 0, 0);
-    lv_obj_set_style(g_sb_region, &lv_style_pretty_color);
+static lv_res_t list_release_action(lv_obj_t *list_btn)
+{
+    printf("List element click:%s\n", lv_list_get_btn_text(list_btn));
 
-    auto HomeFn = new Run_F([](void) -> void {
-        Set_Screen(Home);
+    return LV_RES_OK; /*Return OK because the list is not deleted*/
+}
+
+Log_Message::Log_Message(std::string title, Module source, string contents) : title(title), source(source), contents(contents), created(pros::millis())
+{
+}
+
+
+void GUI::Log(Log_Message message)
+{
+    Message_Log.insert(Message_Log.begin(), message);
+    if (ActiveScreen == GUI::Screens::Logs && !PauseLog)
+    {
+        Set_Screen(Screens::Logs);
+    }
+}
+
+
+void GUI::Render_Logs(lv_obj_t *screen)
+{
+    auto page = lv_list_create(screen, NULL);
+    lv_obj_set_size(page, lv_obj_get_width(screen) * 0.9, lv_obj_get_height(screen));
+    lv_obj_align(page, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
+    lv_obj_set_style(page, &lv_style_pretty_color);
+
+    for (const auto &value : Message_Log)
+    {
+        auto listItemClick = new Run_F([value](void) -> void {
+            GUI::ActiveLog = value;
+            print(value.title + ActiveLog.title);
+            Set_Screen(LogDetails);
+        });
+        auto list_item = lv_list_add(page, NULL, (ModuleName[value.source].substr(0, 3) + "(" + to_string(value.created / 1000) + "s): " + value.title).c_str(), Button_Click);
+        lv_obj_set_free_ptr(list_item, listItemClick);
+    };
+
+    auto scroll = lv_obj_create(screen, NULL);
+    lv_obj_set_size(scroll, lv_obj_get_width(screen) * 0.1, lv_obj_get_height(screen));
+    lv_obj_align(scroll, NULL, LV_ALIGN_IN_TOP_LEFT, lv_obj_get_width(screen) * 0.9, 0);
+    lv_obj_set_style(scroll, &lv_style_pretty_color);
+
+    auto btn_width = lv_obj_get_width(screen) * 0.1;
+    auto btn_height = 50;
+
+    auto TogglePause = new Run_F([](void) -> void {
+        PauseLog = !PauseLog;
+        Set_Screen(Screens::Logs);
     });
-    auto home_button = Assign_Button(g_sb_region, NULL, HomeFn);
-    lv_obj_set_style(home_button, &lv_style_pretty_color);
-    lv_obj_align(home_button, NULL, LV_ALIGN_CENTER, 0, 0);
+    auto pause_button = Assign_Button(scroll, NULL, TogglePause);
+    lv_obj_set_size(pause_button, btn_width, btn_height);
+    lv_obj_align(pause_button, NULL, LV_ALIGN_IN_TOP_MID, 0, 0);
 
-    g_sb_label = lv_label_create(home_button, NULL);
-    lv_obj_set_style(g_sb_label, &lv_style_pretty_color);
-    lv_obj_align(g_sb_label, NULL, LV_ALIGN_CENTER, 0, 0);
-    lv_label_set_text(g_sb_label, "HOME");
-    return g_btn_region;
+    auto pauseLabel = lv_label_create(pause_button, NULL);
+    
+    if (!PauseLog)
+    {
+
+        lv_label_set_text(pauseLabel, "||");
+    }
+    else
+    {
+
+        lv_label_set_text(pauseLabel, "|>");
+    }
+
+    auto scrollUp = new Run_F([page](void) -> void {
+        lv_list_down(page);
+    });
+    auto up_button = Assign_Button(scroll, NULL, scrollUp);
+    lv_obj_set_size(up_button, btn_width, btn_height);
+    lv_obj_align(up_button, NULL, LV_ALIGN_CENTER, 0, -btn_height / 2 - 3);
+
+    auto label = lv_label_create(up_button, NULL);
+    lv_label_set_text(label, "^");
+
+    auto scrollDown = new Run_F([page](void) -> void {
+        lv_list_up(page);
+    });
+    auto down_button = Assign_Button(scroll, NULL, scrollDown);
+    lv_obj_set_size(down_button, btn_width, btn_height);
+    lv_obj_align(down_button, NULL, LV_ALIGN_CENTER, 0, btn_height / 2 + 3);
+
+    auto label2 = lv_label_create(down_button, NULL);
+    lv_label_set_text(label2, "v");
+
+    auto addLog = new Run_F([page](void) -> void {
+        Log(Log_Message("YEEEEEE"));
+    });
+    auto log_button = Assign_Button(scroll, NULL, addLog);
+    lv_obj_set_size(log_button, btn_width, btn_height);
+    lv_obj_align(log_button, NULL, LV_ALIGN_CENTER, 0, btn_height * 1.5 + 6);
+
+    auto label3 = lv_label_create(log_button, NULL);
+    lv_label_set_text(label3, "L");
 }
 
-void GUI::Render_Logs(lv_obj_t* screen)
-{
-    lv_obj_t *label = lv_label_create(screen, NULL);
-    lv_label_set_text(label, "LOGS");
-    lv_obj_align(label, NULL, LV_ALIGN_IN_TOP_MID, 0, 5);
-}
-
-void GUI::Render_Home(lv_obj_t* screen)
+void GUI::Render_Home(lv_obj_t *screen)
 {
     lv_obj_t *label = lv_label_create(screen, NULL);
     lv_label_set_text(label, "Selection A Demo - V0.1.6");
@@ -118,7 +193,6 @@ void GUI::Render_Home(lv_obj_t* screen)
 
     /*Copy the button and set toggled state. (The release action is copied too)*/
     auto LogFn = new Run_F([](void) -> void {
-        print("LOG BOIS");
         Set_Screen(Logs);
     });
 

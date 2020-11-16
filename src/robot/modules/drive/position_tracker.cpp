@@ -59,11 +59,11 @@ double Position_Tracker::Get_Angle()
 
 void Position_Tracker::Track_Position() 
 {
-    if(inertial_->is_calibrating()) 
-    {
-        lcd::set_text(2,"IMU CALIBRATING");
-        return;
-    }
+    // if(inertial_->is_calibrating()) 
+    // {
+    //     lcd::set_text(2,"IMU CALIBRATING");
+    //     return;
+    // }
     auto quat = inertial_->get_euler();
 
     ang_disp = this->Get_Angle();
