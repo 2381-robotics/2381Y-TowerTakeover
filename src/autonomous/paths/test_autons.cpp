@@ -20,21 +20,86 @@ using namespace Auton;
 using namespace pros;
 AutoSequence *Auton::AT_Test_Ultras = AutoSequence::FromTasks(
     vector<AutoTask>{
-AutoPath({0, 24}, M_PI/2, 100),
+// AutoPath({0, 24}, M_PI/2, 100),
+        // AutoTask::SyncTask(
+        //     [](void) -> void {
+        //         // intake->Set_Intake(200); // Set Intake to max speed
+        //         robot->drive->Set_Point_Drive(90, 0, 2000, 0, 2, 0.8, false, 400, 1, {0, 0, 0, 0}); // At the same time, drive forward towards the first row of cubes
+        //     },
+        //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+        // AutoTask::AutoDelay(2000),
+        // AutoTask::SyncTask(
+        //     [](void) -> void {
+        //         // intake->Set_Intake(200); // Set Intake to max speed
+        //         robot->drive->Set_Point_Drive(90, 180, 2000, 0, 2, 0.8, false, 400, 1, {0, 0, 0, 0}); // At the same time, drive forward towards the first row of cubes
+        //     },
+        //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void { intake->Stop(); }),
+        // AutoTask::AutoDelay(100000),
+// AutoPath(0, M_PI/2 , 100), 
+//         AutoTask::AutoDelay(100000),
+//         AutoPath(0, M_PI/2 , 100), 
+//         AutoTask::AutoDelay(1000),
 
-// AutoPath({30, 30}, 0, 100),
+//         AutoPath(0, M_PI/2 , 100), 
+//         AutoTask::AutoDelay(1000),
+
+AutoPath({18, 48}, 0, 100).AddRun([](void)-> void {
+        intake->Set_Intake(0);
+}),
+AutoPath({48, 48}, 0, 100).AddRun([](void)-> void {
+        intake->Set_Intake(100);
+}),
+AutoPath({60, 60}, M_PI/4, 100).AddRun([](void)-> void {
+        intake->Set_Intake(0);
+}),
+AutoPath({48, 48}, M_PI/4, 100),
+AutoPath({48, 48}, -M_PI/4 + 0.3, 127),
+AutoPath({60, 46}, -M_PI/4 + 0.3, 100).AddRun([](void)-> void {
+        intake->Set_Intake(100);
+}),
+AutoPath({44, 0}, -M_PI/2, 100).AddRun([](void)-> void {
+        intake->Set_Intake(100);
+}),
+// AutoPath({48, 0}, -M_PI/2, 100).AddRun([](void)-> void {
+//         intake->Set_Intake(0);
+// }),
+
+
+        AutoTask::AutoDelay(10000000),
+
+
+
+
+AutoPath({-24, 24}, M_PI, 100),
+        AutoTask::AutoDelay(1000),
+AutoPath({0, 0}, M_PI/2, 100),
+        AutoTask::AutoDelay(1000),
+        AutoPath({-24, 24}, M_PI, 100),
+        AutoTask::AutoDelay(1000),
+AutoPath({0, 0}, M_PI/2, 100),
+        AutoTask::AutoDelay(1000),
+        AutoPath({-24, 24}, M_PI, 100),
+        AutoTask::AutoDelay(1000),
+AutoPath({0, 0}, M_PI/2, 100),
+        AutoTask::AutoDelay(1000),
+        AutoPath({-24, 24}, M_PI, 100),
+        AutoTask::AutoDelay(1000),
+AutoPath({0, 0}, M_PI/2, 100),
+        AutoTask::AutoDelay(1000),
+        
+// AutoPath({24, 24}, 0, 100),
 //         AutoTask::AutoDelay(1000),
 // AutoPath({0, 0}, M_PI/2, 100),
 //         AutoTask::AutoDelay(1000),
-//         AutoPath({30, 30}, 0, 100),
+//         AutoPath({24, 24}, 0, 100),
 //         AutoTask::AutoDelay(1000),
 // AutoPath({0, 0}, M_PI/2, 100),
 //         AutoTask::AutoDelay(1000),
-//         AutoPath({30, 30}, 0, 100),
+//         AutoPath({24, 24}, 0, 100),
 //         AutoTask::AutoDelay(1000),
 // AutoPath({0, 0}, M_PI/2, 100),
 //         AutoTask::AutoDelay(1000),
-//         AutoPath({30, 30}, 0, 100),
+//         AutoPath({24, 24}, 0, 100),
 //         AutoTask::AutoDelay(1000),
 // AutoPath({0, 0}, M_PI/2, 100),
 //         AutoTask::AutoDelay(1000),
@@ -46,16 +111,7 @@ AutoPath({0, 24}, M_PI/2, 100),
         // [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
 
         // AutoTask::SyncTask(
-        //     [](void) -> void {
-        //         // robot->drive->Set_Point_Drive(60, 0, 3000, ultra_finder->Ultra_Angle(), 2, 0.5, false, 400, 1, {0, 0, 0, 0});
-        //         // intake->Index_Intake(-50, 600);
-        //         robot->drive->Set_Point_Drive(100, 0, 3000);
-
-        //         // robot->drive->Set_Point_Drive(0,0, turnValue, 0);
-        //     },
-        //     [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
-        // AutoTask::SyncTask(
-        //     [](void) -> void {
+            // [](void) -> void {
         //         robot->drive->Set_Point_Drive(100, 1100, 3000);
 
         //         // robot->drive->Set_Point_Drive(0,0, turnValue, 0);

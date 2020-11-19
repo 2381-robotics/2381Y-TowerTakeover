@@ -63,6 +63,7 @@ extern double cube_height, lift_max_height, lift_min_height, lift_speed;
 extern std::array<double, 3> pid_intake_left_values, pid_intake_right_values;
 extern std::array<double, 3> master_intake_pid_values;
 extern pros::Motor intakeMotorLeft, intakeMotorRight;
+extern pros::Motor indexMotor, shootMotor;
 extern Intake* intake;
 
 // Tracking Wheels

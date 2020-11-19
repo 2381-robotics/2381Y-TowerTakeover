@@ -19,8 +19,6 @@ void Component_Base::$setState(string key, string value)
 {
     print("Set State");
     print((key + " " + value));
-
-
     if(this->$state.find(value)!= $state.end())
     {
       // $state.insert(make_pair("key", "value"));

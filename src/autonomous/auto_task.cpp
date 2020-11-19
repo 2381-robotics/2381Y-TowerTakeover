@@ -20,14 +20,31 @@ AutoTask::AutoTask(std::function<void(void)> task, std::function<bool(void)> don
 : isSync(sync)
 {
     this->done = done;
-    this->run = task;
+    this->runList.push_back(task);
     this->initialize = init;
     this->kill = kill;
 }
 
+AutoTask& AutoTask::AddRun(std::function<void(void)> task)
+{
+    runList.push_back(task);
+    return *this;
+}
+
+void AutoTask::run(void)
+{
+    for(const auto &value : this->runList)
+    {
+        value();
+    }
+
+}
 
 AutoTask AutoTask::TimeLimit(int time)
 {
-    AutoTask* timedTask = new AutoTimer(time, isSync, run, done, initialize, kill);
+    auto run_ = [this](void)->void {
+        this->run();
+    };
+    AutoTask* timedTask = new AutoTimer(time, isSync, run_, done, initialize, kill);
     return *timedTask;
 }

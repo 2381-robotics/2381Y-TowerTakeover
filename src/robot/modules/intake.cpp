@@ -17,10 +17,14 @@ void Intake::Move_Motor() {
     {
         _left_intake_value = leftIntakeController->Set_Speed(_pid_inputs[Left]);
         _right_intake_value = rightIntakeController->Set_Speed(_pid_inputs[Right]);
+        indexMotor.move_voltage(0);
+
     }
     else {
         intakeMotorLeft.move_voltage(_pid_inputs[Left] / 127 * 12000);
         intakeMotorRight.move_voltage(_pid_inputs[Right] / 127 * 12000);
+    indexMotor.move_voltage(_pid_inputs[Left] / 127 * 12000);
+
     }
 }
 void Intake::Set_Intake(double intakeSpeed)

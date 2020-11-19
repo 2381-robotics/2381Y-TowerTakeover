@@ -82,6 +82,10 @@ Arm *arm = new Arm();
 Motor intakeMotorLeft(LEFT_INTAKE_PORT, LEFT_INTAKE_ORIENTATION);
 Motor intakeMotorRight(RIGHT_INTAKE_PORT, RIGHT_INTAKE_ORIENTATION);
 
+Motor indexMotor(INDEXER_MOTOR_PORT, INDEXER_MOTOR_PORT);
+Motor shootMotor(SHOOTER_MOTOR_PORT, SHOOTER_MOTOR_ORIENTATION);
+
+
 array<double, 3> pid_intake_left_values = {0.6, 0.005, 0};
 array<double, 3> pid_intake_right_values = {0.6, 0.005, 0};
 array<double, 3> master_intake_pid_values = {0, 0.005, 0};
@@ -89,8 +93,8 @@ array<double, 3> master_intake_pid_values = {0, 0.005, 0};
 Intake *intake = new Intake();
 
 //  Encoder Variables
-array<int, 3> v_enc_ports = {7,8,1}; //Top Port, Bottom Port, Inverted (0 or 1)
-array<int, 3> h_enc_ports = {5,6,1}; //Top Port, Bottom Port, Inverted (0 or 1)
+array<int, 3> v_enc_ports = {7,8,0}; //Top Port, Bottom Port, Inverted (0 or 1)
+array<int, 3> h_enc_ports = {5,6,0}; //Top Port, Bottom Port, Inverted (0 or 1)
 
 array<double, 3> wheel_diameters = {2.8, 2.8, 2.8}; // Wheel Diameters in Inches, (Left - Right - Back)
 array<double, 3> wheel_offsets = {2.25, 2.25, 0.5};   //Perpindicular Wheel Offsets from Center in Inches, (Left - Right - Back)
@@ -150,7 +154,7 @@ void tracking_task_fn(void *param)
   {
     position_tracker->Track_Position();
     // lcd::set_text(2,"left" + to_string((int)encoder_left.get_value()) + "right" + to_string((int)encoder_right.get_value() ));
-    pros::delay(DELAY_INTERVAL);
+    pros::delay(DELAY_INTERVAL/2);
   }
 }
 
@@ -191,14 +195,14 @@ void initialize()
 {
 
   
-  // pros::lcd::initialize();
-  GUI::Initialize_Log();
-  GUI::Log(GUI::Log_Message("System Initialize", GUI::Module::SYSTEM));
-  GUI::Set_Screen(GUI::Screens::Home);
+  pros::lcd::initialize();
+  // GUI::Initialize_Log();
+  // GUI::Log(GUI::Log_Message("System Initialize", GUI::Module::SYSTEM));
+  // GUI::Set_Screen(GUI::Screens::Home);
   
   robot->drive->Create();
   // angler->Create();
-  // intake->Create();
+  intake->Create();
   // arm->Create();
   position_tracker->Create();
 
@@ -231,8 +235,8 @@ void initialize()
                          TASK_STACK_DEPTH_DEFAULT, "DRIVE_TASK");
   // pros::Task ultra_task(ultra_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
   //                       TASK_STACK_DEPTH_DEFAULT, "ULTRA_TASK");
-  // pros::Task intake_task(intake_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
-  //                       TASK_STACK_DEPTH_DEFAULT, "INTAKE_TASK");
+  pros::Task intake_task(intake_task_fn, (void *)"PROS", TASK_PRIORITY_DEFAULT,
+                        TASK_STACK_DEPTH_DEFAULT, "INTAKE_TASK");
   pros::Task tracking_task(tracking_task_fn, (void*)"PROS", TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "TRACKING_TASK");
   using namespace Auton;
 

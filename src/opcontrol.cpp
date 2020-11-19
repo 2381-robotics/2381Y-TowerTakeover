@@ -19,11 +19,11 @@
 using namespace pros;
 
 // Motor FlywheelMotor (15, false);
-Motor IntakeMotor (15,false);
-Motor IntakeMotor2 (16,true);
+// Motor IntakeMotor (15,false);
+// Motor IntakeMotor2 (16,true);
 
-Motor InternalIntakeMotor (13, false);
-Motor FlywheelMotor(14, false);
+// Motor InternalIntakeMotor (13, false);
+// Motor FlywheelMotor(14, false);
 
 array<double, 3> yeet = {0.3,0,0};      
 // Motor_Controller* FlywheelController = new Motor_Controller( &yeet[0], &yeet[1], &yeet[2], &FlywheelMotor);
@@ -49,6 +49,8 @@ void driver()  {
   // FlywheelMotor.move(127 * (master.get_digital(DIGITAL_A) - master.get_digital(DIGITAL_B)));
 
     // angler->Multiply_Max_Speed(2);
+  intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 50 - 110* (master.get_digital(DIGITAL_L2) && master.get_digital(DIGITAL_L1))));
+
   // intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 50 - 110* (master.get_digital(DIGITAL_L2) && master.get_digital(DIGITAL_L1)) - 30* master.get_digital(DIGITAL_RIGHT)* vision_indexer->Check_Object() ));
   robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
   /*done just upload*/
