@@ -17,40 +17,17 @@
 #include "globals.hpp"
 
 using namespace pros;
+using namespace std;
 
-// Motor FlywheelMotor (15, false);
-// Motor IntakeMotor (15,false);
-// Motor IntakeMotor2 (16,true);
-
-// Motor InternalIntakeMotor (13, false);
-// Motor FlywheelMotor(14, false);
-
-array<double, 3> yeet = {0.3,0,0};      
-// Motor_Controller* FlywheelController = new Motor_Controller( &yeet[0], &yeet[1], &yeet[2], &FlywheelMotor);
-// Motor_Controller* IntakeController = new Motor_Controller( &yeet[0], &yeet[1], &yeet[2], &IntakeMotor);
-
-bool spinFly = false;
-//   Intake * intake = new Intake();
-int anglerGoingDown = 0;
 bool snapshot = false;
 
 void driver()  {
-    if(master.get_digital_new_press(DIGITAL_L2));
-    {
-      spinFly = !spinFly; 
-    }
-    // FlywheelController->Set_Speed(spinFly *300);
-    // IntakeController->Set_Speed(master.get_digital(DIGITAL_L1) * 300);
-  // FlywheelMotor.move_velocity(200* spinFly);
-  
-  // IntakeMotor.move(127 *(master.get_digital(DIGITAL_L1) -master.get_digital(DIGITAL_L2)));
-  // IntakeMotor2.move( 127 * (master.get_digital(DIGITAL_L1) -master.get_digital(DIGITAL_L2)));
-  // InternalIntakeMotor.move(100 * (master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
-  // FlywheelMotor.move(127 * (master.get_digital(DIGITAL_A) - master.get_digital(DIGITAL_B)));
-  lcd::set_text(4, "LINE TRACK:" + to_string(index_sensor_top.get_value()));
+
     // angler->Multiply_Max_Speed(2);
   intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 50 - 110* (master.get_digital(DIGITAL_L2) && master.get_digital(DIGITAL_L1))));
-  shootMotor.move(127*(master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
+  indexer->Set_Indexer((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 50 - 110* (master.get_digital(DIGITAL_L2) && master.get_digital(DIGITAL_L1))));
+  shooter->Shoot(127*(master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
+
   // intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 50 - 110* (master.get_digital(DIGITAL_L2) && master.get_digital(DIGITAL_L1)) - 30* master.get_digital(DIGITAL_RIGHT)* vision_indexer->Check_Object() ));
   robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
   /*done just upload*/

@@ -14,6 +14,7 @@
 #include <vector>
 #include <functional>
 #include "autonomous/global_sequences.hpp"
+#include "legacy_globals.hpp"
 
 using namespace std;
 using namespace Auton;

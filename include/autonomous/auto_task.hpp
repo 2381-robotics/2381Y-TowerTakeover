@@ -11,13 +11,13 @@ class AutoTask {
     public: 
     std::function<bool(void)> done;
 
+    void initialize(void);
     void run(void);
+    void kill(void);
 
-    std::function<void(void)> initialize;
-    std::function<void(void)> kill;
 
     std::vector<std::function<void(void)>> runList = {};
-    std::vector<std::function<void(void)>> doneList = {};
+    std::vector<std::function<void(void)>> killList = {};
     std::vector<std::function<void(void)>> initList = {};
 
     static AutoTask AsyncTask(std::function<void(void)> task, std::function<bool(void)> done, std::function<void(void)> init = [](void) -> void {}, std::function<void(void)> kill = [](void) -> void {});
@@ -32,6 +32,11 @@ class AutoTask {
     AutoTask(std::function<void(void)> task, std::function<bool(void)> done, std::function<void(void)> init = [](void)-> void{}, std::function<void(void)> kill = [](void)->void{}, bool sync = true);
 
     AutoTask& AddRun(std::function<void(void)> task);
+    AutoTask& AddKill(std::function<void(void)> kill);
+    AutoTask& AddInit(std::function<void(void)> init);
+
+    
+
 
 protected:
 };

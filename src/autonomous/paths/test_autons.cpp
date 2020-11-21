@@ -45,13 +45,17 @@ AutoSequence *Auton::AT_Test_Ultras = AutoSequence::FromTasks(
 
 AutoPath({18, 50}, 0, 127).AddRun([](void)-> void {
         intake->Set_Intake(0);
+        shooter->Shoot(0);
 }),
 AutoPath({48, 50}, 0, 127).AddRun([](void)-> void {
-        intake->Set_Intake(100);
+        intake->Set_Intake(127);
 }),
-AutoPath({60, 60}, M_PI/4, 127).AddRun([](void)-> void {
-        intake->Set_Intake(0);
+AutoPath({59.5, 56.5}, M_PI/4, 127).AddRun([](void)-> void {
+        intake->Set_Intake(127);
 }),
+AutoTask::AutoDelay(1000).AddRun([](void)-> void {
+        shooter->Shoot(127);
+}).AddKill([](void) -> void { shooter->Shoot(0); }),
 AutoPath({48, 50}, M_PI/4, 127),
 AutoPath({48, 50}, -M_PI/4 + 0.3, 150),
 AutoPath({60, 46}, -M_PI/4 + 0.3, 127).AddRun([](void)-> void {

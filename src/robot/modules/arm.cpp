@@ -5,6 +5,7 @@
 #include "globals.hpp"
 #include <array>
 #include "robot/modules/angler.hpp"
+#include "legacy_globals.hpp"
 
 using namespace std;
 using namespace pros;

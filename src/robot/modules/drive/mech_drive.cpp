@@ -10,6 +10,8 @@
 #include "pros/api_legacy.h"
 #include "position_tracker.hpp"
 #include "pros/misc.h"
+#include "legacy_globals.hpp"
+
 
 using namespace std;
 using namespace pros;

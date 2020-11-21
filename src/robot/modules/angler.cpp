@@ -3,6 +3,8 @@
 #include "api.h"
 #include "globals.hpp"
 #include <array>
+#include "legacy_globals.hpp"
+
 
 using namespace std;
 

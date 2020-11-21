@@ -1,4 +1,5 @@
 #include "Y_lift.hpp"
+#include "legacy_globals.hpp"
 #include "robot/control/motor_controller.hpp"
 #include "api.h"
 #include "globals.hpp"
