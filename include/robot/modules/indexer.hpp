@@ -12,7 +12,8 @@ public:
 
     void Set_Indexer(double speed, bool override = false);
     bool IsBallIndexed();
-
+    bool newBallIndexed();
+    void resetNewBall();
 
     double Get_Speed();
     void Reset_Point();

@@ -49,20 +49,33 @@ AutoPath({18, 50}, 0, 127).AddRun([](void)-> void {
 }),
 AutoPath({48, 50}, 0, 127).AddRun([](void)-> void {
         intake->Set_Intake(127);
+        indexer->Set_Indexer(127, true);
 }),
 AutoPath({59.5, 56.5}, M_PI/4, 127).AddRun([](void)-> void {
-        intake->Set_Intake(127);
+        intake->Set_Intake(60);
+        indexer->Set_Indexer(127, true);
 }),
 AutoTask::AutoDelay(1000).AddRun([](void)-> void {
+        intake->Set_Intake(0);
         shooter->Shoot(127);
-}).AddKill([](void) -> void { shooter->Shoot(0); }),
-AutoPath({48, 50}, M_PI/4, 127),
+}).AddKill([](void) -> void { shooter->Shoot(0); indexer->Set_Indexer(0); }).AddInit([](void)->void{indexer->resetNewBall();}).AddDone([](void)->bool { return indexer->newBallIndexed();}),
+AutoPath({48, 50}, M_PI/4, 127).AddRun([](void) -> void { intake->Set_Intake(-60);}),
 AutoPath({48, 50}, -M_PI/4 + 0.3, 150),
 AutoPath({60, 46}, -M_PI/4 + 0.3, 127).AddRun([](void)-> void {
-        intake->Set_Intake(100);
+        intake->Set_Intake(127);
+        indexer->Set_Indexer(100, true);
 }),
-AutoPath({44, 0}, -M_PI/2, 127).AddRun([](void)-> void {
+AutoPath({52, 30}, -M_PI/2, 127).AddRun([](void)-> void {
         intake->Set_Intake(100);
+        indexer->Set_Indexer(100, true);
+}),
+AutoPath({52, 8}, -M_PI/2, 127).AddRun([](void)-> void {
+        intake->Set_Intake(100);
+        indexer->Set_Indexer(100, true);
+}),
+AutoPath({58, 4}, 0, 150).AddRun([](void)-> void {
+        intake->Set_Intake(0);
+        indexer->Set_Indexer(0);
 }),
 // AutoPath({48, 0}, -M_PI/2, 100).AddRun([](void)-> void {
 //         intake->Set_Intake(0);

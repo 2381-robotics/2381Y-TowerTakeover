@@ -20,7 +20,7 @@ AutoTask AutoTask::AutoDelay(int time, bool sync, std::function<void(void)> task
 AutoTask::AutoTask(std::function<void(void)> task, std::function<bool(void)> done, std::function<void(void)> init, std::function<void(void)> kill, bool sync)
     : isSync(sync)
 {
-    this->done = done;
+    this->doneList.push_back(done);
     this->runList.push_back(task);
     this->initList.push_back(init);
     this->killList.push_back(kill);
@@ -45,6 +45,11 @@ AutoTask &AutoTask::AddKill(std::function<void(void)> task)
     return *this;
 }
 
+AutoTask &AutoTask::AddDone(std::function<bool(void)> done)
+{
+    doneList.push_back(done);
+    return *this;
+}
 
 void AutoTask::run(void)
 {
@@ -68,17 +73,34 @@ void AutoTask::initialize(void)
         value();
     }
 }
+bool AutoTask::done(void)
+{
+    auto isDone = false;
+    for (const auto &value : this->doneList)
+    {
+        isDone = isDone || value();
+    }
+    return isDone;
+}
 AutoTask AutoTask::TimeLimit(int time)
 {
-    auto run_ = [this](void) -> void {
-        this->run();
+
+    AutoTask *timedTask = new AutoTimer(time, isSync);
+    for (const auto &value : this->runList)
+    {
+        timedTask->AddRun(value);
     };
-    auto kill_ = [this](void) -> void {
-        this->kill();
-    };
-    auto initialize_ = [this](void) -> void {
-        this->initialize();
-    };
-    AutoTask *timedTask = new AutoTimer(time, isSync, run_, done, initialize_, kill_);
+    for (const auto &value : this->killList)
+    {
+        timedTask->AddKill(value);
+    }
+    for (const auto &value : this->initList)
+    {
+        timedTask->AddInit(value);
+    }
+    for (const auto &value : this->doneList)
+    {
+        timedTask->AddDone(value);
+    }
     return *timedTask;
 }

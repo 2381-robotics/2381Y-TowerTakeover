@@ -41,6 +41,23 @@ bool Indexer::IsBallIndexed()
     pros::lcd::set_text(4, "LINE TRACK:" + to_string(indexValue));
     return indexValue < 2000;
 }
+
+auto previousIndexed = false;
+auto newBall = false;
+
+bool Indexer::newBallIndexed()
+{
+    newBall = newBall || (IsBallIndexed() && !previousIndexed);
+    previousIndexed = IsBallIndexed();
+    return newBall;
+}
+
+void Indexer::resetNewBall()
+{
+    previousIndexed = IsBallIndexed();
+    newBall = false;
+}
+
 //Empty default constructor for blank factory arguments.
 Indexer::Indexer(){};
 
