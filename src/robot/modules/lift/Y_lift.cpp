@@ -13,8 +13,8 @@ void Y_Lift::Create() {
     // _left_lift_motor = &left_lift_motor;
     // _right_lift_motor = &right_lift_motor;
     // Initialize Pids.
-    _lift_pid = new Pid(&lift_pid_values[0], &lift_pid_values[1], &lift_pid_values[2]);
-    _master_lift_pid = new Pid(&master_lift_pid_values[0], &master_lift_pid_values[1], &master_lift_pid_values[2]);
+    _lift_pid = new Pid(lift_pid_values[0], lift_pid_values[1], lift_pid_values[2]);
+    _master_lift_pid = new Pid(master_lift_pid_values[0], master_lift_pid_values[1], master_lift_pid_values[2]);
     // Assign Variables
     _cube_height = cube_height;
     _min_height = lift_min_height;

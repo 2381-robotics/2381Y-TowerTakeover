@@ -106,10 +106,11 @@ Position_Tracker* position_tracker = Position_Tracker::instance();
 ADIEncoder h_enc(h_enc_ports[0], h_enc_ports[1], h_enc_ports[2]);
 ADIEncoder v_enc(v_enc_ports[0], v_enc_ports[1], v_enc_ports[2]);
 
+pros::ADIAnalogIn index_sensor_top(2);
 pros::Vision vision_sensor(VISION_PORT);
 VisionIndexer* vision_indexer = new VisionIndexer(&vision_sensor);
 
-ADIUltrasonic ultra_left(1, 2);
+ADIUltrasonic ultra_left(0, 0);
 ADIUltrasonic ultra_right(3, 4);
 // UltraFinder* ultra_finder = new UltraFinder(&ultra_left, &ultra_right);
 UltraFinder* ultra_finder = nullptr;
@@ -200,6 +201,8 @@ void initialize()
   // GUI::Log(GUI::Log_Message("System Initialize", GUI::Module::SYSTEM));
   // GUI::Set_Screen(GUI::Screens::Home);
   
+  index_sensor_top.calibrate();
+
   robot->drive->Create();
   // angler->Create();
   intake->Create();

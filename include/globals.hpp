@@ -83,4 +83,6 @@ extern pros::ADIUltrasonic ultra_left;
 extern pros::ADIUltrasonic ultra_right;
 extern UltraFinder* ultra_finder;
 
+extern pros::ADIAnalogIn index_sensor_top;
+
 #endif

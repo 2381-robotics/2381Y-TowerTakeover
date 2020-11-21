@@ -43,21 +43,21 @@ AutoSequence *Auton::AT_Test_Ultras = AutoSequence::FromTasks(
 //         AutoPath(0, M_PI/2 , 100), 
 //         AutoTask::AutoDelay(1000),
 
-AutoPath({18, 48}, 0, 100).AddRun([](void)-> void {
+AutoPath({18, 50}, 0, 127).AddRun([](void)-> void {
         intake->Set_Intake(0);
 }),
-AutoPath({48, 48}, 0, 100).AddRun([](void)-> void {
+AutoPath({48, 50}, 0, 127).AddRun([](void)-> void {
         intake->Set_Intake(100);
 }),
-AutoPath({60, 60}, M_PI/4, 100).AddRun([](void)-> void {
+AutoPath({60, 60}, M_PI/4, 127).AddRun([](void)-> void {
         intake->Set_Intake(0);
 }),
-AutoPath({48, 48}, M_PI/4, 100),
-AutoPath({48, 48}, -M_PI/4 + 0.3, 127),
-AutoPath({60, 46}, -M_PI/4 + 0.3, 100).AddRun([](void)-> void {
+AutoPath({48, 50}, M_PI/4, 127),
+AutoPath({48, 50}, -M_PI/4 + 0.3, 150),
+AutoPath({60, 46}, -M_PI/4 + 0.3, 127).AddRun([](void)-> void {
         intake->Set_Intake(100);
 }),
-AutoPath({44, 0}, -M_PI/2, 100).AddRun([](void)-> void {
+AutoPath({44, 0}, -M_PI/2, 127).AddRun([](void)-> void {
         intake->Set_Intake(100);
 }),
 // AutoPath({48, 0}, -M_PI/2, 100).AddRun([](void)-> void {

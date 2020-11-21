@@ -90,7 +90,7 @@ void Arm::Create() {
   // Assign motors.
   _arm_motor = &arm_motor; //asdadasd
   // Initialize Pids.
-  _arm_pid = new Pid(&arm_pid_values[0], &arm_pid_values[1], &arm_pid_values[2]);
+  _arm_pid = new Pid(arm_pid_values[0], arm_pid_values[1], arm_pid_values[2]);
   // Assign Variables
   _min_height = arm_min_height;
   _max_height = arm_max_height;

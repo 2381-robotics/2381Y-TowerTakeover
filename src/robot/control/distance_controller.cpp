@@ -6,7 +6,7 @@
  * Constructor taking in kp, ki, and kd
  */
 
-Distance_Controller::Distance_Controller(double* kp, double* ki, double* kd, pros::Motor* motor){
+Distance_Controller::Distance_Controller(double kp, double ki, double kd, pros::Motor* motor){
   this->motor = motor;
   pid = new Pid(kp, ki, kd);
 }

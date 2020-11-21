@@ -8,7 +8,7 @@ class Pid {
    * Accepts the kp, ki, and kd to determine the correction value
    * Defaults to (0,0,0)
    */
-   Pid(double* kp = 0, double* ki = 0, double* kd = 0);
+   Pid(double kp = 0, double ki = 0, double kd = 0);
   /**
    * Resets the error counts. It should be called when the PID loop is not
    * active to prevent integral windup.
@@ -26,9 +26,9 @@ class Pid {
   void Set_Error(double error);
 
 
-  double* kp_;
-  double* ki_;
-  double* kd_;
+  double kp_;
+  double ki_;
+  double kd_;
  private:
   // PID constants (Proportional (P), Integral (I), Derivative (D))
 

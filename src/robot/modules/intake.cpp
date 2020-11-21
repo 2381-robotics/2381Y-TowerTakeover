@@ -80,9 +80,9 @@ void Intake::Stop() {
 
 void Intake::Create()
 {
-    leftIntakeController = new Motor_Controller(&pid_intake_left_values[0], &pid_intake_left_values[1], &pid_intake_left_values[2], &intakeMotorLeft);
-    rightIntakeController = new Motor_Controller(&pid_intake_right_values[0], &pid_intake_right_values[1], &pid_intake_right_values[2], &intakeMotorRight);
+    leftIntakeController = new Motor_Controller(pid_intake_left_values[0], pid_intake_left_values[1], pid_intake_left_values[2], &intakeMotorLeft);
+    rightIntakeController = new Motor_Controller(pid_intake_right_values[0], pid_intake_right_values[1], pid_intake_right_values[2], &intakeMotorRight);
 
-    _master_intake_pid = new Pid(&(master_intake_pid_values)[0], &(master_intake_pid_values)[1], &(master_intake_pid_values)[2]);
+    _master_intake_pid = new Pid((master_intake_pid_values)[0], (master_intake_pid_values)[1], (master_intake_pid_values)[2]);
     _master_intake_error_average = 0;
 }

@@ -5,7 +5,7 @@
  * Constructor taking in kp, ki, and kd
  */
 
-Motor_Controller::Motor_Controller(double* kp, double* ki, double* kd, pros::Motor* motor){
+Motor_Controller::Motor_Controller(double kp, double ki, double kd, pros::Motor* motor){
   this->motor = motor;
   pid = new Pid(kp, ki, kd);
 }

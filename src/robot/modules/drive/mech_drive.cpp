@@ -230,6 +230,9 @@ void Mech_Drive::Set_Path_Drive(complex<double> EndPoint, double accelSpeed, dou
   Set_Drive(0, Forwards, Turn, 0);
 }
 
+auto TurnControl = new Pid({-1,0,0.02});
+
+
 void Mech_Drive::Set_Curve_Drive(complex<double> EndPoint, double EndAngle, double speed, double accelSpeed, double deaccelSpeed, double criticalPoint, double criticalMultiplier, std::array<double, 4> endVelo)
 {
 
@@ -258,8 +261,11 @@ void Mech_Drive::Set_Curve_Drive(complex<double> EndPoint, double EndAngle, doub
 
   double deaccellCoeff = abs(Displacement) * 127 / ( 9 * speed)  < 1 ? abs(Displacement) * 127 / ( 9 * speed) : 1;
   
+  TurnControl->Update(0, sin(EndAngleDiff));
   auto Forwards = speed * cos(AngleDiff) * deaccellCoeff;
-  auto Turn = speed * (0.8 * sin(EndAngleDiff) / pow(pow(sin(EndAngleDiff),2.0),0.25) + 0.2 * abs(sin(EndAngleDiff))/sin(EndAngleDiff));
+  // auto Turn = speed * (0.8 * sin(EndAngleDiff) / pow(pow(sin(EndAngleDiff),2.0),0.25) + 0.2 * abs(sin(EndAngleDiff))/sin(EndAngleDiff));
+  auto Turn = speed * TurnControl->Update(0,(0.8 * sin(EndAngleDiff) / pow(pow(sin(EndAngleDiff),2.0),0.25) + 0.2 * abs(sin(EndAngleDiff))/sin(EndAngleDiff)));
+
   auto Strafe = speed * sin(AngleDiff)  * deaccellCoeff;
 
   // lcd::set_text(5, "AngleDiff: " + to_string((int)(AngleDiff*180/M_PI)) + "EndDiff: " + to_string((int)(EndAngleDiff*180/M_PI)));
@@ -383,11 +389,11 @@ void Mech_Drive::Create()
   std::array<double, 4>
       tempArray = {0, 0, 0, 0};
   initial_position = {0, 0, 0, 0};
-  _left_front_motor_controller = new Motor_Controller(&left_front_pid_values[0], &left_front_pid_values[1], &left_front_pid_values[2], &left_front_motor);
-  _left_back_motor_controller = new Motor_Controller(&left_back_pid_values[0], &left_back_pid_values[1], &left_back_pid_values[2], &left_back_motor);
-  _right_front_motor_controller = new Motor_Controller(&right_front_pid_values[0], &right_front_pid_values[1], &right_front_pid_values[2], &right_front_motor);
-  _right_back_motor_controller = new Motor_Controller(&left_front_pid_values[0], &left_front_pid_values[1], &left_front_pid_values[2], &right_back_motor);
-  _master_pid = new Pid(&(master_drive_pid_values)[0], &(master_drive_pid_values)[1], &(master_drive_pid_values)[2]);
+  _left_front_motor_controller = new Motor_Controller(left_front_pid_values[0], left_front_pid_values[1], left_front_pid_values[2], &left_front_motor);
+  _left_back_motor_controller = new Motor_Controller(left_back_pid_values[0], left_back_pid_values[1], left_back_pid_values[2], &left_back_motor);
+  _right_front_motor_controller = new Motor_Controller(right_front_pid_values[0], right_front_pid_values[1], right_front_pid_values[2], &right_front_motor);
+  _right_back_motor_controller = new Motor_Controller(left_front_pid_values[0], left_front_pid_values[1], left_front_pid_values[2], &right_back_motor);
+  _master_pid = new Pid((master_drive_pid_values)[0], (master_drive_pid_values)[1], (master_drive_pid_values)[2]);
   _master_error_average = 0;
   _master_setpoint = 0;
   // _master_pid->Set_Error(2600); 

@@ -72,7 +72,7 @@ void Angler::Create() {
   // Assign motors.
   _angler_motor = &angler_motor;
   // Initialize Pids.
-  _angler_pid = new Pid(&angler_pid_values[0], &angler_pid_values[1], &angler_pid_values[2]);
+  _angler_pid = new Pid(angler_pid_values[0], angler_pid_values[1], angler_pid_values[2]);
   // Assign Variables
   _min_height = angler_min_height;
   _max_height = angler_max_height;

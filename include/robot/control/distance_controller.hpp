@@ -14,7 +14,7 @@ class Distance_Controller : public Motor_Controller {
    * Accepts the kp, ki, and kd to determine the correction value
    * Defaults to (0,0,0)
    */
-   Distance_Controller (double* kp = 0, double* ki = 0, double* kd = 0, pros::Motor* motor = 0);
+   Distance_Controller (double kp = 0, double ki = 0, double kd = 0, pros::Motor* motor = 0);
   /**
    * Resets the error counts. It should be called when the PID loop is not
    * active to prevent integral windup.
