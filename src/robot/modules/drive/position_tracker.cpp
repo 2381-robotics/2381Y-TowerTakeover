@@ -22,7 +22,7 @@ void Position_Tracker::Create() {
     v_enc_ = &v_enc;
     h_enc_ = &h_enc;
     // Maybe take an input or global on initial position;
-    Set_Position({7.5, 65}, 0);
+    Set_Position({7, 64.5}, -M_PI/2);
     // Maybe take an input or global on initial position;
     // Set_Position(0, 0);
 }

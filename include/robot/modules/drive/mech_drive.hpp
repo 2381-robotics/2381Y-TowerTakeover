@@ -16,7 +16,12 @@ public:
 
   void Set_Point_Drive(double speed, double direction, double distance, double turnSpeed = 0, double accelSpeed =  1, double deaccelSpeed = 1,  bool wallAlign = false, double criticalPoint = 400, double criticalMultiplier = 1, std::array<double, 4> endVelo = {0, 0, 0, 0});
   void Set_Path_Drive(std::complex<double> EndPoint, double accelSpeed =  1, double deaccelSpeed = 1, double criticalPoint = 400, double criticalMultiplier = 1, std::array<double, 4> endVelo = {0, 0, 0, 0});
-  void Set_Curve_Drive(std::complex<double> EndPoint, double EndAngle, double speed = 100, double accelSpeed =  1, double deaccelSpeed = 1, double criticalPoint = 400, double criticalMultiplier = 1, std::array<double, 4> endVelo = {0, 0, 0, 0});
+  
+  void Set_Curve_Drive(std::complex<double> EndPoint, double EndAngle, std::array<double, 2> speed, std::array<double, 2> errorTolerance);
+  void Set_Curve_Drive(std::complex<double> EndPoint, double EndAngle, double speed = 100, std::array<double, 2> errorTolerance = {1,1});
+  void Set_Curve_Drive(std::complex<double> EndPoint, double EndAngle, std::array<double, 2> speed, double errorTolerance = 1);
+  void Set_Curve_Drive(std::complex<double> EndPoint, double EndAngle, double speed, double errorTolerance);
+
 
 
   std::array<double,4> previousVelo;

@@ -21,7 +21,7 @@ using namespace pros;
 AutoSequence *Auton::AT_Test_Ultras = AutoSequence::FromTasks(
     vector<AutoTask>{
 
-        AutoPath({18, 48}, 0, 127).AddRun([](void) -> void {
+        AutoPath({18, 48}, 0, 127, 3).AddRun([](void) -> void {
                 intake->Set_Intake(0);
                 shooter->Shoot(0);
         }),
@@ -40,21 +40,25 @@ AutoSequence *Auton::AT_Test_Ultras = AutoSequence::FromTasks(
             .AddKill([](void) -> void { shooter->Shoot(0); indexer->Set_Indexer(0); })
             .AddInit([](void) -> void { indexer->resetNewBall(); })
             .AddDone([](void) -> bool { return indexer->newBallIndexed(); }),
-        AutoPath({48, 48}, M_PI / 4, 127).AddRun([](void) -> void { intake->Set_Intake(-60); }),
+        AutoPath({48, 48}, M_PI / 4, 127, 2).AddRun([](void) -> void { intake->Set_Intake(-60); }),
         AutoPath({48, 48}, -M_PI / 4 + 0.3, 150),
         AutoPath({61, 45}, -M_PI / 4 + 0.3, 127).AddRun([](void) -> void {
                 intake->Set_Intake(127);
                 indexer->Set_Indexer(100, true);
         }),
-        AutoPath({48, 30}, -M_PI / 2, 127).AddRun([](void) -> void {
+        AutoPath({48, 30}, -M_PI / 2, 127, 3).AddRun([](void) -> void {
                 intake->Set_Intake(100);
                 indexer->Set_Indexer(100, true);
         }),
-        AutoPath({48, 4}, -M_PI / 2, 127).AddRun([](void) -> void {
+        AutoPath({48, 4}, -M_PI / 2, 127 , 2).AddRun([](void) -> void {
                 intake->Set_Intake(100);
                 indexer->Set_Indexer(100, true);
         }),
-        AutoPath({56, 1}, 0, 150).AddRun([](void) -> void {
+        AutoPath({48, 1}, 0, 200).AddRun([](void) -> void {
+                intake->Set_Intake(0);
+                indexer->Set_Indexer(0);
+        }),
+        AutoPath({57, 1}, 0, 100).AddRun([](void) -> void {
                 intake->Set_Intake(0);
                 indexer->Set_Indexer(0);
         }),
@@ -64,8 +68,8 @@ AutoSequence *Auton::AT_Test_Ultras = AutoSequence::FromTasks(
                                  })
             .AddInit([](void) -> void { indexer->resetNewBall(); })
             .AddDone([](void) -> bool { return indexer->newBallIndexed(); }),
-        AutoTask::AutoDelay(500).AddRun([](void)-> void {indexer->Set_Indexer(70, false);}),
-        AutoTask::AutoDelay(1000).AddRun([](void) -> void {
+        AutoTask::AutoDelay(500).AddRun([](void)-> void {indexer->Set_Indexer(70, false); shooter->Shoot(0);}),
+        AutoTask::AutoDelay(700).AddRun([](void) -> void {
                                          intake->Set_Intake(0);
                                          shooter->Shoot(127);
                                  })
@@ -73,6 +77,10 @@ AutoSequence *Auton::AT_Test_Ultras = AutoSequence::FromTasks(
             .AddInit([](void) -> void { indexer->resetNewBall(); })
             .AddDone([](void) -> bool { return indexer->newBallIndexed(); }),
 
+        AutoPath({52, 1}, 0, 127).AddRun([](void) -> void {
+                intake->Set_Intake(0);
+                indexer->Set_Indexer(0);
+        }),
         // AutoPath({48, 0}, -M_PI/2, 100).AddRun([](void)-> void {
         //         intake->Set_Intake(0);
         // }),

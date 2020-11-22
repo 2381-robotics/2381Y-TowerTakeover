@@ -19,7 +19,7 @@ void MasterController::run() {
         driver();
         return;
     }
-    if(master.get_digital(E_CONTROLLER_DIGITAL_L1)&&master.get_digital(E_CONTROLLER_DIGITAL_L2)&&master.get_digital(E_CONTROLLER_DIGITAL_R1)&&master.get_digital(E_CONTROLLER_DIGITAL_R2)) {
+    if(master.get_digital(E_CONTROLLER_DIGITAL_RIGHT)&&master.get_digital(E_CONTROLLER_DIGITAL_DOWN)&&master.get_digital(E_CONTROLLER_DIGITAL_Y)&&master.get_digital(E_CONTROLLER_DIGITAL_B)) {
         set_state(auton_mode);
     }
 
@@ -79,25 +79,25 @@ void MasterController::autonomous() {
     if(master.get_digital(E_CONTROLLER_DIGITAL_B)){
         robot->stop();
     }
-    if(master.get_digital_new_press(E_CONTROLLER_DIGITAL_Y)){
-        set_state(auton_edit_mode);
+    if(master.get_digital_new_press(E_CONTROLLER_DIGITAL_LEFT)){
+        set_state(selector_mode);
     }
     // lcd::set_text(1, "Current Increment Value: " + to_string(autonomous_increment));
     // lcd::set_text(2, "Set To " + to_string(_local_increment));
 
-    _local_increment += master.get_digital(E_CONTROLLER_DIGITAL_UP) - master.get_digital(E_CONTROLLER_DIGITAL_DOWN) + (master.get_digital_new_press(E_CONTROLLER_DIGITAL_LEFT) - master.get_digital_new_press(E_CONTROLLER_DIGITAL_RIGHT)) * 30;
-    if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_A))
-    {
-        autonomous_increment = _local_increment;
-        // auton_control->select_auton(AutonControl::RedSmallSideAuton);
-        set_state(auton_mode);
-    }
+    // _local_increment += master.get_digital(E_CONTROLLER_DIGITAL_UP) - master.get_digital(E_CONTROLLER_DIGITAL_DOWN) + (master.get_digital_new_press(E_CONTROLLER_DIGITAL_LEFT) - master.get_digital_new_press(E_CONTROLLER_DIGITAL_RIGHT)) * 30;
+    // if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_A))
+    // {
+    //     autonomous_increment = _local_increment;
+    //     // auton_control->select_auton(AutonControl::RedSmallSideAuton);
+    //     set_state(auton_mode);
+    // }
 
-    if ( master.get_digital_new_press(E_CONTROLLER_DIGITAL_L2)){
-        autonomous_increment = _local_increment;
-        // auton_control->select_auton(AutonControl::RedSmallSideAuton);
-        set_state(auton_mode);
-    }
+    // if ( master.get_digital_new_press(E_CONTROLLER_DIGITAL_L2)){
+    //     autonomous_increment = _local_increment;
+    //     // auton_control->select_auton(AutonControl::RedSmallSideAuton);
+    //     set_state(auton_mode);
+    // }
 
 };
 
