@@ -31,10 +31,12 @@ class Position_Tracker {
 
     double Get_Angle();
 
-    void Set_Position(std::complex<double> position = 0, double Angle = 0);
+    const void Set_Position(std::complex<double> position = 0, double Angle = 0);
     void Reset();
 
     void Create();
+    static const std::complex<double> wheel_center_offset;
+
 
     protected:
 
@@ -53,7 +55,6 @@ class Position_Tracker {
 
     std::complex<double> v_vel = 0, h_vel = 0;
 
-    std::array<double, 3> current_position = {0,0,0}, current_velocity = {0,0,0}, last_position = {0,0,0};
     std::array<double,3> current_encoder_values = {0,0,0}, last_encoder_values = {0,0,0}, position_change = {0,0,0};
     unsigned int velLastChecked = 0;
 };

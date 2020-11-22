@@ -9,6 +9,8 @@ using namespace pros;
 using namespace std;
 using namespace std::complex_literals;
 
+const complex<double> Position_Tracker::wheel_center_offset = {2.75, 2.25};
+
 Position_Tracker *Position_Tracker::instance() {
     static Position_Tracker instance;
     return &instance;
@@ -19,9 +21,10 @@ void Position_Tracker::Create() {
     inertial_ = &imu;
     v_enc_ = &v_enc;
     h_enc_ = &h_enc;
-
     // Maybe take an input or global on initial position;
-    Set_Position({7, 65}, 0);
+    Set_Position({7.5, 65}, 0);
+    // Maybe take an input or global on initial position;
+    // Set_Position(0, 0);
 }
 
 void Position_Tracker::Reset()
@@ -34,7 +37,7 @@ void Position_Tracker::Reset()
     h_disp = v_disp = h_vel = v_vel = origin = 0;
 }
 
-void Position_Tracker::Set_Position(complex<double> position_, double angle_) 
+const void Position_Tracker::Set_Position(complex<double> position_, double angle_) 
 {
     Reset();
     origin = position_;
@@ -76,15 +79,15 @@ void Position_Tracker::Track_Position()
     // lcd::set_text(4, quatText2);
 
     current_encoder_values[right_] = v_enc_->get_value();
-    current_encoder_values[back_] = h_enc_->get_value();
+    current_encoder_values[back_] = h_enc_->get_value() * 982/890;
     // lcd::set_text(2, "VERT: " + to_string(current_encoder_values[right_]) + " Horz: " + to_string(current_encoder_values[back_]));
 
     position_change[right_] = (current_encoder_values[right_] - last_encoder_values[right_]) * PI * wheel_diameters[right_] / 360;
     position_change[back_] = (current_encoder_values[back_] - last_encoder_values[back_]) * PI * wheel_diameters[back_] / 360;
 
     // Current Orientation - Angular Change/2 to get average between current and last angle measured.
-    v_vel = (position_change[right_] - 0* wheel_offsets[right_] * ang_vel) * exp<double>(1i * (ang_disp - ang_vel * 2/3));
-    h_vel = ( position_change[back_]  - 0 * wheel_offsets[back_] * ang_vel) * exp<double>(1i * (ang_disp - M_PI/2 - ang_vel * 2/3));    
+    v_vel = (position_change[right_]) * exp<double>(1i * (ang_disp - ang_vel * 2/3));
+    h_vel = ( position_change[back_]) * exp<double>(1i * (ang_disp - M_PI/2 - ang_vel * 2/3));    
     // h_vel = 0;
 
     h_disp += h_vel;
@@ -104,7 +107,9 @@ void Position_Tracker::Track_Position()
 
 complex<double> Position_Tracker::Get_Position()
 {
-    return Get_Displacement() + origin;
+    auto initial_wheel_displacement = Position_Tracker::wheel_center_offset * exp<double>(1i * ang_origin);
+    auto wheel_displacement = Position_Tracker::wheel_center_offset * exp<double>(1i * Get_Angle());
+    return Get_Displacement() + origin - initial_wheel_displacement + wheel_displacement;
 }
 
 complex<double> Position_Tracker::Get_Displacement()
