@@ -82,6 +82,9 @@ void MasterController::autonomous() {
     if(master.get_digital_new_press(E_CONTROLLER_DIGITAL_LEFT)){
         set_state(selector_mode);
     }
+    if(master.get_digital_new_press(E_CONTROLLER_DIGITAL_UP)){
+        auton_control->Reset();
+    }
     // lcd::set_text(1, "Current Increment Value: " + to_string(autonomous_increment));
     // lcd::set_text(2, "Set To " + to_string(_local_increment));
 

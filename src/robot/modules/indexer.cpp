@@ -1,8 +1,10 @@
+#include <array>
+
 #include "indexer.hpp"
 #include "api.h"
 #include "main.h"
 #include "globals.hpp"
-#include <array>
+#include "robot/sensors/light_indexer.hpp"
 
 using namespace std;
 
@@ -31,13 +33,11 @@ void Indexer::Set_Indexer(double indexerSpeed, bool override)
     {
         _pid_input = indexerSpeed;
     }
-
-    
 }
 
 bool Indexer::IsBallIndexed()
 {
-    auto indexValue = index_sensor_top.get_value();
+    auto indexValue = light_indexer->Get_Value();
     pros::lcd::set_text(4, "LINE TRACK:" + to_string(indexValue));
     return indexValue < 2000;
 }
@@ -77,7 +77,6 @@ void Indexer::Reset_Point()
 
 void Indexer::Stop()
 {
-
     shootMotor.move_voltage(0);
 }
 

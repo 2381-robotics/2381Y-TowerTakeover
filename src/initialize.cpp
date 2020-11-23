@@ -91,9 +91,10 @@ Shooter *shooter = new Shooter();
 // Indexer
 Motor indexMotor(INDEXER_MOTOR_PORT, INDEXER_MOTOR_PORT);
 array<double, 3> pid_indexer_values = {0.6, 0.005, 0};
-pros::ADIAnalogIn index_sensor_top(2);
 
 Indexer *indexer = new Indexer();
+
+Light_Indexer *light_indexer = new Light_Indexer(2);
 
 array<double, 3> pid_intake_left_values = {0.6, 0.005, 0};
 array<double, 3> pid_intake_right_values = {0.6, 0.005, 0};
@@ -162,6 +163,7 @@ void indexer_task_fn(void *param)
   while (true)
   {
     indexer->Run();
+    light_indexer->Update();
     pros::delay(DELAY_INTERVAL);
   }
 }
@@ -193,27 +195,6 @@ void ultra_task_fn(void *param)
   }
 }
 
-lv_obj_t *myButton;
-lv_obj_t *myButtonLabel;
-lv_obj_t *myLabel;
-
-lv_style_t myButtonStyleREL; //relesed style
-lv_style_t myButtonStylePR;  //pressed style
-
-static lv_res_t btn_click_action(lv_obj_t *btn)
-{
-  uint8_t id = lv_obj_get_free_num(btn); //id usefull when there are multiple buttons
-
-  if (id == 0)
-  {
-    char buffer[100];
-    sprintf(buffer, "button was clicked %i milliseconds from start", pros::millis());
-    lv_label_set_text(myLabel, buffer);
-  }
-
-  return LV_RES_OK;
-}
-
 void initialize()
 {
 
@@ -222,11 +203,10 @@ void initialize()
   // GUI::Log(GUI::Log_Message("System Initialize", GUI::Module::SYSTEM));
   // GUI::Set_Screen(GUI::Screens::Home);
 
-  index_sensor_top.calibrate();
-
   robot->drive->Create();
   shooter->Create();
   indexer->Create();
+  light_indexer->Create();
   // angler->Create();
   intake->Create();
   // arm->Create();

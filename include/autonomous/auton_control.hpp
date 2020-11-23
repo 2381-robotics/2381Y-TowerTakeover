@@ -19,6 +19,7 @@ public:
     void select_auton(Autonomous sequence);
     static AutonControl* instance();
     void run();
+    void Reset();
 private:
     AutoSequence* _auton_running;
  

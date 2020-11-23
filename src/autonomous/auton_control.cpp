@@ -6,7 +6,10 @@ AutonControl* AutonControl::instance() {
     return &control;
 }
 void AutonControl::run() {
-     _auton_running->run();
+    _auton_running->run();
+}
+void AutonControl::Reset() {
+    _auton_running->Reset();
 }
 
 void AutonControl::select_auton(Autonomous sequence){

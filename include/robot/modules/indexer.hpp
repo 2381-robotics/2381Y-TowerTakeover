@@ -24,6 +24,7 @@ public:
     void Stop() override;
     void Reset() override;
     std::string name = "Indexer";
+    
 protected:
     void Move_Motor() override;
     double Get_Real_Target();

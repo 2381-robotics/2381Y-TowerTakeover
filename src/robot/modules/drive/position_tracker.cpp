@@ -21,8 +21,10 @@ void Position_Tracker::Create() {
     inertial_ = &imu;
     v_enc_ = &v_enc;
     h_enc_ = &h_enc;
+
+    Reset();
     // Maybe take an input or global on initial position;
-    Set_Position({7, 64.5}, -M_PI/2);
+    Set_Position(0,0);
     // Maybe take an input or global on initial position;
     // Set_Position(0, 0);
 }
@@ -37,11 +39,13 @@ void Position_Tracker::Reset()
     h_disp = v_disp = h_vel = v_vel = origin = 0;
 }
 
-const void Position_Tracker::Set_Position(complex<double> position_, double angle_) 
+
+const void Position_Tracker::Set_Position(complex<double> position_, double angle_, complex<double> oldPos, double oldAngle) 
 {
-    Reset();
-    origin = position_;
-    ang_origin = ang_last = angle_;
+    origin = position_ - oldPos + origin;
+
+    ang_origin = angle_ - oldAngle + ang_origin;
+    ang_last = Get_Angle();
 }
 
 

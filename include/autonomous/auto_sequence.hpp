@@ -11,10 +11,11 @@ class AutoSequence : public AutoTask{
 
     int tasksRemaining = 0;
     void run_sequence();
+    void Reset();
     bool isSequenceFinished = false;
     
     std::vector<AutoTask> taskList;
-    std::vector<AutoTask> runningTasks;
+    std::vector<AutoTask> resetTaskList;
     
     void add_tasks(std::vector<AutoTask> tasks);
 

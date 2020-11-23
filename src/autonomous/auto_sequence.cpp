@@ -14,7 +14,10 @@ AutoSequence* AutoSequence::FromTasks(vector<AutoTask> tasks) {
 void AutoSequence::add_tasks(vector<AutoTask> tasks){
     taskList.reserve(taskList.size() + tasks.size());
     taskList.insert(taskList.end(), tasks.begin(), tasks.end());
+    resetTaskList.reserve(resetTaskList.size() + tasks.size());
+    resetTaskList.insert(resetTaskList.end(), tasks.begin(), tasks.end());
 }
+
 AutoSequence::AutoSequence() : AutoTask(
     [&](void) -> void {//run
         run_sequence();
@@ -26,7 +29,11 @@ AutoSequence::AutoSequence() : AutoTask(
 
 }
 
-
+void AutoSequence::Reset()
+{
+    isSequenceFinished = false;
+    taskList = resetTaskList;
+}
 
 void AutoSequence::run_sequence(){
     // First check if the sequence is done.

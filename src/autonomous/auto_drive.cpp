@@ -43,3 +43,8 @@ AutoTask AutoPath(complex<double> EndPoint, double angle, array<double,2> speed,
         },
         [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {});
 }
+
+AutoTask SingleRun(std::function<void(void)> run)
+{
+    return  AutoTask(run, [](void)-> bool { return true; });
+}

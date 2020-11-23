@@ -17,6 +17,7 @@
 #include "robot/sensors/ultra_align.hpp"
 #include "robot/modules/shooter.hpp"
 #include "robot/modules/indexer.hpp"
+#include "robot/sensors/light_indexer.hpp"
 
 #define DELAY_INTERVAL 20
 
@@ -57,10 +58,10 @@ extern Shooter* shooter;
 
 // Indexer
 extern std::array<double,3> pid_indexer_values;
-extern pros::ADIAnalogIn index_sensor_top;
 extern pros::Motor indexMotor;
 extern Indexer* indexer;
 
+extern Light_Indexer* light_indexer;
 // Tracking Wheels
 extern Position_Tracker* position_tracker;
 extern std::array<int,3> h_enc_ports, v_enc_ports;

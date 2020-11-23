@@ -31,12 +31,12 @@ class Position_Tracker {
 
     double Get_Angle();
 
-    const void Set_Position(std::complex<double> position = 0, double Angle = 0);
+    const void Reset_Position(void);
+    const void Set_Position(std::complex<double> newPosition = 0, double Angle = 0, std::complex<double> previousPosition = 0, double previousAngle = 0);
     void Reset();
 
     void Create();
     static const std::complex<double> wheel_center_offset;
-
 
     protected:
 
