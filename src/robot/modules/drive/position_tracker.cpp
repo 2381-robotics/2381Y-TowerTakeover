@@ -97,7 +97,7 @@ void Position_Tracker::Track_Position()
     h_disp += h_vel;
     v_disp += v_vel;
 
-    lcd::set_text(5, "V POS " + to_string(current_encoder_values[right_]));
+    // lcd::set_text(5, "V POS " + to_string(current_encoder_values[right_]));
     lcd::set_text(6, "H POS " + to_string(current_encoder_values[back_]));
     // lcd::set_text(2, "RATIO: " + to_string(current_encoder_values[right_]/(current_encoder_values[back_] )));
 

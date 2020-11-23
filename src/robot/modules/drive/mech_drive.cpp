@@ -268,7 +268,7 @@ void Mech_Drive::Set_Curve_Drive(complex<double> EndPoint, double EndAngle, arra
   auto AngleDiff = fmod(AngleRobot-AngleDisplacement + M_PI, 2* M_PI) - M_PI; 
   //Normalize turn angle to between (-pi and pi) so sin(x/2) works properly
   
-  auto EndAngleDiff = (AngleRobot-EndAngle)/2;
+  auto EndAngleDiff = (fmod((AngleRobot-EndAngle) + M_PI, 2* M_PI) - M_PI)/2;
 
   if(abs(Displacement) < 1 * errorTolerance[0] && abs(EndAngleDiff) < 0.01 * errorTolerance[1])
   {
@@ -282,11 +282,12 @@ void Mech_Drive::Set_Curve_Drive(complex<double> EndPoint, double EndAngle, arra
   TurnControl->Update(0, sin(EndAngleDiff));
   auto Forwards = speed[0] * cos(AngleDiff) * deaccellCoeff;
   auto Strafe = speed[0] * sin(AngleDiff)  * deaccellCoeff;
-  // auto Turn = speed * (0.8 * sin(EndAngleDiff) / pow(pow(sin(EndAngleDiff),2.0),0.25) + 0.2 * abs(sin(EndAngleDiff))/sin(EndAngleDiff));
+  auto Turna = (0.8 * sin(EndAngleDiff) / pow(pow(sin(EndAngleDiff),2.0),0.25) + 0.2 * abs(sin(EndAngleDiff))/sin(EndAngleDiff));
 
-  auto Turn = speed[1] * TurnControl->Update(0,(0.8 * sin(EndAngleDiff) / pow(pow(sin(EndAngleDiff),2.0),0.25) + 0.2 * abs(sin(EndAngleDiff))/sin(EndAngleDiff)));
+  auto Turn = speed[1] * (abs(EndAngleDiff) < 0.2 ? Turna : EndAngleDiff/abs(EndAngleDiff));
+  // auto Turn = speed[1] * TurnControl->Update(0,(0.8 * sin(EndAngleDiff) / pow(pow(sin(EndAngleDiff),2.0),0.25) + 0.2 * abs(sin(EndAngleDiff))/sin(EndAngleDiff)));
 
-  // lcd::set_text(5, "AngleDiff: " + to_string((int)(AngleDiff*180/M_PI)) + "EndDiff: " + to_string((int)(EndAngleDiff*180/M_PI)));
+  lcd::set_text(5, "AngleDiff: " + to_string((int)(AngleDiff*180/M_PI)) + "EndDiff: " + to_string((int)(EndAngleDiff*180/M_PI)));
   // lcd::set_text(6, "Input: " + to_string((int)Strafe) + " / " + to_string((int)Forwards) + " / " + to_string((int)Turn));
   Set_Drive( Strafe, Forwards, Turn, 0);
 }

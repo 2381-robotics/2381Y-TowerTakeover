@@ -92,24 +92,10 @@ AutoSequence *AT_Test_Ultra1 = AutoSequence::FromTasks(
 
 
 
-AutoSequence *Auton::AT_Test_Ultras = AutoSequence::FromTasks(
-    vector<AutoTask>{
-            AutoTask::AutoDelay(1000).AddRun([](void) -> void {
-                                         intake->Set_Intake(0);
-                                         shooter->Shoot(127);
-                                 })
-            .AddInit([](void) -> void { indexer->resetNewBall(); })
-            .AddDone([](void) -> bool { return indexer->newBallIndexed(); }),
-        AutoTask::AutoDelay(500).AddRun([](void) -> void {indexer->Set_Indexer(70, false); shooter->Shoot(0); }),
-        AutoTask::AutoDelay(700).AddRun([](void) -> void {
-                                        intake->Set_Intake(0);
-                                        shooter->Shoot(127);
-                                })
-            .AddKill([](void) -> void { shooter->Shoot(0); indexer->Set_Indexer(0); })
-            .AddInit([](void) -> void { indexer->resetNewBall(); })
-            .AddDone([](void) -> bool { return indexer->newBallIndexed(); }),
-        AutoTask::AutoDelay(10000000),
+AutoSequence *Auton::AT_Test_Ultras = AT_Test_Ultra1;
 
+ auto ree = AutoSequence::FromTasks(
+    vector<AutoTask>{
         SingleRun([](void) -> void { position_tracker->Set_Position({48, 0}, 0); }),
         AutoPath({58, -30}, -M_PI / 4, 160).AddRun([](void) -> void {
                 intake->Set_Intake(127);
