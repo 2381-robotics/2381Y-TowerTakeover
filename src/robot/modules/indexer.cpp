@@ -1,11 +1,11 @@
 #include <array>
 
+#include <tuple>
 #include "indexer.hpp"
 #include "api.h"
 #include "main.h"
 #include "globals.hpp"
 #include "robot/sensors/light_indexer.hpp"
-
 using namespace std;
 
 double Indexer::Get_Speed()
@@ -21,7 +21,7 @@ void Indexer::Move_Motor()
     }
     else
     {
-        indexMotor.move_voltage(_pid_input / 127 * 12000);
+        indexer_motor->move_voltage(_pid_input / 127 * 12000);
     }
 }
 void Indexer::Set_Indexer(double indexerSpeed, bool override)
@@ -59,7 +59,9 @@ void Indexer::resetNewBall()
 }
 
 //Empty default constructor for blank factory arguments.
-Indexer::Indexer(){};
+Indexer::Indexer(std::tuple<uint8_t, bool> motor_config) : motor_config_(motor_config_) {
+
+};
 
 void Indexer::Reset()
 {
@@ -82,5 +84,6 @@ void Indexer::Stop()
 
 void Indexer::Create()
 {
-    indexerMC = new Motor_Controller(pid_indexer_values[0], pid_indexer_values[1], pid_indexer_values[2], &indexMotor);
+    indexer_motor = new pros::Motor(get<0>(motor_config_), get<1>(motor_config_));
+    indexerMC = new Motor_Controller(indexer_pid_config[0], indexer_pid_config[1], indexer_pid_config[2], indexer_motor);
 }

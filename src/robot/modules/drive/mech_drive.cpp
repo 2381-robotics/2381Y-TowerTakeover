@@ -253,7 +253,6 @@ void Mech_Drive::Set_Curve_Drive(complex<double> EndPoint, double EndAngle, doub
 
 void Mech_Drive::Set_Curve_Drive(complex<double> EndPoint, double EndAngle, array<double,2> speed, array<double,2> errorTolerance)
 {
-
   auto CurrentPos = position_tracker->Get_Position();
   auto Displacement = EndPoint - CurrentPos;
 

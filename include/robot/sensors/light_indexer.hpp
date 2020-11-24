@@ -3,18 +3,19 @@
 
 #include "api.h"
 #include <vector>
+#include "robot/structure.hpp"
 
-class Light_Indexer
+class Light_Indexer : public Structure
 {
     public: 
     void Update();
-    bool initialized = false;
     double Get_Value(void);
 
     Light_Indexer(int indexer_port);
-    void Create();
-
+    void Reset(void) override;
+    
     protected: 
+    void Create() override;
     int port;
     std::vector<double> RecentValues = {0,0,0};
     pros::ADIAnalogIn* light_sensor = nullptr;

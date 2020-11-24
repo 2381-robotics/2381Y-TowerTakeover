@@ -57,8 +57,6 @@ extern pros::Motor shootMotor;
 extern Shooter* shooter;
 
 // Indexer
-extern std::array<double,3> pid_indexer_values;
-extern pros::Motor indexMotor;
 extern Indexer* indexer;
 
 extern Light_Indexer* light_indexer;

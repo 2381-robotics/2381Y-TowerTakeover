@@ -1,5 +1,6 @@
 #include "module.hpp"
 #include "globals.hpp"
+#include "structure.hpp"
 
 
 void Module::Run() {
@@ -8,4 +9,10 @@ void Module::Run() {
         return;
     }
     this->Move_Motor();
+}
+
+void Structure::Init()
+{
+    Create();
+    isInitialized = true;
 }

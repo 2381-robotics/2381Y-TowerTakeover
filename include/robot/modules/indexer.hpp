@@ -1,14 +1,15 @@
 #ifndef INDEXER_HPP
 #define INDEXER_HPP
 
-#include "robot/control/motor_controller.hpp"
+#include <tuple>
 #include <array>
+#include "robot/control/motor_controller.hpp"
 #include "robot/module.hpp"
 
 class Indexer : public Module
 {
 public:
-    Indexer();
+    Indexer(std::tuple<uint8_t, bool> motor_config);
 
     void Set_Indexer(double speed, bool override = false);
     bool IsBallIndexed();
@@ -20,12 +21,17 @@ public:
     double start_point = 0;
 
     double Get_Position();
-    void Create() override;
     void Stop() override;
     void Reset() override;
-    std::string name = "Indexer";
     
+    std::string name = "Indexer";
+    static std::array<double, 3> indexer_pid_config;
 protected:
+
+    std::tuple<uint8_t, bool> motor_config_;
+    pros::Motor * indexer_motor = nullptr;
+
+    void Create() override;
     void Move_Motor() override;
     double Get_Real_Target();
     

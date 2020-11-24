@@ -89,10 +89,9 @@ array<double, 3> pid_shooter_values = {0.6, 0.005, 0};
 Shooter *shooter = new Shooter();
 
 // Indexer
-Motor indexMotor(INDEXER_MOTOR_PORT, INDEXER_MOTOR_PORT);
-array<double, 3> pid_indexer_values = {0.6, 0.005, 0};
 
-Indexer *indexer = new Indexer();
+array<double,3> Indexer::indexer_pid_config = {0.6, 0.005, 0};
+Indexer *indexer = new Indexer({INDEXER_MOTOR_PORT, INDEXER_MOTOR_ORIENTATION});
 
 Light_Indexer *light_indexer = new Light_Indexer(2);
 
@@ -204,11 +203,11 @@ void initialize()
   // GUI::Set_Screen(GUI::Screens::Home);
 
   robot->drive->Create();
-  shooter->Create();
-  indexer->Create();
-  light_indexer->Create();
+  shooter->Init();
+  indexer->Init();
+  light_indexer->Init();
   // angler->Create();
-  intake->Create();
+  intake->Init();
   // arm->Create();
   position_tracker->Create();
 

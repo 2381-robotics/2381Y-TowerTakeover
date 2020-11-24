@@ -17,13 +17,13 @@ public:
     double intake_distance = 0, start_point = 0;
 
     double Get_Position();
-    void Create() override;
     void Stop() override;
     void Reset() override;
     std::string name = "Shooter";
-
-    enum Motor_Slot {Left = 0, Right};
+    
 protected:
+
+    void Create() override;
     void Move_Motor() override;
     double Get_Real_Target();
     

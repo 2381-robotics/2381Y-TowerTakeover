@@ -11,12 +11,12 @@ class Structure {
    */
 		Structure(){};
 		virtual void Reset() = 0;
-		virtual void Create() = 0;
 		std::string name;
-		// virtual void Debug() = 0;
-
-
+		
+		void Init();
+		bool isInitialized = false;
 	protected:
+		virtual void Create() = 0;
 };
 
 #endif

@@ -21,7 +21,6 @@ public:
 
 protected:
     virtual void Move_Motor() = 0;
-
 };
 
 #endif
