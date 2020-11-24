@@ -92,10 +92,14 @@ AutoSequence *AT_Test_Ultra1 = AutoSequence::FromTasks(
 
 
 
-AutoSequence *Auton::AT_Test_Ultras = AT_Test_Ultra1;
-
- auto ree = AutoSequence::FromTasks(
+AutoSequence *Auton::AT_Test_Ultras = AutoSequence::FromTasks(
     vector<AutoTask>{
+        SingleRun([](void) -> void { position_tracker->Set_Position({0,0}, M_PI / 2); }),
+
+            AutoPath({0, 10}, M_PI/2, 100),
+            AutoPath({10, 20}, M_PI/4, 100).AddKill([](void)-> void { robot->drive->Stop(); }),
+        AutoTask::AutoDelay(10000000),
+
         SingleRun([](void) -> void { position_tracker->Set_Position({48, 0}, 0); }),
         AutoPath({58, -30}, -M_PI / 4, 160).AddRun([](void) -> void {
                 intake->Set_Intake(127);

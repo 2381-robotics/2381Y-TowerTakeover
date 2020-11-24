@@ -272,12 +272,14 @@ void Mech_Drive::Set_Curve_Drive(complex<double> EndPoint, double EndAngle, arra
 
   if(abs(Displacement) < 1 * errorTolerance[0] && abs(EndAngleDiff) < 0.01 * errorTolerance[1])
   {
-    Stop();
+    // Stop();
     _is_running = false;
     return;
   }
 
-  double deaccellCoeff = abs(Displacement) * 127 / ( 9 * speed[0])  < 1 ? abs(Displacement) * 127 / ( 9 * speed[0]) : 1;
+  // double deaccellCoeff = abs(Displacement) * 127 / ( 9 * speed[0])  < 1 ? abs(Displacement) * 127 / ( 9 * speed[0]) : 1;
+  double deaccellCoeff = 1;
+
   
   TurnControl->Update(0, sin(EndAngleDiff));
   auto Forwards = speed[0] * cos(AngleDiff) * deaccellCoeff;
