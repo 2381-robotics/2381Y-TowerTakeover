@@ -39,7 +39,7 @@ array<double, 3> right_back_pid_values = {0.6, 0, 0};
 array<double, 3> left_front_pid_values = {0.6, 0, 0};
 array<double, 3> right_front_pid_values = {0.6, 0, 0};
 
-array<double, 3> master_drive_pid_values = {0, 0.001, 0};
+array<double, 3> master_drive_pid_values = {0, 0.01, 0};
 
 Motor left_front_motor(LEFT_FRONT_MOTOR_PORT, false);
 Motor left_back_motor(LEFT_BACK_MOTOR_PORT, false);

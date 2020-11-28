@@ -83,22 +83,22 @@ void Position_Tracker::Track_Position()
     // lcd::set_text(4, quatText2);
 
     current_encoder_values[right_] = v_enc_->get_value();
-    current_encoder_values[back_] = h_enc_->get_value() * 982/890;
+    current_encoder_values[back_] = h_enc_->get_value();
     // lcd::set_text(2, "VERT: " + to_string(current_encoder_values[right_]) + " Horz: " + to_string(current_encoder_values[back_]));
 
     position_change[right_] = (current_encoder_values[right_] - last_encoder_values[right_]) * PI * wheel_diameters[right_] / 360;
     position_change[back_] = (current_encoder_values[back_] - last_encoder_values[back_]) * PI * wheel_diameters[back_] / 360;
 
     // Current Orientation - Angular Change/2 to get average between current and last angle measured.
-    v_vel = (position_change[right_]) * exp<double>(1i * (ang_disp - ang_vel * 2/3));
-    h_vel = ( position_change[back_]) * exp<double>(1i * (ang_disp - M_PI/2 - ang_vel * 2/3));    
+    v_vel = (position_change[right_]) * exp<double>(1i * (ang_disp - ang_vel * 1/2));
+    h_vel = ( position_change[back_]) * exp<double>(1i * (ang_disp - M_PI/2 - ang_vel * 1/2));    
     // h_vel = 0;
 
     h_disp += h_vel;
     v_disp += v_vel;
 
     // lcd::set_text(5, "V POS " + to_string(current_encoder_values[right_]));
-    lcd::set_text(6, "H POS " + to_string(current_encoder_values[back_]));
+    // lcd::set_text(6, "H POS " + to_string(current_encoder_values[back_]));
     // lcd::set_text(2, "RATIO: " + to_string(current_encoder_values[right_]/(current_encoder_values[back_] )));
 
     // lcd::set_text(5, "V POS : (" + to_string(v_disp.real()) + ", " + to_string(v_disp.imag()) + ")");

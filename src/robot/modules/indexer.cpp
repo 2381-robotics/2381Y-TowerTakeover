@@ -38,7 +38,7 @@ void Indexer::Set_Indexer(double indexerSpeed, bool override)
 bool Indexer::IsBallIndexed()
 {
     auto indexValue = light_indexer->Get_Value();
-    pros::lcd::set_text(4, "LINE TRACK:" + to_string(indexValue));
+    // pros::lcd::set_text(4, "LINE TRACK:" + to_string(indexValue));
     return indexValue < 2000;
 }
 
@@ -70,7 +70,7 @@ void Indexer::Reset()
 
 double Indexer::Get_Position()
 {
-    return (shootMotor.get_position());
+    return (indexer_motor->get_position());
 }
 void Indexer::Reset_Point()
 {
@@ -79,11 +79,11 @@ void Indexer::Reset_Point()
 
 void Indexer::Stop()
 {
-    shootMotor.move_voltage(0);
+    indexer_motor->move_voltage(0);
 }
 
 void Indexer::Create()
 {
-    indexer_motor = new pros::Motor(get<0>(motor_config_), get<1>(motor_config_));
+    indexer_motor = new pros::Motor(INDEXER_MOTOR_PORT, INDEXER_MOTOR_ORIENTATION);
     indexerMC = new Motor_Controller(indexer_pid_config[0], indexer_pid_config[1], indexer_pid_config[2], indexer_motor);
 }

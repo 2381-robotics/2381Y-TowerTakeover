@@ -4,7 +4,6 @@
 
 Light_Indexer::Light_Indexer(int port) : port(port)
 {
-
 }
 
 void Light_Indexer::Create()
