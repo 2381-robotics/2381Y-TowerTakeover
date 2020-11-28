@@ -18,6 +18,8 @@ AutoTask AutoTask::AutoDelay(int time, bool sync, std::function<void(void)> task
 }
 
 
+
+
 AutoTask::AutoTask(std::function<void(void)> task, std::function<bool(void)> done, std::function<void(void)> init, std::function<void(void)> kill, bool sync)
     : isSync(sync)
 {
