@@ -44,11 +44,11 @@ AutoTask AutoPath(complex<double> EndPoint, double angle, array<double, 2> speed
         [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {});
 }
 
-AutoTask AutoCurve(complex<double> Waypoint, double angle, complex<double> Endpoint, double EndAngle, double speed, double curvature)
+AutoTask AutoCurve(complex<double> Waypoint, double angle, complex<double> Endpoint, double EndAngle, double speed, double curvature, double AngleInterpolation)
 {
     return AutoTask::SyncTask(
-        [Waypoint, angle, Endpoint, EndAngle, speed, curvature](void) -> void {
-            robot->drive->Set_Curve_Drive(Waypoint, angle, Endpoint, EndAngle, speed, curvature);
+        [Waypoint, angle, Endpoint, EndAngle, speed, curvature, AngleInterpolation](void) -> void {
+            robot->drive->Set_Curve_Drive(Waypoint, angle, Endpoint, EndAngle, speed, curvature, AngleInterpolation);
         },
         [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); });
 }

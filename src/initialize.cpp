@@ -90,7 +90,7 @@ Shooter *shooter = new Shooter();
 
 // Indexer
 
-array<double,3> Indexer::indexer_pid_config = {0.6, 0.005, 0};
+array<double, 3> Indexer::indexer_pid_config = {0.6, 0.005, 0};
 Indexer *indexer = new Indexer({INDEXER_MOTOR_PORT, INDEXER_MOTOR_ORIENTATION});
 
 Light_Indexer *light_indexer = new Light_Indexer(2);
@@ -234,10 +234,19 @@ void initialize()
   // auton_control->define_auton(AutonControl::Red7PointAuton, AT_Red7);
   // auton_control->define_auton(AutonControl::Blue7PointAuton, AT_Blue7);
 
-  // auton_control->define_auton(AutonControl::SkillsAuton, AT_Skills);
+  AutoSequence *CUS_FULL = AutoSequence::FromTasks({*CUS_Q1,
+                                                    *CUS_Q2,
+                                                    *CUS_Q3,
+                                                    *CUS_Q4});
+
+  auton_control->define_auton(AutonControl::CUS_ALL, CUS_FULL);
+  auton_control->define_auton(AutonControl::CUS_Q1, CUS_Q1);
+  auton_control->define_auton(AutonControl::CUS_Q2, CUS_Q2);
+  auton_control->define_auton(AutonControl::CUS_Q3, CUS_Q3);
+  auton_control->define_auton(AutonControl::CUS_Q4, CUS_Q4);
   auton_control->define_auton(AutonControl::TestAuton, AT_Test_Ultras);
 
-  auton_control->select_auton(AutonControl::TestAuton);
+  auton_control->select_auton(AutonControl::CUS_ALL);
 }
 /**
  * Runs while the robot is in the disabled state of Field Management System or

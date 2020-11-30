@@ -16,6 +16,11 @@
 using namespace std;
 using namespace pros;
 
+double NormalizeAngle(double angle)
+{
+  return fmod(angle + M_PI, 2 * M_PI) - M_PI;
+}
+
 void Mech_Drive::Move_Motor()
 {
 
@@ -207,7 +212,7 @@ double UltraAlign()
   return previousAlign;
 }
 
-void Mech_Drive::Set_Curve_Drive(complex<double> Waypoint, double WaypointAngle, complex<double> EndPoint, double EndAngle, double speed, double curvature)
+void Mech_Drive::Set_Curve_Drive(complex<double> Waypoint, double WaypointAngle, complex<double> EndPoint, double EndAngle, double speed, double curvature, double AngleInterpolation)
 {
   auto CurrentPos = position_tracker->Get_Position();
   auto EndpointDisp = EndPoint - CurrentPos;
@@ -217,13 +222,16 @@ void Mech_Drive::Set_Curve_Drive(complex<double> Waypoint, double WaypointAngle,
 
   auto TotalDisp = EndpointDisp;
 
-  if (cos(InnerAngle) > 0)
+  if (cos(InnerAngle) <= 0)
   {
-    TotalDisp *= sin(InnerAngle) * sin(InnerAngle);
-    TotalDisp += (double)2 * WaypointDisplacement * cos(InnerAngle) * cos(InnerAngle) * curvature;
+    _is_running = false;
+    return;
   }
 
-  auto TargetAngle = cos(InnerAngle) > 0 ? WaypointAngle : EndAngle;
+  TotalDisp *= sin(InnerAngle) * sin(InnerAngle);
+  TotalDisp += (double)2 * WaypointDisplacement * cos(InnerAngle) * cos(InnerAngle) * curvature;
+
+  auto TargetAngle = EndAngle + pow(cos(InnerAngle), AngleInterpolation) * NormalizeAngle(WaypointAngle-EndAngle);
 
   // lcd::set_text(3, "DISTANCE: " + to_string(abs(TotalDisp)));
   // lcd::set_text(4, "Current: " + to_string(CurrentPos.real()) + ", " + to_string(CurrentPos.imag()));
@@ -235,12 +243,6 @@ void Mech_Drive::Set_Curve_Drive(complex<double> Waypoint, double WaypointAngle,
 
   auto AngleDiff = fmod(AngleRobot - AngleDisplacement + M_PI, 2 * M_PI) - M_PI;
   auto EndAngleDiff = (fmod((AngleRobot - TargetAngle) + M_PI, 2 * M_PI) - M_PI) / 2;
-
-  if (cos(InnerAngle) <= 0)
-  {
-    _is_running = false;
-    return;
-  }
 
   double deaccellCoeff = abs(TotalDisp) * 127 / (9 * speed) < 1 ? abs(TotalDisp) * 127 / (9 * speed) : 1;
 

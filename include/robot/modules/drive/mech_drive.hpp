@@ -21,7 +21,7 @@ public:
   void Set_Path_Drive(std::complex<double> EndPoint, double EndAngle, std::array<double, 2> speed, double errorTolerance = 1);
   void Set_Path_Drive(std::complex<double> EndPoint, double EndAngle, double speed, double errorTolerance);
 
-  void Set_Curve_Drive(std::complex<double> Waypoint, double WaypointAngle, std::complex<double> EndPoint, double EndAngle,  double speed = 100, double curvature = 1);
+  void Set_Curve_Drive(std::complex<double> Waypoint, double WaypointAngle, std::complex<double> EndPoint, double EndAngle,  double speed = 100, double curvature = 1, double angleInterpolation = 1);
 
 
 
