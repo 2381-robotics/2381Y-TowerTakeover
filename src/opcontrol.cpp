@@ -15,9 +15,12 @@
 #include <map> 
 #include <string>
 #include "globals.hpp"
+#include "gui.h"
+
 
 using namespace pros;
 using namespace std;
+using namespace GUI;
 
 bool snapshot = false;
 
@@ -30,6 +33,18 @@ void driver()  {
 
   // intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 50 - 110* (master.get_digital(DIGITAL_L2) && master.get_digital(DIGITAL_L1)) - 30* master.get_digital(DIGITAL_RIGHT)* vision_indexer->Check_Object() ));
   robot->set_drive(master.get_analog(ANALOG_LEFT_X), master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_X), master.get_analog(ANALOG_RIGHT_Y));
+  if(master.get_analog(ANALOG_LEFT_X) != 0){
+    Console_Log(Console_Message("TREE"), 1);
+  }
+  if(master.get_analog(ANALOG_LEFT_Y) != 0){
+    Console_Log(Console_Message("APPLE"), 1);
+  }
+  if(master.get_analog(ANALOG_RIGHT_X) != 0){
+    Console_Log(Console_Message("TREE"), 7);
+  }
+  if(master.get_analog(ANALOG_RIGHT_Y) != 0){
+    Console_Log(Console_Message("APPLE"), 7);
+  }
   /*done just upload*/
 
   // intakeMotorLeft.move_voltage(master.get_digital(DIGITAL_L1)* 12000 - master.get_digital(DIGITAL_L2) * 6000);

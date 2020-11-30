@@ -31,9 +31,9 @@ lv_obj_t *GUI::Assign_Button(lv_obj_t *par, const lv_obj_t *copy, Run_F *run_fn)
     return btn;
 }
 
-Screens ActiveScreen = Home;
+Screens GUI::ActiveScreen = Home;
 vector<Log_Message> Message_Log = {};
-
+std::string CurrentConsole[8];
 void GUI::Set_Screen(Screens screen)
 {
     auto blank = Render_Default();
@@ -48,11 +48,15 @@ void GUI::Set_Screen(Screens screen)
     case LogDetails:
         Render_Log_Details(blank);
         break;
+    case Console:
+        Render_Console(blank);
+        break;
     default:
         Render_Home(blank);
         break;
     };
     ActiveScreen = screen;
+    
 }
 
 void GUI::Initialize_Log()
@@ -70,7 +74,6 @@ static lv_res_t list_release_action(lv_obj_t *list_btn)
 Log_Message::Log_Message(std::string title, Module source, string contents) : title(title), source(source), contents(contents), created(pros::millis())
 {
 }
-
 
 void GUI::Log(Log_Message message)
 {
@@ -117,7 +120,7 @@ void GUI::Render_Logs(lv_obj_t *screen)
     lv_obj_align(pause_button, NULL, LV_ALIGN_IN_TOP_MID, 0, 0);
 
     auto pauseLabel = lv_label_create(pause_button, NULL);
-    
+
     if (!PauseLog)
     {
 
@@ -170,15 +173,28 @@ void GUI::Render_Home(lv_obj_t *screen)
     lv_coord_t btn_height = btn_width / 2;
 
     /*Create a normal button*/
-    lv_obj_t *btn1 = lv_btn_create(lv_scr_act(), NULL);
-    lv_obj_set_size(btn1, btn_width, btn_height);
-    lv_obj_align(btn1, NULL, LV_ALIGN_IN_LEFT_MID, 8, 0);
-    lv_obj_set_free_num(btn1, 1); /*Set a unique number for the button*/
-    // lv_btn_set_action(btn1, LV_BTN_ACTION_CLICK, demo_click_action);
+    auto ConsoleFn = new Run_F([](void) -> void {
+        print("Console Pressed");
+        Set_Screen(Console);
+    });
 
-    /*Add a label to the button*/
-    label = lv_label_create(btn1, NULL);
-    lv_label_set_text(label, "MATRIX");
+    auto Console_button = Assign_Button(lv_scr_act(), NULL, ConsoleFn);
+    lv_obj_set_size(Console_button, btn_width, btn_height);
+    lv_obj_align(Console_button, NULL, LV_ALIGN_IN_LEFT_MID, 8, 0);
+
+    label = lv_label_create(Console_button, NULL);
+    lv_label_set_text(label, "CONSOLE");
+
+    // lv_obj_t *btn1 = lv_btn_create(lv_scr_act(), NULL);
+    // lv_obj_set_size(btn1, btn_width, btn_height);
+    // lv_obj_align(btn1, NULL, LV_ALIGN_IN_LEFT_MID, 8, 0);
+    // lv_obj_set_free_num(btn1, 1); /*Set a unique number for the butt
+
+    // button-> funcon*/
+    // // lv_btn_set_action(btn1, LV_BTN_ACTION_CLICK, demo_click_action);
+    // /*Add a label to the button*/
+    // label = lv_label_create(btn1, NULL);
+    // lv_label_set_text(label, "MATRIX");
 
     /*Copy the button and set toggled state. (The release action is copied too)*/
     lv_obj_t *btn2 = lv_btn_create(lv_scr_act(), NULL);
@@ -215,9 +231,6 @@ void GUI::Render_Home(lv_obj_t *screen)
     label = lv_label_create(btn4, NULL);
     lv_label_set_text(label, "GUAGE");
 }
-
-// Rest is prebuilt //
-
 int auton_sel = 0;
 
 static lv_res_t btnm_action(lv_obj_t *btnm, const char *txt)

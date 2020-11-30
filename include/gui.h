@@ -3,11 +3,11 @@
 
 #include "api.h"
 #include <vector>
+#include <array>
 #include <ostream>
 #include <sstream>
 #include <iostream>
 #include <map>
-
 extern int auton_sel;
 
 using Run_F = std::function<void(void)>;
@@ -19,7 +19,9 @@ namespace GUI
         Home,
         Logs,
         LogDetails,
+        Console,
     };
+    
 
     enum class Module
     {
@@ -49,8 +51,20 @@ namespace GUI
         Log_Message(std::string title, Module source = Module::DEBUG, std::string contents = "");
     };
 
-    static Screens ActiveScreen;
+
+    class Console_Message
+    {
+        public:
+        std::string contents;
+        int line;
+        Module source;
+        Console_Message(std::string contents = "", Module source = Module::DEBUG);
+    };
+    extern void Console_Log(Console_Message message, int line);
+    extern Screens ActiveScreen;
     static std::vector<Log_Message> Message_Log;
+    static std::array<GUI::Console_Message, 8> CurrentConsole = {};
+    
     static bool PauseLog = false;
     
     extern GUI::Log_Message ActiveLog;
@@ -59,6 +73,7 @@ namespace GUI
     extern void Render_Home(lv_obj_t *screen);
     extern void Render_Logs(lv_obj_t *screen);
     extern void Render_Log_Details(lv_obj_t *screen);
+    extern void Render_Console(lv_obj_t *screen);
 
     extern void Log(Log_Message message);
 
