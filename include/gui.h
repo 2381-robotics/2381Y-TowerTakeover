@@ -20,6 +20,7 @@ namespace GUI
         Logs,
         LogDetails,
         Console,
+        Sliders,
     };
     
 
@@ -60,9 +61,20 @@ namespace GUI
         Module source;
         Console_Message(std::string contents = "", Module source = Module::DEBUG);
     };
+
+    class Slider_Message
+    {
+        public: 
+        std::string title;
+        float value;
+        Module source;
+        Slider_Message(std::string title = "", float value = 0, Module source = Module::DEBUG);
+    };
     extern void Console_Log(Console_Message message, int line);
+    extern void Slider(Slider_Message message);
     extern Screens ActiveScreen;
     static std::vector<Log_Message> Message_Log;
+    static std::vector<Slider_Message> Slider_Log;
     static std::array<GUI::Console_Message, 8> CurrentConsole = {};
     
     static bool PauseLog = false;
@@ -72,6 +84,7 @@ namespace GUI
     extern void Set_Screen(Screens screen);
     extern void Render_Home(lv_obj_t *screen);
     extern void Render_Logs(lv_obj_t *screen);
+    extern void Render_Sliders(lv_obj_t *screen);
     extern void Render_Log_Details(lv_obj_t *screen);
     extern void Render_Console(lv_obj_t *screen);
 

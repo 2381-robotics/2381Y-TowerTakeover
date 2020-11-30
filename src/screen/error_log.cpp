@@ -33,7 +33,10 @@ lv_obj_t *GUI::Assign_Button(lv_obj_t *par, const lv_obj_t *copy, Run_F *run_fn)
 
 Screens GUI::ActiveScreen = Home;
 vector<Log_Message> Message_Log = {};
+vector<Slider_Message> Slider_Log = {};
 std::string CurrentConsole[8];
+
+// sets the current screen on the gui homepage
 void GUI::Set_Screen(Screens screen)
 {
     auto blank = Render_Default();
@@ -50,6 +53,9 @@ void GUI::Set_Screen(Screens screen)
         break;
     case Console:
         Render_Console(blank);
+        break;
+    case Sliders:
+        Render_Sliders(blank);
         break;
     default:
         Render_Home(blank);
@@ -85,13 +91,16 @@ void GUI::Log(Log_Message message)
 }
 
 
+// logs screen rendering
 void GUI::Render_Logs(lv_obj_t *screen)
 {
+    // list of logs
     auto page = lv_list_create(screen, NULL);
     lv_obj_set_size(page, lv_obj_get_width(screen) * 0.9, lv_obj_get_height(screen));
     lv_obj_align(page, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
     lv_obj_set_style(page, &lv_style_pretty_color);
 
+    // renders each list item
     for (const auto &value : Message_Log)
     {
         auto listItemClick = new Run_F([value](void) -> void {
@@ -103,6 +112,7 @@ void GUI::Render_Logs(lv_obj_t *screen)
         lv_obj_set_free_ptr(list_item, listItemClick);
     };
 
+    // scroll logic and stuff
     auto scroll = lv_obj_create(screen, NULL);
     lv_obj_set_size(scroll, lv_obj_get_width(screen) * 0.1, lv_obj_get_height(screen));
     lv_obj_align(scroll, NULL, LV_ALIGN_IN_TOP_LEFT, lv_obj_get_width(screen) * 0.9, 0);
@@ -111,6 +121,7 @@ void GUI::Render_Logs(lv_obj_t *screen)
     auto btn_width = lv_obj_get_width(screen) * 0.1;
     auto btn_height = 50;
 
+    // pause logic and stuff
     auto TogglePause = new Run_F([](void) -> void {
         PauseLog = !PauseLog;
         Set_Screen(Screens::Logs);
@@ -132,6 +143,8 @@ void GUI::Render_Logs(lv_obj_t *screen)
         lv_label_set_text(pauseLabel, "|>");
     }
 
+
+    // buttons shown on page
     auto scrollUp = new Run_F([page](void) -> void {
         lv_list_down(page);
     });
@@ -155,6 +168,7 @@ void GUI::Render_Logs(lv_obj_t *screen)
     auto addLog = new Run_F([page](void) -> void {
         Log(Log_Message("YEEEEEE"));
     });
+    //test log button "YEEEE"
     auto log_button = Assign_Button(scroll, NULL, addLog);
     lv_obj_set_size(log_button, btn_width, btn_height);
     lv_obj_align(log_button, NULL, LV_ALIGN_CENTER, 0, btn_height * 1.5 + 6);
@@ -163,6 +177,8 @@ void GUI::Render_Logs(lv_obj_t *screen)
     lv_label_set_text(label3, "L");
 }
 
+
+// home page
 void GUI::Render_Home(lv_obj_t *screen)
 {
     lv_obj_t *label = lv_label_create(screen, NULL);
@@ -220,19 +236,117 @@ void GUI::Render_Home(lv_obj_t *screen)
     label = lv_label_create(logs_button, NULL);
     lv_label_set_text(label, "LOGS");
 
-    /*Copy the button and set toggled state. (The release action is copied too)*/
-    lv_obj_t *btn4 = lv_btn_create(lv_scr_act(), NULL);
-    lv_obj_set_size(btn4, btn_width, btn_height);
-    lv_obj_align(btn4, NULL, LV_ALIGN_IN_RIGHT_MID, -8, 0);
-    lv_obj_set_free_num(btn4, 4); /*Set a unique number for the button*/
+
+
+   auto SlidersFn = new Run_F([](void) -> void {
+        Set_Screen(Sliders);
+    });
+    /*Copy the button and set toggled state. (The release actsion is copied too)*/
+    auto sliders_button = Assign_Button(lv_scr_act(), NULL, SlidersFn);
+    lv_obj_set_size(sliders_button, btn_width, btn_height);
+    lv_obj_align(sliders_button, NULL, LV_ALIGN_IN_RIGHT_MID, -8, 0);
     // lv_btn_set_action(btn4, LV_BTN_ACTION_CLICK, demo_click_action);
 
     /*Add a label to the toggled button*/
-    label = lv_label_create(btn4, NULL);
-    lv_label_set_text(label, "GUAGE");
+
+
+    // slider page
+    label = lv_label_create(sliders_button, NULL);
+    lv_label_set_text(label, "SLIDERS");
 }
 int auton_sel = 0;
 
+Slider_Message::Slider_Message(std::string title, float value, Module source) : source(source), title(title), value(value)
+{
+}
+
+void GUI::Slider(Slider_Message message)
+{
+    Slider_Log.insert(Slider_Log.begin(), message);
+    if (ActiveScreen == GUI::Screens::Sliders)
+    {
+        Set_Screen(Screens::Sliders);
+    }
+}
+
+
+void GUI::Render_Sliders(lv_obj_t *screen)
+{
+    Slider(Slider_Message("V1", 200));
+    Slider(Slider_Message("V2", 200));
+    Slider(Slider_Message("V3", 200));
+    Slider(Slider_Message("V4", 200));
+    Slider(Slider_Message("V5", 200));
+    // renders page
+    auto page = lv_list_create(screen, NULL);
+    lv_obj_set_size(page, lv_obj_get_width(screen) * 0.9, lv_obj_get_height(screen));
+    lv_obj_align(page, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
+    lv_obj_set_style(page, &lv_style_pretty_color);
+
+
+    // renders each list item
+    for (const auto &value : Slider_Log)
+    {
+        auto listItemClick = new Run_F([value](void) -> void {
+            // GUI::ActiveLog = value;
+            // print(value.title + ActiveLog.title);
+            // Set_Screen(LogDetails);
+        });
+        auto list_item = lv_list_add(page, NULL,  ((value.title + " " + std::string(to_string(value.value))).c_str()), Button_Click);
+        lv_obj_set_free_ptr(list_item, listItemClick);
+    };
+
+// strcat(Integer.toString(), tempScore.c_str());
+
+    // scroll logic 
+    auto scroll = lv_obj_create(screen, NULL);
+    lv_obj_set_size(scroll, lv_obj_get_width(screen) * 0.1, lv_obj_get_height(screen));
+    lv_obj_align(scroll, NULL, LV_ALIGN_IN_TOP_LEFT, lv_obj_get_width(screen) * 0.9, 0);
+    lv_obj_set_style(scroll, &lv_style_pretty_color);
+
+    auto btn_width = lv_obj_get_width(screen) * 0.1;
+    auto btn_height = 50;
+
+    // up botton
+    auto scrollUp = new Run_F([page](void) -> void {
+        lv_list_down(page);
+    });
+    auto up_button = Assign_Button(scroll, NULL, scrollUp);
+    lv_obj_set_size(up_button, btn_width, btn_height);
+    lv_obj_align(up_button, NULL, LV_ALIGN_CENTER, 0, -btn_height / 2 - 3);
+
+    auto label = lv_label_create(up_button, NULL);
+    lv_label_set_text(label, "^");
+
+    // scroll down button
+    auto scrollDown = new Run_F([page](void) -> void {
+        lv_list_up(page);
+    });
+    auto down_button = Assign_Button(scroll, NULL, scrollDown);
+    lv_obj_set_size(down_button, btn_width, btn_height);
+    lv_obj_align(down_button, NULL, LV_ALIGN_CENTER, 0, btn_height / 2 + 3);
+
+    auto label2 = lv_label_create(down_button, NULL);
+    lv_label_set_text(label2, "v");
+
+    // auto addLog = new Run_F([page](void) -> void {
+    //     Log(Log_Message("YEEEEEE"));
+    // });
+    // //test log button "YEEEE"
+    // auto log_button = Assign_Button(scroll, NULL, addLog);
+    // lv_obj_set_size(log_button, btn_width, btn_height);
+    // lv_obj_align(log_button, NULL, LV_ALIGN_CENTER, 0, btn_height * 1.5 + 6);
+
+    // auto label3 = lv_label_create(log_button, NULL);
+    // lv_label_set_text(label3, "L");
+}
+
+
+
+
+
+
+// (UNKOWN) auton setting
 static lv_res_t btnm_action(lv_obj_t *btnm, const char *txt)
 {
 
