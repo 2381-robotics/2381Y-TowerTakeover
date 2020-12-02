@@ -23,13 +23,10 @@ AutoSequence *Auton::CUS_Q2 = AutoSequence::FromTasks({
         shooter->Set_Shooter(0);
         indexer->Set_Indexer(100, true);
     }),
-    AutoTask::SyncTask(
-        [](void) -> void {
-            robot->drive->Set_Curve_Drive({54, -53}, -M_PI / 4 + 0.05, {58, -56}, -M_PI / 4 + 0.05, 160, 0.5);
-            intake->Set_Intake(127);
-            indexer->Set_Indexer(100, true);
-        },
-        [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
+    AutoCurve({54, -53}, -M_PI / 4 + 0.05, {58, -56}, -M_PI / 4 + 0.05, 160, 0.5).AddRun([](void) -> void {
+        intake->Set_Intake(127);
+        indexer->Set_Indexer(100, true);
+    }),
 
     AutoPath({58, -56}, -M_PI / 4 + 0.05, 160).AddRun([](void) -> void {
         intake->Set_Intake(0);
@@ -41,7 +38,7 @@ AutoSequence *Auton::CUS_Q2 = AutoSequence::FromTasks({
                                 shooter->Shoot(127);
                             })
         .AddInit([](void) -> void { indexer->resetNewBall(); })
-        .AddKill([](void)->void {shooter->Set_Shooter(0);})
+        .AddKill([](void) -> void { shooter->Set_Shooter(0); })
         .AddDone([](void) -> bool { return indexer->newBallIndexed(); }),
 
     AutoTask::SyncTask(
@@ -88,16 +85,16 @@ AutoSequence *Auton::CUS_Q2 = AutoSequence::FromTasks({
         indexer->Set_Indexer(70, false);
         shooter->Shoot(0);
         robot->drive->Set_Path_Drive({2, -56}, -M_PI / 2, 80);
-    }),
+    }),       
     AutoTask::AutoDelay(700)
         .AddRun([](void) -> void {
             intake->Set_Intake(0);
             shooter->Shoot(127);
             robot->drive->Set_Path_Drive({2, -56}, -M_PI / 2, 80);
         })
-        .AddKill([](void) -> void { shooter->Shoot(0); indexer->Set_Indexer(0); robot->drive->Set_Drive(0,0,0,0);})
+        .AddKill([](void) -> void { shooter->Shoot(0); indexer->Set_Indexer(0); robot->drive->Set_Drive(0,0,0,0); })
         .AddInit([](void) -> void { indexer->resetNewBall(); })
         .AddDone([](void) -> bool { return indexer->newBallIndexed(); }),
 
-    SingleRun([](void) -> void { position_tracker->Set_Position(0, 0, {2, -56}, -M_PI/2); }),
+    SingleRun([](void) -> void { position_tracker->Set_Position(0, 0, {2, -56}, -M_PI / 2); }),
 });

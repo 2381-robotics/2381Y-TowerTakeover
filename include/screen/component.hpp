@@ -15,7 +15,7 @@ class Component_Base
 
   explicit Component_Base(std::vector<Component_Base*> children);
   
-  static Component_Base* create();
+  // static Component_Base* create();
 
   std::unordered_map<std::string, std::string> $state;
 

@@ -229,11 +229,6 @@ void Mech_Drive::Set_Curve_Drive(complex<double> Waypoint, double WaypointAngle,
 
   auto TargetAngle = EndAngle + pow(cos(InnerAngle), AngleInterpolation) * NormalizeAngle(WaypointAngle-EndAngle);
 
-  // lcd::set_text(3, "DISTANCE: " + to_string(abs(TotalDisp)));
-  // lcd::set_text(4, "Current: " + to_string(CurrentPos.real()) + ", " + to_string(CurrentPos.imag()));
-  // lcd::set_text(5, "End Point: " + to_string((TotalDisp+CurrentPos).real()) + ", " + to_string((TotalDisp+CurrentPos).imag()));
-  // lcd::set_text(4, "Disp: " + to_string(TotalDisp.real()) + ", " + to_string(TotalDisp.imag()));
-
   auto AngleDisplacement = arg(TotalDisp);
   auto AngleRobot = (position_tracker->Get_Angle());
 

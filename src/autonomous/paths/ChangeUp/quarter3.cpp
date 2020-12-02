@@ -50,14 +50,22 @@ AutoSequence *Auton::CUS_Q3 = AutoSequence::FromTasks({
         .AddKill([](void) -> void { shooter->Set_Shooter(0); })
         .AddDone([](void) -> bool { return indexer->newBallIndexed(); }),
 
-    AutoCurve({-48, -48}, -3 * M_PI / 4, {48, 12}, -3 * M_PI / 2, 127, 3).AddRun([](void) -> void {
+    AutoCurve({-48, -48}, -3 * M_PI / 4, {-48, -12}, -3 * M_PI / 2, 127, 3).AddRun([](void) -> void {
         intake->Set_Intake(20);
         indexer->Set_Indexer(127, true);
     }),
-    AutoPath({-48, -12}, -3 * M_PI/2, {127, 160}, 1).AddRun([](void) -> void {
+
+    AutoCurve({-48, -12}, -3* M_PI/ 2, {-48, 0}, -M_PI, 150, 3).AddRun([](void) -> void {
         intake->Set_Intake(127);
         indexer->Set_Indexer(127, true);
     }),
+    
+// ^ is riskier way, with autocurve, v is safer way where you just stop at the point
+
+    // AutoPath({-48, -12}, -3 * M_PI/2, {127, 160}, 1).AddRun([](void) -> void {
+    //     intake->Set_Intake(127);
+    //     indexer->Set_Indexer(127, true);
+    // }),
     AutoPath({-48, 0}, -M_PI, 200).AddRun([](void) -> void {
         intake->Set_Intake(0);
         indexer->Set_Indexer(0);
