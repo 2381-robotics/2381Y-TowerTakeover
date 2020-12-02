@@ -84,10 +84,6 @@ double ratioCalc(double masterDis, double masterOS, double specDis, double specO
 
 double turningCoefficient = 1;
 
-vector<double[]> Path_Inject(vector<double[]> path, double interval)
-{
-}
-
 void Mech_Drive::Follow_Path()
 {
   // array<double, 3> currentPosition = position_tracker->Get_Position();

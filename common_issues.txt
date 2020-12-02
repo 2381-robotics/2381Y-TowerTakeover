@@ -38,3 +38,19 @@ if you have a variable x defined locally in the context, for ints it will just c
 Error: Memory Permission - 
 Cause: Don't assign motors and shit inside constructor of modules - ALWAYS USE Create() method to assign motors because otherwise
 you will assign an extern motor that hasn't been initialized in initialized.cpp yet
+
+
+
+
+**** UPGRADING PROS **** 
+
+ok so there are 3 different things in pros - the terminal CLI, the editor, and the actual KERNEL itself.
+The CLI is just the set of commands that are availible to you to use, the KERNEL is what is 
+responsible for the machinery behind the scenes and compiling - when a new sensor comes out,
+the CLI may stay on the same version, but the KERNEL is what will upgrade to support it.
+
+`prosv5 upgrade` upgrades specifically the terminal CLI but not the kernel.
+
+To upgrade KERNEL, run `prosv5 conduct upgrade` -> `prosv5 conduct info` gives you 
+the current version number. `prosv5 conduct` is generally the useful command for 
+managing pros.

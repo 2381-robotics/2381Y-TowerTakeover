@@ -8,8 +8,6 @@ Component_Base::Component_Base(vector<Component_Base*> children) : $state($initi
   assignChildren(children);
 }
   
-Component_Base* Component_Base::create() {};
-
 const string Component_Base::$getState(string key)
 {
    return this->$state[key];
