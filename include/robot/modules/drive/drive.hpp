@@ -17,7 +17,6 @@ public:
   virtual bool get_running() = 0;
   virtual void Set_Turn(double Speed, double direction, double distance) = 0;
   void Reset() override;
-  virtual void Stop() = 0;
   // ~Drive();
   // virtual void Pid_Set_Point_Drive();
 

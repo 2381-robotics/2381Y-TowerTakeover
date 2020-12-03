@@ -22,7 +22,7 @@ AutoSequence *invertedSmallSideAuto = AutoSequence::FromTasks(
     vector<AutoTask>{
         AutoTask::AutoDelay(500, false, [](void)->void{
             intake->Set_Intake(-80);
-        }, [&](void)->void{
+        }, [](void)->void{
             return;
         }, [](void)->void{
             intake->Set_Intake(127);
