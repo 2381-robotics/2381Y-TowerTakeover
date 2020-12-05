@@ -25,6 +25,8 @@ class Position_Tracker {
     void Track_Position();
 
     std::complex<double> Get_Position();
+    std::complex<double> Get_Position_N();
+
     std::complex<double> Get_Displacement();
 
     std::complex<double> Get_Velocity();
@@ -55,9 +57,13 @@ class Position_Tracker {
 
     std::complex<double> v_vel = 0, h_vel = 0;
 
+    std::complex<double> v_vel_n = 0, h_vel_n = 0, h_disp_n = 0, v_disp_n = 0;
+
+
     std::array<double,3> current_encoder_values = {0,0,0}, last_encoder_values = {0,0,0}, position_change = {0,0,0};
     unsigned int velLastChecked = 0;
 };
 
+double NormalizeAngle(double angle);
 
 #endif

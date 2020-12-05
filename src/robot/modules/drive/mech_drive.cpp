@@ -18,7 +18,7 @@ using namespace pros;
 
 double NormalizeAngle(double angle)
 {
-  return fmod(angle + M_PI, 2 * M_PI) - M_PI;
+  return remainder(angle, 2 * M_PI);
 }
 
 void Mech_Drive::Move_Motor()
@@ -298,6 +298,8 @@ void Mech_Drive::Set_Path_Drive(complex<double> EndPoint, double EndAngle, array
   // TurnControl->Update(0, sin(EndAngleDiff));
   auto Forwards = speed[0] * cos(AngleDiff) * deaccellCoeff;
   auto Strafe = speed[0] * sin(AngleDiff) * deaccellCoeff;
+
+  
   auto Turna = (0.9 * sin(EndAngleDiff) / pow(pow(sin(EndAngleDiff), 2.0), 0.25) + 0.15 * abs(sin(EndAngleDiff)) / sin(EndAngleDiff));
 
   auto Turn = speed[1] * ((abs(EndAngleDiff) < 0.5 * errorTolerance[1] || deaccellCoeff / errorTolerance[1] > 1) ? Turna : Turna * deaccellCoeff + (EndAngleDiff / abs(EndAngleDiff)) * (1 - deaccellCoeff));
