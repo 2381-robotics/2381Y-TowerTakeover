@@ -21,12 +21,25 @@ using namespace pros;
 
 AutoSequence *AT_Test_Ultra1 = AutoSequence::FromTasks(
     vector<AutoTask>{
+        //     each tile is 24 inches, (0,0) at center of field, width of bot is 18, length is 14, tracked at center of bot, max distance is 3 tiles (72).  
+        // autopath(AUTO_DRIVE.CPP) drives to a certain point P {0, -72}, and it will have the angle 0, and reach that point of 127    
+        AutoPath({0,-72}, 0 , 127),
+        // delay in ms
+        AutoTask::AutoDelay(10000000),
+
+        // set position is run only at the begining, and just sets position of robot
+        // use this to run tasks that just need to run once and are immediete (not drive) 
         SingleRun([](void) -> void { position_tracker->Set_Position({36, 64.5}, -M_PI / 2); }),
+        // autocurve (IM MECHDRIVE.CPP) interpolates 2 points curved towards waypoint, waypoint angle (angle it should be when closest to waypoint), endpoint, end angle, speed, curve 
+        // add run run allows you to set speeds and values for all stuff other than drive (intake shooter and indexer)
+        // does run while doing curve
         AutoCurve({36, 52}, -M_PI / 2, {58, 38}, 0, 127, 3).AddRun([](void) -> void {
                                                                    intake->Set_Intake(127);
                                                                    shooter->Set_Shooter(100);
                                                                    indexer->Set_Indexer(0);
                                                            })
+        // runs at the end to 'reset' certain things 
+        // intake is intake, shooter is to output balls, and indexer is to move balls up within the bot
             .AddKill([](void) -> void { shooter->Set_Shooter(0); }),
 
         AutoPath({59, 38}, 0, {127, 130}, 1).AddRun([](void) -> void {
@@ -42,14 +55,16 @@ AutoSequence *AT_Test_Ultra1 = AutoSequence::FromTasks(
                                         shooter->Shoot(127);
                                 })
             .AddKill([](void) -> void { shooter->Shoot(0); indexer->Set_Indexer(0); })
+        //     init is same as kill but it runs at the beggining of a task 
             .AddInit([](void) -> void { indexer->resetNewBall(); })
+        //     done returns true or false and returns a boolean and only compeltes if that or the previous is true
             .AddDone([](void) -> bool { return indexer->newBallIndexed(); }),
 
         AutoCurve({48, 48}, M_PI/4, {48, 12}, -M_PI/2, 127,3).AddRun([](void) -> void {
                 intake->Set_Intake(20);
                 indexer->Set_Indexer(127, true);
         }),
-
+        // wait for task to finish to run the next 
         AutoTask::SyncTask(
             [](void) -> void {
                     robot->drive->Set_Curve_Drive({48, 12}, -M_PI / 2, {48, 1}, 0, 150, 3);

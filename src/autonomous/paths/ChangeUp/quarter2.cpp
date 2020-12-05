@@ -17,7 +17,7 @@ using namespace Auton;
 using namespace pros;
 
 AutoSequence *Auton::CUS_Q2 = AutoSequence::FromTasks({
-    SingleRun([](void) -> void { position_tracker->Set_Position({48, 0}, 0); }),
+    SingleRun([](void) -> void { position_tracker->Set_Position({47, 0}, 0); }),
     AutoPath({58, -30}, -M_PI / 4, 160, 3).AddRun([](void) -> void {
         intake->Set_Intake(127);
         shooter->Set_Shooter(0);
@@ -31,7 +31,7 @@ AutoSequence *Auton::CUS_Q2 = AutoSequence::FromTasks({
         },
         [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
 
-    AutoPath({58, -56}, -M_PI / 4 + 0.05, 160).AddRun([](void) -> void {
+    AutoPath({58, -55.5}, -M_PI / 4 + 0.05, 160).AddRun([](void) -> void {
         intake->Set_Intake(0);
         shooter->Set_Shooter(0);
         indexer->Set_Indexer(100, true);
@@ -72,7 +72,7 @@ AutoSequence *Auton::CUS_Q2 = AutoSequence::FromTasks({
     }),
     AutoPath({2, -28}, -M_PI / 2, {127, 180}, 1),
 
-    AutoPath({2, -56}, -M_PI / 2, {150, 150}, 1),
+    AutoPath({2, -55}, -M_PI / 2, {150, 150}, 1),
 
     AutoTask::AutoDelay(1000).AddRun([](void) -> void {
                                  intake->Set_Intake(0);

@@ -83,7 +83,7 @@ void Position_Tracker::Track_Position()
     // lcd::set_text(4, quatText2);
 
     current_encoder_values[right_] = v_enc_->get_value();
-    current_encoder_values[back_] = h_enc_->get_value();
+    current_encoder_values[back_] = h_enc_->get_value() * 1.03;
     // lcd::set_text(2, "VERT: " + to_string(current_encoder_values[right_]) + " Horz: " + to_string(current_encoder_values[back_]));
 
     position_change[right_] = (current_encoder_values[right_] - last_encoder_values[right_]) * PI * wheel_diameters[right_] / 360;

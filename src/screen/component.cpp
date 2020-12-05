@@ -7,7 +7,8 @@ using namespace std;
 Component_Base::Component_Base(vector<Component_Base*> children) : $state($initialState()) {
   assignChildren(children);
 }
-  
+
+
 const string Component_Base::$getState(string key)
 {
    return this->$state[key];

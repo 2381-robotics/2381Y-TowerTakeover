@@ -18,22 +18,29 @@ using namespace pros;
 
 AutoSequence *Auton::CUS_Q1 = AutoSequence::FromTasks({
     // Start Position
-    SingleRun([](void) -> void { position_tracker->Set_Position({36, 64.5}, -M_PI / 2); }),
 
+    // setting initial position of the bot
+    SingleRun([](void) -> void { position_tracker->Set_Position({36, 63}, -M_PI / 2); }),
+
+
+    // Curves the both towards left to pick up ball, also sets intake to intake a second ball infront, sets shooter to deploy roof, and runs indexer
     AutoCurve({36, 52}, -M_PI / 2, {59, 38}, 0, 127, 3)
         .AddRun([](void) -> void {
             intake->Set_Intake(127);
             shooter->Set_Shooter(100);
-            indexer->Set_Indexer(0);
+            indexer->Set_Indexer(20);
         })
+        // resetting shooter
         .AddKill([](void) -> void { shooter->Set_Shooter(0); }),
 
-    AutoPath({59, 38}, 0, {127, 130}, 1).AddRun([](void) -> void {
+    // moving towards bottom left tower and intaking and moving balls up at the same time
+    AutoPath({57, 38}, 0, {127, 130}, 1).AddRun([](void) -> void {
         intake->Set_Intake(127);
+        // light sensor (true or false), false will make it stop running as soon as it detects it
         indexer->Set_Indexer(127, true);
     }),
-    AutoPath({57.5, 57.5}, M_PI / 4, 127).AddRun([](void) -> void {
-        intake->Set_Intake(0);
+    AutoPath({56, 56}, M_PI / 4, 127).AddRun([](void) -> void {
+        intake->Set_Intake(20);
         indexer->Set_Indexer(127, true);
     }),
 
@@ -65,11 +72,11 @@ AutoSequence *Auton::CUS_Q1 = AutoSequence::FromTasks({
     //         indexer->Set_Indexer(100, true);
     // }),
     AutoPath({48, 1}, 0, 200).AddRun([](void) -> void {
-        intake->Set_Intake(0);
-        indexer->Set_Indexer(0);
+        intake->Set_Intake(127);
+        indexer->Set_Indexer(127);
     }),
 
-    AutoPath({57, 1}, 0, 127).AddRun([](void) -> void {
+    AutoPath({55, 1}, 0, 127).AddRun([](void) -> void {
         intake->Set_Intake(0);
         indexer->Set_Indexer(50, true);
     }),
@@ -93,9 +100,9 @@ AutoSequence *Auton::CUS_Q1 = AutoSequence::FromTasks({
         .AddInit([](void) -> void { indexer->resetNewBall(); })
         .AddDone([](void) -> bool { return indexer->newBallIndexed(); }),
 
-    AutoPath({50, 1}, 0, 127).AddRun([](void) -> void {
+    AutoPath({48, 1}, 0, 127).AddRun([](void) -> void {
         intake->Set_Intake(-20);
         indexer->Set_Indexer(0);
     }),
-    SingleRun([](void) -> void { position_tracker->Set_Position({0, 0}, 0, {50, 1}, 0); }),
+    SingleRun([](void) -> void { position_tracker->Set_Position({0, 0}, 0, {48, 1}, 0); })
 });
