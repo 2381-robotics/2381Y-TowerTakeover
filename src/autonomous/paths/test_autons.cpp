@@ -22,8 +22,22 @@ using namespace pros;
 AutoSequence *AT_Test_Ultra1 = AutoSequence::FromTasks(
     vector<AutoTask>{
         //     each tile is 24 inches, (0,0) at center of field, width of bot is 18, length is 14, tracked at center of bot, max distance is 3 tiles (72).  
-        // autopath(AUTO_DRIVE.CPP) drives to a certain point P {0, -72}, and it will have the angle 0, and reach that point of 127    
-        AutoPath({0,-72}, 0 , 127),
+        // autopath(AUTO_DRIVE.CPP) drives to a certain point P {0, -72}, and it will have the angle 0, and reach that point of 127     
+
+    SingleRun([](void) -> void { position_tracker->Set_Position({36, 63}, -M_PI / 2); }),
+        AutoTask::SyncTask(
+        [](void) -> void {
+            robot->drive->Set_Curve_Drive({48, 12}, -M_PI / 2, {48, 5}, 0, 150, 3);
+            intake->Set_Intake(127);
+            shooter->Set_Shooter(0);
+            indexer->Set_Indexer(127, true);
+        },
+        [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
+
+    AutoPath({48, 7}, 0, 200).AddRun([](void) -> void {
+        intake->Set_Intake(127);
+        indexer->Set_Indexer(127);
+    }),
         // delay in ms
         AutoTask::AutoDelay(10000000),
 

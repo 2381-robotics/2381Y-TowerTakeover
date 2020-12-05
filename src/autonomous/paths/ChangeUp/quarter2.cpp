@@ -17,7 +17,7 @@ using namespace Auton;
 using namespace pros;
 
 AutoSequence *Auton::CUS_Q2 = AutoSequence::FromTasks({
-    SingleRun([](void) -> void { position_tracker->Set_Position({47, 0}, 0); }),
+    SingleRun([](void) -> void { position_tracker->Set_Position({43, 0}, 0); }),
     AutoPath({58, -30}, -M_PI / 4, 160, 3).AddRun([](void) -> void {
         intake->Set_Intake(127);
         shooter->Set_Shooter(0);

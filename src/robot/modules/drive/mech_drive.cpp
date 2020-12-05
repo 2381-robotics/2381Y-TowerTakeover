@@ -240,11 +240,11 @@ void Mech_Drive::Set_Curve_Drive(complex<double> Waypoint, double WaypointAngle,
   auto AngleDiff = fmod(AngleRobot - AngleDisplacement + M_PI, 2 * M_PI) - M_PI;
   auto EndAngleDiff = (fmod((AngleRobot - TargetAngle) + M_PI, 2 * M_PI) - M_PI) / 2;
 
-  double deaccellCoeff = abs(TotalDisp) * 127 / (9 * speed) < 1 ? abs(TotalDisp) * 127 / (9 * speed) : 1;
+  double deaccellCoeff = abs(TotalDisp) * 127 / (12 * speed) < 1 ? abs(TotalDisp) * 127 / (12 * speed) : 1;
 
   auto Forwards = speed * cos(AngleDiff) * deaccellCoeff;
   auto Strafe = speed * sin(AngleDiff) * deaccellCoeff;
-  auto Turn = speed * TurnControl->Update(0, (0.8 * sin(EndAngleDiff) / pow(pow(sin(EndAngleDiff), 2.0), 0.25) + 0.2 * abs(sin(EndAngleDiff)) / sin(EndAngleDiff)));
+  auto Turn = speed * TurnControl->Update(0, (0.9 * sin(EndAngleDiff) / pow(pow(sin(EndAngleDiff), 2.0), 0.25) + 0.1 * abs(sin(EndAngleDiff)) / sin(EndAngleDiff)));
 
   // lcd::set_text(5, "AngleDiff: " + to_string((int)(AngleDiff*180/M_PI)) + "EndDiff: " + to_string((int)(EndAngleDiff*180/M_PI)));
   Set_Drive(Strafe, Forwards, Turn, 0);
@@ -296,9 +296,9 @@ void Mech_Drive::Set_Path_Drive(complex<double> EndPoint, double EndAngle, array
   // double deaccellCoeff = 1;
 
   // TurnControl->Update(0, sin(EndAngleDiff));
-  auto Forwards = speed[0] * cos(AngleDiff) * deaccelSecond;
-  auto Strafe = speed[0] * sin(AngleDiff) * deaccelSecond;
-  auto Turna = (0.8 * sin(EndAngleDiff) / pow(pow(sin(EndAngleDiff), 2.0), 0.25) + 0.2 * abs(sin(EndAngleDiff)) / sin(EndAngleDiff));
+  auto Forwards = speed[0] * cos(AngleDiff) * deaccellCoeff;
+  auto Strafe = speed[0] * sin(AngleDiff) * deaccellCoeff;
+  auto Turna = (0.9 * sin(EndAngleDiff) / pow(pow(sin(EndAngleDiff), 2.0), 0.25) + 0.15 * abs(sin(EndAngleDiff)) / sin(EndAngleDiff));
 
   auto Turn = speed[1] * ((abs(EndAngleDiff) < 0.5 * errorTolerance[1] || deaccellCoeff / errorTolerance[1] > 1) ? Turna : Turna * deaccellCoeff + (EndAngleDiff / abs(EndAngleDiff)) * (1 - deaccellCoeff));
 

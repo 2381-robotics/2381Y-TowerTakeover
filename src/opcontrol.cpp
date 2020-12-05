@@ -24,8 +24,8 @@ bool snapshot = false;
 void driver()  {
 
     // angler->Multiply_Max_Speed(2);
-  intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 50 - 110* (master.get_digital(DIGITAL_L2) && master.get_digital(DIGITAL_L1))));
-  indexer->Set_Indexer((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 50 - 110* (master.get_digital(DIGITAL_L2) && master.get_digital(DIGITAL_L1))), true);
+  intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 127 - 110* (master.get_digital(DIGITAL_L2) && master.get_digital(DIGITAL_L1))));
+  indexer->Set_Indexer((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 127 - 110* (master.get_digital(DIGITAL_L2) && master.get_digital(DIGITAL_L1))), true);
   shooter->Shoot(127*(master.get_digital(DIGITAL_R1) - master.get_digital(DIGITAL_R2)));
 
   // intake->Set_Intake((master.get_digital(DIGITAL_L1) * 127 - master.get_digital(DIGITAL_L2) * 50 - 110* (master.get_digital(DIGITAL_L2) && master.get_digital(DIGITAL_L1)) - 30* master.get_digital(DIGITAL_RIGHT)* vision_indexer->Check_Object() ));

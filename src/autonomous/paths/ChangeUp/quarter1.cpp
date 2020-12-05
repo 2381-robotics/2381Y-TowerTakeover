@@ -60,7 +60,7 @@ AutoSequence *Auton::CUS_Q1 = AutoSequence::FromTasks({
 
     AutoTask::SyncTask(
         [](void) -> void {
-            robot->drive->Set_Curve_Drive({48, 12}, -M_PI / 2, {48, 1}, 0, 150, 3);
+            robot->drive->Set_Curve_Drive({48, 12}, -M_PI / 2, {48, 5}, 0, 150, 3);
             intake->Set_Intake(127);
             shooter->Set_Shooter(0);
             indexer->Set_Indexer(127, true);
@@ -71,12 +71,12 @@ AutoSequence *Auton::CUS_Q1 = AutoSequence::FromTasks({
     //         intake->Set_Intake(100);
     //         indexer->Set_Indexer(100, true);
     // }),
-    AutoPath({48, 1}, 0, 200).AddRun([](void) -> void {
+    AutoPath({48, 7}, 0, 200).AddRun([](void) -> void {
         intake->Set_Intake(127);
         indexer->Set_Indexer(127);
     }),
 
-    AutoPath({55, 1}, 0, 127).AddRun([](void) -> void {
+    AutoPath({55, 7}, 0, 127).AddRun([](void) -> void {
         intake->Set_Intake(0);
         indexer->Set_Indexer(50, true);
     }),
@@ -100,9 +100,9 @@ AutoSequence *Auton::CUS_Q1 = AutoSequence::FromTasks({
         .AddInit([](void) -> void { indexer->resetNewBall(); })
         .AddDone([](void) -> bool { return indexer->newBallIndexed(); }),
 
-    AutoPath({48, 1}, 0, 127).AddRun([](void) -> void {
+    AutoPath({48, 7}, 0, 127).AddRun([](void) -> void {
         intake->Set_Intake(-20);
         indexer->Set_Indexer(0);
     }),
-    SingleRun([](void) -> void { position_tracker->Set_Position({0, 0}, 0, {48, 1}, 0); })
+    SingleRun([](void) -> void { position_tracker->Set_Position({0, 0}, 0, {48, 7}, 0); })
 });
