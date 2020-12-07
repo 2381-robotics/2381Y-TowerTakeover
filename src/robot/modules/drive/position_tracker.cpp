@@ -61,9 +61,8 @@ double Position_Tracker::Get_Angle()
     // Corrected is adjusted for drift?
 
     auto radians = -corrected * M_PI / 180;
-    return fmod(radians + ang_origin, 2 * M_PI);
+    return remainder(radians + ang_origin, 2 * M_PI);
 }
-
 
 void Position_Tracker::Track_Position() 
 {
@@ -72,10 +71,11 @@ void Position_Tracker::Track_Position()
         lcd::set_text(2,"IMU CALIBRATING");
         return;
     }
-    auto quat = inertial_->get_euler();
 
+    // Current Angle, Angular Dispertion. This is normalized to between (-M_PI, M_PI).
     ang_disp = this->Get_Angle();
 
+    // Angular Velocity 
     ang_vel = fmod(ang_disp - ang_last, 2*M_PI);
     auto normalized_ang_vel = NormalizeAngle(ang_disp - ang_last);
 
@@ -83,10 +83,14 @@ void Position_Tracker::Track_Position()
     current_encoder_values[back_] = h_enc_->get_value() * 1.04;
     // lcd::set_text(2, "VERT: " + to_string(current_encoder_values[right_]) + " Horz: " + to_string(current_encoder_values[back_]));
 
+    // Position change is the swept angle multiplied by the radius. Radius = 1/2 Diameter, so it is \Delta_Angle * M_PI/180 *Diameter/2.
     position_change[right_] = (current_encoder_values[right_] - last_encoder_values[right_]) * PI * wheel_diameters[right_] / 360;
     position_change[back_] = (current_encoder_values[back_] - last_encoder_values[back_]) * PI * wheel_diameters[back_] / 360;
 
-    // Current Orientation - Angular Change/2 to get average between current and last angle measured.
+    // Current Orientation - Angular Change/2 to get average between current and last angle measured. 
+    // Angular velocity is normalized to (-M_PI, M_PI) so that the change in angle always calculates as the closest side.
+    // Otherwise the vector will be pointing in the opposite direction.
+    
     v_vel = (position_change[right_]) * exp<double>(1i * (ang_disp - ang_vel * 1/2));
     h_vel = ( position_change[back_]) * exp<double>(1i * (ang_disp - M_PI/2 - ang_vel * 1/2));    
 
@@ -94,16 +98,17 @@ void Position_Tracker::Track_Position()
     h_vel_n = (position_change[back_]) * exp<double>(1i * (ang_disp - M_PI/2 - normalized_ang_vel * 1/2));
 
     v_disp_n += v_vel_n;
-    h_disp_n += h_disp_n;
+    h_disp_n += h_vel_n;
 
     h_disp += h_vel;
     v_disp += v_vel;
+
+    ang_last = ang_disp;
+    last_encoder_values = current_encoder_values;
     
     lcd::set_text(2, "POSITION : ("  + to_string((int)round( 100* Get_Position().real())) + ", " + to_string((int)round( 100* Get_Position().imag())) + "), " + to_string(round(ang_disp * 180 / M_PI)) +" deg");
     lcd::set_text(3, "N_POS : ("  + to_string((int)round( 100* Get_Position_N().real())) + ", " + to_string((int)round( 100* Get_Position_N().imag())) + "), " + to_string(round(ang_disp * 180 / M_PI)) +" deg");
 
-    ang_last = ang_disp;
-    last_encoder_values = current_encoder_values;
 }  
 
 complex<double> Position_Tracker::Get_Position()

@@ -237,8 +237,8 @@ void Mech_Drive::Set_Curve_Drive(complex<double> Waypoint, double WaypointAngle,
   auto AngleDisplacement = arg(TotalDisp);
   auto AngleRobot = (position_tracker->Get_Angle());
 
-  auto AngleDiff = fmod(AngleRobot - AngleDisplacement + M_PI, 2 * M_PI) - M_PI;
-  auto EndAngleDiff = (fmod((AngleRobot - TargetAngle) + M_PI, 2 * M_PI) - M_PI) / 2;
+  auto AngleDiff = remainder(AngleRobot - AngleDisplacement, 2 * M_PI);
+  auto EndAngleDiff = (remainder((AngleRobot - TargetAngle), 2 * M_PI)) / 2;
 
   double deaccellCoeff = abs(TotalDisp) * 127 / (12 * speed) < 1 ? abs(TotalDisp) * 127 / (12 * speed) : 1;
 
@@ -278,10 +278,10 @@ void Mech_Drive::Set_Path_Drive(complex<double> EndPoint, double EndAngle, array
   auto AngleDisplacement = arg(Displacement);
   auto AngleRobot = (position_tracker->Get_Angle());
 
-  auto AngleDiff = fmod(AngleRobot - AngleDisplacement + M_PI, 2 * M_PI) - M_PI;
+  auto AngleDiff = remainder(AngleRobot - AngleDisplacement, 2 * M_PI);
   //Normalize turn angle to between (-pi and pi) so sin(x/2) works properly
 
-  auto EndAngleDiff = (fmod((AngleRobot - EndAngle) + M_PI, 2 * M_PI) - M_PI) / 2;
+  auto EndAngleDiff = (remainder((AngleRobot - EndAngle), 2 * M_PI)) / 2;
 
   if (abs(Displacement) < 1 * errorTolerance[0] && abs(EndAngleDiff) < 0.01 * errorTolerance[1])
   {
