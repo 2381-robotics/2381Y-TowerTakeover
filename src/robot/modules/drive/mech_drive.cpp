@@ -210,7 +210,7 @@ double UltraAlign()
 
 void Mech_Drive::Set_Curve_Drive(complex<double> Waypoint, double WaypointAngle, complex<double> EndPoint, double EndAngle, double speed, double curvature, double AngleInterpolation)
 {
-  auto CurrentPos = position_tracker->Get_Position();
+  auto CurrentPos = position_tracker->Get_Position_N();
   auto EndpointDisp = EndPoint - CurrentPos;
   auto WaypointDisplacement = Waypoint - CurrentPos;
 
@@ -267,7 +267,7 @@ void Mech_Drive::Set_Path_Drive(complex<double> EndPoint, double EndAngle, doubl
 
 void Mech_Drive::Set_Path_Drive(complex<double> EndPoint, double EndAngle, array<double, 2> speed, array<double, 2> errorTolerance)
 {
-  auto CurrentPos = position_tracker->Get_Position();
+  auto CurrentPos = position_tracker->Get_Position_N();
   auto Displacement = EndPoint - CurrentPos;
 
   lcd::set_text(3, "DISTANCE: " + to_string(abs(Displacement)));

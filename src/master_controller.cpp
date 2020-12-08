@@ -80,7 +80,7 @@ void MasterController::autonomous() {
         robot->stop();
     }
     if(master.get_digital_new_press(E_CONTROLLER_DIGITAL_LEFT)){
-        set_state(selector_mode);
+        set_state(driver_mode);
     }
     if(master.get_digital_new_press(E_CONTROLLER_DIGITAL_UP)){
         auton_control->Reset();
