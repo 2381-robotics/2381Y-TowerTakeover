@@ -246,7 +246,7 @@ void initialize()
   auton_control->define_auton(AutonControl::CUS_Q4, CUS_Q4);
   auton_control->define_auton(AutonControl::TestAuton, AT_Test_Ultras);
 
-  auton_control->select_auton(AutonControl::CUS_Q1);
+  auton_control->select_auton(AutonControl::CUS_ALL);
 }
 /**
  * Runs while the robot is in the disabled state of Field Management System or

@@ -80,7 +80,7 @@ void Position_Tracker::Track_Position()
     auto normalized_ang_vel = NormalizeAngle(ang_disp - ang_last);
 
     current_encoder_values[right_] = v_enc_->get_value();
-    current_encoder_values[back_] = h_enc_->get_value() * 1.04;
+    current_encoder_values[back_] = h_enc_->get_value();
     // lcd::set_text(2, "VERT: " + to_string(current_encoder_values[right_]) + " Horz: " + to_string(current_encoder_values[back_]));
 
     // Position change is the swept angle multiplied by the radius. Radius = 1/2 Diameter, so it is \Delta_Angle * M_PI/180 *Diameter/2.
