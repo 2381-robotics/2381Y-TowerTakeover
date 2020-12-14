@@ -64,6 +64,11 @@ double Position_Tracker::Get_Angle()
     return remainder(radians + ang_origin, 2 * M_PI);
 }
 
+double Position_Tracker::Get_Ang_Vel()
+{
+    return ang_vel;
+}
+
 void Position_Tracker::Track_Position() 
 {
     if(inertial_->is_calibrating()) 
@@ -102,11 +107,10 @@ void Position_Tracker::Track_Position()
 
     h_disp += h_vel;
     v_disp += v_vel;
-
     ang_last = ang_disp;
     last_encoder_values = current_encoder_values;
-    
-    lcd::set_text(1, "POS DIFF : ("  + to_string((int)round( 100* (Get_Position().real() - Get_Position_N().real()))) + ", " + to_string((int)round( 100* (Get_Position().imag() - Get_Position_N().imag()))) + "), " + to_string(round(ang_disp * 180 / M_PI)) +" deg");
+    //
+    lcd::set_text(1, "VEL: ("  + to_string((int)round( 100* abs(Get_Velocity()))) + ", " + to_string((int)round( 100* abs(Get_Ang_Vel()))) + "), " + to_string(round(ang_disp * 180 / M_PI)) +" deg");
     lcd::set_text(2, "N_POS : ("  + to_string((int)round( 100* Get_Position_N().real())) + ", " + to_string((int)round( 100* Get_Position_N().imag())) + "), " + to_string(round(ang_disp * 180 / M_PI)) +" deg");
 }  
 
@@ -130,6 +134,6 @@ complex<double> Position_Tracker::Get_Displacement()
 
 complex<double> Position_Tracker::Get_Velocity() 
 {
-    return v_vel + h_vel;
+    return v_vel_n + h_vel_n;
 }
 // Position_Tracker::Poistion_Tra  

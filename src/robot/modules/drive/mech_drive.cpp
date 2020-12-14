@@ -51,8 +51,11 @@ bool Mech_Drive::get_running()
 {
   return _is_running;
 }
+ 
+
 void Mech_Drive::Reset_Point()
 {
+  stuck = 0;
   started = pros::c::millis();
   Set_Init_Point();
   _is_running = true;
@@ -288,6 +291,21 @@ void Mech_Drive::Set_Path_Drive(complex<double> EndPoint, double EndAngle, array
     Stop();
     _is_running = false;
     return;
+  }
+
+  if(abs(position_tracker->Get_Velocity()) < 0.01 && abs(position_tracker->Get_Ang_Vel()) < 0.01)
+  {
+    lcd::set_text(3, "STUCK");
+    stuck += 1;
+    if(stuck > 40)
+    {
+      Stop();
+      _is_running = false;
+      return;
+    }
+  } else 
+  {
+    stuck = 0;
   }
 
   double deaccellCoeff = abs(Displacement) * 127 / (9 * speed[0]) < 1 ? abs(Displacement) * 127 / (9 * speed[0]) : 1;

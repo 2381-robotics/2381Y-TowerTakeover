@@ -102,10 +102,11 @@ AutoSequence *Auton::CUS_Q1 = AutoSequence::FromTasks({
         .AddInit([](void) -> void { indexer->resetNewBall(); })
         .AddDone([](void) -> bool { return indexer->newBallIndexed(); }),
 
-    AutoPath({48, 3.5}, 0, 127).AddRun([](void) -> void {
+    AutoPath({48, 4.5}, 0, 127).AddRun([](void) -> void {
         intake->Set_Intake(-20);
         indexer->Set_Indexer(0);
     }),
-    SingleRun([](void) -> void { position_tracker->Set_Position({0, 0}, 0, {48, 3.5}, 0); })
+    SingleRun([](void) -> void { position_tracker->Set_Position({0, 0}, 0, {48, 4.5}, 0); })
 
 });
+// (.13, .19) - (45, -2.5) , (-.5, -.9) - (43, -1)

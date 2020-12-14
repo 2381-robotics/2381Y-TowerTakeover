@@ -44,6 +44,9 @@ public:
   std::array<double, 4> initial_position = {0,0,0,0};
   void Reset_Point() override;
   double test;
+  int stuck = 0;
+
+
   bool get_running() override;
   void Set_Turn(double Speed, double direction, double distance) override;
   std::array<double, 2> Convert(double speed = 0, double direction = 0);

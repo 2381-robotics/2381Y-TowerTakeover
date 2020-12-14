@@ -18,7 +18,7 @@ using namespace pros;
 
 AutoSequence *Auton::CUS_Q2 = AutoSequence::FromTasks({
 
-    SingleRun([](void) -> void { position_tracker->Set_Position({46, 0}, 0); }),
+    SingleRun([](void) -> void { position_tracker->Set_Position({44, 0}, 0); }),
     AutoPath({57, -30}, -M_PI / 4, 160, 3).AddRun([](void) -> void {
         intake->Set_Intake(127);
         shooter->Set_Shooter(0);
@@ -26,14 +26,15 @@ AutoSequence *Auton::CUS_Q2 = AutoSequence::FromTasks({
     }),
     AutoTask::SyncTask(
         [](void) -> void {
-            robot->drive->Set_Curve_Drive({50, -52}, -M_PI / 4, {55, -55}, -M_PI / 4, 160, 0.5);
+            robot->drive->Set_Curve_Drive({50, -52}, -M_PI / 4, {55, -54.5}, -M_PI / 4, 160, 0.5);
             intake->Set_Intake(127);
             indexer->Set_Indexer(100, true);
         },
         [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
 // 5694 54.76
-// 
-    AutoPath({55.5, -55.5}, -M_PI / 4, 160).AddRun([](void) -> void {
+//5567, -5363
+
+    AutoPath({55.5, -54.5}, -M_PI / 4, 160).AddRun([](void) -> void {
         intake->Set_Intake(0);
         shooter->Set_Shooter(0);
         indexer->Set_Indexer(100, true);
@@ -68,18 +69,18 @@ AutoSequence *Auton::CUS_Q2 = AutoSequence::FromTasks({
         },
         [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
 
-    AutoPath({0, -28}, -10 * M_PI / 8, {127, 150}, 2).AddRun([](void) -> void {
+    AutoPath({0, -24}, -10 * M_PI / 8, {100, 127}, 2).AddRun([](void) -> void {
         intake->Set_Intake(127);
         indexer->Set_Indexer(127, true);
     }),
-    AutoPath({2, -28}, -M_PI / 2, {127, 180}, 1),
+    AutoPath({0, -24}, -M_PI / 2, {127, 180}, 1),
 
-    AutoPath({2, -55}, -M_PI / 2, {150, 150}, 1),
+    AutoPath({0, -53}, -M_PI / 2, {100, 127}, 1),
 
     AutoTask::AutoDelay(1000).AddRun([](void) -> void {
                                  intake->Set_Intake(0);
                                  shooter->Shoot(127);
-                                 robot->drive->Set_Path_Drive({2, -56}, -M_PI / 2, 80);
+                                 robot->drive->Set_Path_Drive({0, -53}, -M_PI / 2, 80);
                              })
         .AddInit([](void) -> void {
             indexer->resetNewBall();
@@ -89,17 +90,19 @@ AutoSequence *Auton::CUS_Q2 = AutoSequence::FromTasks({
     AutoTask::AutoDelay(500).AddRun([](void) -> void {
         indexer->Set_Indexer(70, false);
         shooter->Shoot(0);
-        robot->drive->Set_Path_Drive({2, -56}, -M_PI / 2, 80);
+        robot->drive->Set_Path_Drive({0, -53}, -M_PI / 2, 80);
     }),
     AutoTask::AutoDelay(700)
         .AddRun([](void) -> void {
             intake->Set_Intake(0);
             shooter->Shoot(127);
-            robot->drive->Set_Path_Drive({2, -56}, -M_PI / 2, 80);
+            robot->drive->Set_Path_Drive({0, -53}, -M_PI / 2, 80);
         })
         .AddKill([](void) -> void { shooter->Shoot(0); indexer->Set_Indexer(0); robot->drive->Set_Drive(0,0,0,0);})
         .AddInit([](void) -> void { indexer->resetNewBall(); })
         .AddDone([](void) -> bool { return indexer->newBallIndexed(); }),
 
-    SingleRun([](void) -> void { position_tracker->Set_Position(0, 0, {2, -56}, -M_PI/2); }),
+    SingleRun([](void) -> void { position_tracker->Set_Position(0, 0, {0, -53}, -M_PI/2); }),
 });
+
+// speed of collecting last one down, too far too the right, back up more when leaving 4th tower
