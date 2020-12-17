@@ -293,7 +293,7 @@ void Mech_Drive::Set_Path_Drive(complex<double> EndPoint, double EndAngle, array
     return;
   }
 
-  if(abs(position_tracker->Get_Velocity()) < 0.01 && abs(position_tracker->Get_Ang_Vel()) < 0.01)
+  if(abs(position_tracker->Get_Velocity()) < 0.1 && abs(position_tracker->Get_Ang_Vel()) < 0.1)
   {
     lcd::set_text(3, "STUCK");
     stuck += 1;
@@ -307,6 +307,8 @@ void Mech_Drive::Set_Path_Drive(complex<double> EndPoint, double EndAngle, array
   {
     stuck = 0;
   }
+
+  lcd::set_text(3, "Vel" + to_string(abs(position_tracker->Get_Velocity()) < 0.1) + " Ang Vel + " + to_string(abs(position_tracker->Get_Ang_Vel()) < 0.1));
 
   double deaccellCoeff = abs(Displacement) * 127 / (9 * speed[0]) < 1 ? abs(Displacement) * 127 / (9 * speed[0]) : 1;
   double deaccelSecond = abs(Displacement) * 127 / (6 * speed[0]) < 1 ? abs(Displacement) * 127 / (6 * speed[0]) : 1;

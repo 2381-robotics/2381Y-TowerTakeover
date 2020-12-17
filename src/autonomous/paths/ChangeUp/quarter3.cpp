@@ -18,7 +18,7 @@ using namespace pros;
 
 AutoSequence *Auton::CUS_Q3 = AutoSequence::FromTasks({
     SingleRun([](void) -> void { position_tracker->Set_Position({0, -53}, -M_PI / 2); }),
-    AutoCurve({0, -50}, -M_PI / 2, {-10, -46}, -M_PI, 127, 3, 0.2)
+    AutoCurve({0, -46}, -M_PI / 2, {-10, -36}, -M_PI, 127, 3, 0.2)
         .AddRun([](void) -> void {
             indexer->Set_Indexer(100);
         }),
