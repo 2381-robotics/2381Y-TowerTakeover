@@ -18,27 +18,27 @@ using namespace pros;
 
 AutoSequence *Auton::CUS_Q3 = AutoSequence::FromTasks({
     SingleRun([](void) -> void { position_tracker->Set_Position({0, -53}, -M_PI / 2); }),
-    AutoCurve({0, -46}, -M_PI / 2, {-10, -36}, -M_PI, 127, 3, 0.2)
+    AutoCurve({0, -46}, -M_PI / 2 -0.2, {-10, -38}, -M_PI, 127, 3, 0.2)
         .AddRun([](void) -> void {
             indexer->Set_Indexer(100);
         }),
 
-    AutoCurve({-10, -46}, -M_PI - 0.1, {-36, -46}, -M_PI - 0.1, 127, 3, 0)
+    AutoCurve({-10, -38}, -M_PI - 0.2, {-28, -46}, -M_PI - 0.2, 127, 3, 0)
         .AddRun([](void) -> void {
             intake->Set_Intake(100);
         }),
-    AutoCurve({-36, -46}, -M_PI - 0.1, {-58, -42}, -5 * M_PI / 4, 127, 3)
+    AutoCurve({-28, -46}, -M_PI - 0.2, {-56, -42}, -5 * M_PI / 4 + 0.1, 127, 3)
         .AddRun([](void) -> void {
             intake->Set_Intake(127);
             indexer->Set_Indexer(127, true);
         }),
 
-    AutoPath({-58, -43}, -5 * M_PI / 4, 127).AddRun([](void) -> void {
+    AutoPath({-56, -42}, -5 * M_PI / 4 + 0.1, 127).AddRun([](void) -> void {
         intake->Set_Intake(127);
         indexer->Set_Indexer(127, true);
     }),
-    AutoCurve({-54, -53}, -3 * M_PI / 4, {-56.5, -56.5}, -3 * M_PI / 4, 127, 3),
-    AutoPath({-56.5, -56.5}, -3 * M_PI / 4, 127).AddRun([](void) -> void {
+    AutoPath({-50, -52}, -3 * M_PI / 4, 127),
+    AutoPath({-55.5,-55.5}, -3 * M_PI / 4, 127).AddRun([](void) -> void {
         intake->Set_Intake(0);
         indexer->Set_Indexer(127, true);
     }),
@@ -50,7 +50,7 @@ AutoSequence *Auton::CUS_Q3 = AutoSequence::FromTasks({
         .AddKill([](void) -> void { shooter->Set_Shooter(0); })
         .AddDone([](void) -> bool { return indexer->newBallIndexed(); }),
 
-    AutoCurve({-48, -48}, -3 * M_PI / 4, {48, 12}, -3 * M_PI / 2, 127, 3).AddRun([](void) -> void {
+    AutoCurve({-48, -48}, -3 * M_PI / 4, {-48, -12}, -3 * M_PI / 2, 127, 3).AddRun([](void) -> void {
         intake->Set_Intake(20);
         indexer->Set_Indexer(127, true);
     }),

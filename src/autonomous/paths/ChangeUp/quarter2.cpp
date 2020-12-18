@@ -34,7 +34,9 @@ AutoSequence *Auton::CUS_Q2 = AutoSequence::FromTasks({
 // 5694 54.76
 //5567, -5363
 // 5564 -5334
-// 5566 -5319
+
+// With deploy it is lower than without deploy - with deploy it is 5550 5300 gets stuck, without deploy it is up to 5850 5650
+// 5566 -5315
     AutoPath({57.5, -55.5}, -M_PI / 4, 160).AddRun([](void) -> void {
         intake->Set_Intake(0);
         shooter->Set_Shooter(0);
