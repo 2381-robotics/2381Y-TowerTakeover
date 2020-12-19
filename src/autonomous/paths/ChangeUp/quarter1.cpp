@@ -44,7 +44,7 @@ AutoSequence *Auton::CUS_Q1 = AutoSequence::FromTasks({
     AutoPath({57, 57}, M_PI / 4, 127).AddRun([](void) -> void {
         intake->Set_Intake(20);
         indexer->Set_Indexer(127, true);
-    }),
+    }).TimeLimit(5000),
 
     AutoTask::AutoDelay(600)
         .AddRun([](void) -> void {
@@ -55,24 +55,16 @@ AutoSequence *Auton::CUS_Q1 = AutoSequence::FromTasks({
         .AddInit([](void) -> void { indexer->resetNewBall(); })
         .AddDone([](void) -> bool { return indexer->newBallIndexed(); }),
 
+    AutoTask::AutoDelay(300),
     AutoCurve({48, 48}, M_PI / 4, {48, 12}, -M_PI / 2, 127, 3).AddRun([](void) -> void {
         intake->Set_Intake(20);
         indexer->Set_Indexer(127, true);
     }),
 
-    AutoTask::SyncTask(
-        [](void) -> void {
-            robot->drive->Set_Curve_Drive({48, 12}, -M_PI / 2 , {48, 5}, -M_PI/2, 127, 5);
-            intake->Set_Intake(127);
-            shooter->Set_Shooter(0);
-            indexer->Set_Indexer(127, true);
-        },
-        [](void) -> bool { return (!robot->drive->get_running()); }, [](void) -> void { robot->drive->Reset_Point(); }, [](void) -> void {}),
-
-    // AutoPath({48, 4}, -M_PI / 2, 127, 2).AddRun([](void) -> void {
-    //         intake->Set_Intake(100);
-    //         indexer->Set_Indexer(100, true);
-    // }),
+    AutoPath({48, 12}, -M_PI / 2, 127, 2).AddRun([](void) -> void {
+            intake->Set_Intake(100);
+            indexer->Set_Indexer(100, true);
+    }),
     AutoPath({48, 5.5}, 0, 200).AddRun([](void) -> void {
         intake->Set_Intake(127);
         indexer->Set_Indexer(127);
@@ -81,7 +73,7 @@ AutoSequence *Auton::CUS_Q1 = AutoSequence::FromTasks({
     AutoPath({57.5, 5.5}, 0, 127).AddRun([](void) -> void {
         intake->Set_Intake(0);
         indexer->Set_Indexer(50, true);
-    }),
+    }).TimeLimit(5000),
 
     AutoTask::AutoDelay(1000)
         .AddRun([](void) -> void {
@@ -101,6 +93,7 @@ AutoSequence *Auton::CUS_Q1 = AutoSequence::FromTasks({
         .AddKill([](void) -> void { shooter->Shoot(0); indexer->Set_Indexer(0); })
         .AddInit([](void) -> void { indexer->resetNewBall(); })
         .AddDone([](void) -> bool { return indexer->newBallIndexed(); }),
+    AutoTask::AutoDelay(500),
 
     AutoPath({48, 5.5}, 0, 127).AddRun([](void) -> void {
         intake->Set_Intake(-20);

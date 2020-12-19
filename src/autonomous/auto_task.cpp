@@ -88,7 +88,7 @@ bool AutoTask::done(void)
 AutoTask AutoTask::TimeLimit(int time)
 {
 
-    AutoTask *timedTask = new AutoTimer(time, isSync);
+    AutoTask *timedTask = new AutoTimer(time);
     for (const auto &value : this->runList)
     {
         timedTask->AddRun(value);

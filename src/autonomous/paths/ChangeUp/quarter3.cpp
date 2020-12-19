@@ -41,7 +41,7 @@ AutoSequence *Auton::CUS_Q3 = AutoSequence::FromTasks({
     AutoPath({-55.5,-55.5}, -3 * M_PI / 4, 127).AddRun([](void) -> void {
         intake->Set_Intake(0);
         indexer->Set_Indexer(127, true);
-    }),
+    }).TimeLimit(1000),
     AutoTask::AutoDelay(500).AddRun([](void) -> void {
                                 intake->Set_Intake(0);
                                 shooter->Shoot(127);
@@ -49,12 +49,13 @@ AutoSequence *Auton::CUS_Q3 = AutoSequence::FromTasks({
         .AddInit([](void) -> void { indexer->resetNewBall(); })
         .AddKill([](void) -> void { shooter->Set_Shooter(0); })
         .AddDone([](void) -> bool { return indexer->newBallIndexed(); }),
+    AutoTask::AutoDelay(300),
 
     AutoCurve({-48, -48}, -3 * M_PI / 4, {-48, -12}, -3 * M_PI / 2, 127, 3).AddRun([](void) -> void {
         intake->Set_Intake(20);
         indexer->Set_Indexer(127, true);
     }),
-    AutoPath({-48, -12}, -3 * M_PI/2, {127, 160}, 1).AddRun([](void) -> void {
+    AutoPath({-48, -10}, -3 * M_PI/2, 127).AddRun([](void) -> void {
         intake->Set_Intake(127);
         indexer->Set_Indexer(127, true);
     }),
@@ -62,10 +63,10 @@ AutoSequence *Auton::CUS_Q3 = AutoSequence::FromTasks({
         intake->Set_Intake(0);
         indexer->Set_Indexer(0);
     }),
-    AutoPath({-57, 0}, -M_PI, 127).AddRun([](void) -> void {
+    AutoPath({-55, 0}, -M_PI, 127).AddRun([](void) -> void {
         intake->Set_Intake(0);
         indexer->Set_Indexer(50, true);
-    }),
+    }).TimeLimit(1000),
 
     AutoTask::AutoDelay(1000)
         .AddRun([](void) -> void {
@@ -85,10 +86,7 @@ AutoSequence *Auton::CUS_Q3 = AutoSequence::FromTasks({
         .AddKill([](void) -> void { shooter->Shoot(0); indexer->Set_Indexer(0); })
         .AddInit([](void) -> void { indexer->resetNewBall(); })
         .AddDone([](void) -> bool { return indexer->newBallIndexed(); }),
-
-    AutoPath({-48, 0}, -M_PI, 127).AddRun([](void) -> void {
-        intake->Set_Intake(-20);
-        indexer->Set_Indexer(0);
-    }),
-    SingleRun([](void) -> void { position_tracker->Set_Position({0, 0}, 0, {-48, 0}, -M_PI); }),
+    AutoTask::AutoDelay(300),
+    
+    SingleRun([](void) -> void { position_tracker->Set_Position({0, 0}, 0, {-53, 0}, -M_PI); }),
 });

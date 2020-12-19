@@ -19,7 +19,7 @@ public:
     int _time = 0;
     int _duration = 1;
     AutoTimer(AutoTimerArgs args);
-    AutoTimer(int interval, bool sync = true, std::function<void(void)> task = [](void) -> void {}, std::function<bool(void)> done = [](void) -> bool { return true; },  std::function<void(void)> init = [](void) -> void {}, std::function<void(void)> kill = [](void) -> void {});
+    AutoTimer(int interval, bool sync = true, std::function<void(void)> task = [](void) -> void {}, std::function<bool(void)> done = [](void) -> bool { return false; },  std::function<void(void)> init = [](void) -> void {}, std::function<void(void)> kill = [](void) -> void {});
 
     std::function<bool(void)> _done_check = [](void) -> bool { return false;};
     bool _timer_done();

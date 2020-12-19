@@ -9,7 +9,7 @@ AutoTimer::AutoTimer(AutoTimerArgs args)
             _run_increment();
           },
           [&](void) -> bool {
-            //pros::lcd::set_text(5, "time +" + std::to_string(_time) + "duartion" + std::to_string(_duration)); 
+
             return (_time >= _duration); }, args.init, args.kill, args.sync},
       _duration(args.interval), _run_action(args.task)
 {
